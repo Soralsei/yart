@@ -1,16 +1,18 @@
 set(sources
-    src/tmp.cpp
+  src/math/math.cpp
+  src/math/vector3.cpp
 )
 
 set(exe_sources
-		src/main.cpp
-		${sources}
+  src/main.cpp
+  ${sources}
 )
 
 set(headers
-    include/yart/tmp.hpp
+  include/yart/math/math.h
+  include/yart/math/vector3.h
 )
 
 set(test_sources
-  src/tmp_test.cpp
+  src/vector3_test.cpp
 )

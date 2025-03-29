@@ -1,3 +1,5 @@
+#pragma once
+
 namespace yart
 {
   constexpr double ATOL = 1e-8;
