@@ -1,4 +1,5 @@
 #pragma once
+#include <ostream>
 
 namespace yart {
   namespace vector {
@@ -16,26 +17,32 @@ namespace yart {
 
       float operator[](const int i) const;
 
-      Vector3& operator+=(const int rhs);
-      friend Vector3 operator+(Vector3& lhs, const int rhs);
-      Vector3& operator-=(const int rhs);
-      friend Vector3 operator-(Vector3& lhs, const int rhs);
+      Vector3& operator+=(float rhs);
+      friend Vector3 operator+(const Vector3& lhs, float rhs);
+      Vector3& operator-=(float rhs);
+      friend Vector3 operator-(const Vector3& lhs, float rhs);
 
       Vector3& operator+=(const Vector3& rhs);
-      friend Vector3 operator+(Vector3& lhs, const Vector3& rhs);
+      friend Vector3 operator+(const Vector3& lhs, const Vector3& rhs);
       Vector3& operator-=(const Vector3& rhs);
-      friend Vector3 operator-(Vector3& lhs, const Vector3& rhs);
+      friend Vector3 operator-(const Vector3& lhs, const Vector3& rhs);
+
+      Vector3& operator*=(float rhs);
+      friend Vector3 operator*(const Vector3& lhs, float rhs);
+      Vector3& operator/=(float rhs);
+      friend Vector3 operator/(const Vector3& lhs, float rhs);
 
       Vector3& operator*=(const Vector3& rhs);
-      Vector3& operator*(const Vector3& rhs);
+      friend Vector3 operator*(const Vector3& lhs, const Vector3& rhs);
       Vector3& operator/=(const Vector3& rhs);
-      Vector3& operator/(const Vector3& rhs);
+      friend Vector3 operator/(const Vector3& lhs, const Vector3& rhs);
 
       friend bool operator==(const Vector3& lhs, const Vector3& rhs);
       friend bool operator!=(const Vector3& lhs, const Vector3& rhs);
 
-      float dot(const Vector3& other);
-      float cross(const Vector3& other);
+      friend std::ostream& operator<<(std::ostream& outs, const Vector3& vec);
+
+      float cross(const Vector3& other) const;
       Vector3 abs() const;
       float norm() const;
       Vector3 normalized() const;
