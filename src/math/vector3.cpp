@@ -8,6 +8,12 @@ namespace yart {
   namespace vector {
     Vector3 ZERO = {0, 0, 0};
     Vector3 ONE = {1, 1, 1};
+    Vector3 UP = {0, 1, 0};
+    Vector3 DOWN = {0, -1, 0};
+    Vector3 LEFT = {-1, 0, 0};
+    Vector3 RIGHT = {1, 0, 0};
+    Vector3 FORWARD = {0, 0, 1};
+    Vector3 BACKWARD = {0, 0, -1};
 
     Vector3::Vector3(float x, float y, float z) {
       data[0] = x;
@@ -108,6 +114,38 @@ namespace yart {
       return outs;
     }
     // #############################################################################################
+
+    float Vector3::norm() const {
+      return std::sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]);
+    }
+
+    Vector3 Vector3::abs() const {
+      return Vector3(std::abs(data[0]), std::abs(data[1]), std::abs(data[2]));
+    }
+
+    Vector3 Vector3::normalized() const {
+      float n = norm();
+      if (n == 0) {
+        return ZERO;
+      }
+      return *this / n;
+    }
+
+    float Vector3::dot(const Vector3& other) const {
+      return data[0] * other[0] + data[1] * other[1] + data[2] * other[2];
+    }
+
+    Vector3 Vector3::cross(const Vector3& other) const {
+      return Vector3(data[1] * other[2] - data[2] * other[1],
+                     data[2] * other[0] - data[0] * other[2],
+                     data[0] * other[1] - data[1] * other[0]);
+    }
+
+    float Vector3::dot(const Vector3& first, const Vector3& second) { return first.dot(second); }
+
+    Vector3 Vector3::cross(const Vector3& first, const Vector3& second) {
+      return first.cross(second);
+    }
 
   }  // namespace vector
 }  // namespace yart
