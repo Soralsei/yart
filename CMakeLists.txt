@@ -175,6 +175,15 @@ include(cmake/Doxygen.cmake)
 #  )
 #endif()
 
+# SDL3
+# This assumes the SDL source is available in vendored/SDL
+add_subdirectory(vendored)
+target_link_libraries(
+ ${PROJECT_NAME}
+ PRIVATE
+   vendored
+)
+
 # For Windows, it is necessary to link with the MultiThreaded library.
 # Depending on how the rest of the project's dependencies are linked, it might be necessary
 # to change the line to statically link with the library.
