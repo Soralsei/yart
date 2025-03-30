@@ -1,5 +1,7 @@
 #pragma once
 #include <cmath>
+#include <stdexcept>
+#include <type_traits>
 
 namespace yart {
   namespace math {
@@ -18,5 +20,29 @@ namespace yart {
       return std::abs(left - right)
              <= std::max(rtol * std::max(std::abs(left), std::abs(right)), atol);
     }
+
+    // Function to remap a value from one range to another
+    // This function takes a value and remaps it from the range [old_min, old_max]
+    // to the range [new_min, new_max].
+    template <typename T, typename U> U remap(T value, T old_min, T old_max, U new_min, U new_max) {
+      static_assert(std::is_arithmetic_v<T>, "remap: Invalid type T, not arithmetic");
+      if (old_min == old_max) {
+        throw std::invalid_argument("remap: old_min and old_max cannot be equal");
+      }
+      if (new_min == new_max) {
+        throw std::invalid_argument("remap: new_min and new_max cannot be equal");
+      }
+      if (value < old_min || value > old_max) {
+        throw std::out_of_range("remap: value is out of range");
+      }
+      if (old_min > old_max) {
+        std::swap(old_min, old_max);
+      }
+      if (new_min > new_max) {
+        std::swap(new_min, new_max);
+      }
+      return (value - old_min) / static_cast<U>(old_max - old_min) * (new_max - new_min) + new_min;
+    }
+
   }  // namespace math
 }  // namespace yart
