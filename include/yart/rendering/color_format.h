@@ -10,9 +10,9 @@ namespace yart {
     template <typename T> class ColorFormat {
     public:
       ColorFormat() = default;
+      virtual ~ColorFormat() = default;
       virtual T colorToFormat(const Color& color) = 0;
       virtual Color formatToColor(const T& format) = 0;
-      ~ColorFormat() = default;
     };
 
     class RGB888Format : public ColorFormat<uint32_t>  // Assuming RGB888 is represented as uint32_t

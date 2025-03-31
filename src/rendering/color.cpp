@@ -21,6 +21,8 @@ namespace yart  // namespace color
     }
     Color::Color(float _r, float _g, float _b) : r(_r), g(_g), b(_b), a(1.0f) {}
 
+    Color::Color() : r(0), g(0), b(0), a(1) {}
+
     bool operator==(const Color& lhs, const Color& rhs) {
       return (math::approx_equals(lhs.r, rhs.r) && math::approx_equals(lhs.g, rhs.g)
               && math::approx_equals(lhs.b, rhs.b) && math::approx_equals(lhs.a, rhs.a));

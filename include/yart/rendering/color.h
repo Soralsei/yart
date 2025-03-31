@@ -7,7 +7,7 @@ namespace yart {
 
   namespace rendering {
     class Color {
-      friend class Canvas;
+      template<uint32_t W, uint32_t H> friend class Canvas;
 
     private:
       float r = 0.0f;
@@ -18,6 +18,7 @@ namespace yart {
     public:
       Color(float r, float g, float b, float a);
       Color(float r, float g, float b);
+      Color();
 
       Color& operator+=(const Color& rhs);
       friend Color operator+(const Color& lhs, const Color& rhs);

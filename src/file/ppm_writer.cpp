@@ -1,26 +1,25 @@
-#pragma once
-#include <iostream>
-#include <fstream>
+#include "yart/file/ppm_writer.h"
+
 #include <cstdint>
+#include <fstream>
+#include <iostream>
 
 #include "yart/file/image_writer.h"
 #include "yart/rendering/color.h"
 #include "yart/rendering/color_format.h"
-#include "yart/file/ppm_writer.h"
-#include "ppm_writer.h"
 
 namespace yart {
   namespace file {
-    
-    PPMWriter::PPMWriter(PPMFormat format = PPMFormat::P3) : format(format) {}
-    bool PPMWriter::write(const char* filename, const rendering::Color* data, int width, int height) {
+
+    PPMWriter::PPMWriter(PPMFormat _format) : format(_format) {}
+    bool PPMWriter::write(const char* filename, const rendering::Color* data, int width,
+                          int height) {
       std::ofstream file(filename, std::ios::binary);
-      if (!file.good())
-      {
+      if (!file.good()) {
         std::cerr << "Error opening file for writing: " << filename << std::endl;
         return false;
       }
-      
+
       // Write the header
       writeHeader(file, width, height);
       // Write the pixel data
@@ -34,7 +33,7 @@ namespace yart {
       }
       file.flush();
       bool ret = !file.bad();
-      file.close();     
+      file.close();
 
       return ret;
     }
@@ -48,16 +47,37 @@ namespace yart {
       file << width << " " << height << "\n255\n";
     }
 
-    void PPMWriter::writeDataP3(std::ofstream& file, const rendering::Color* data, int width, int height) {
+    void PPMWriter::writeDataP3(std::ofstream& file, const rendering::Color* data, int width,
+                                int height) {
       for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-          int index = (y * width + x) * 3;
+          int index = y * width + x;
           uint32_t color = color_format.colorToFormat(data[index]);
           uint8_t r = (color >> 16) & 0xFF;
           uint8_t g = (color >> 8) & 0xFF;
           uint8_t b = color & 0xFF;
-          file << std::to_string(r) << " " << std::to_string(g) << " " << std::to_string(b) << "\n";
+          file << std::to_string(r) << " " << std::to_string(g) << " " << std::to_string(b);
+          if (index % 70 == 0 && index != 0) {
+            file << "\n";
+          } else {
+            file << " ";
+          }
         }
+      }
+    }
+
+    void PPMWriter::writeDataP6(std::ofstream& file, const rendering::Color* data, int width,
+                                int height) {
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          int index = y * width + x;
+          uint32_t color = color_format.colorToFormat(data[index]);
+          uint8_t r = (color >> 16) & 0xFF;
+          uint8_t g = (color >> 8) & 0xFF;
+          uint8_t b = color & 0xFF;
+          file << r << g << b;
+        }
+        file << "\n";
       }
     }
   }  // namespace file

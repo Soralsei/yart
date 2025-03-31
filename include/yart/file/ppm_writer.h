@@ -16,7 +16,7 @@ namespace yart {
       rendering::RGB888Format color_format;
 
     public:
-      PPMWriter(PPMFormat format = PPMFormat::P3) : format(format) {}
+      PPMWriter(PPMFormat format = PPMFormat::P3);
       ~PPMWriter() override = default;
       // bool write(const char* filename, const uint8_t* data, int width, int height) override;
       bool write(const char* filename, const rendering::Color* data, int width, int height) override;
