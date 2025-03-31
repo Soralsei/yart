@@ -1,9 +1,8 @@
 set(sources
   src/math/math.cpp
   src/math/vector3.cpp
-  src/rendering/canvas.cpp
-  src/rendering/color.cpp
-  src/rendering/color_format.cpp
+  src/image/color.cpp
+  src/image/color_format.cpp
   src/file/ppm_writer.cpp
 )
 
@@ -15,9 +14,9 @@ set(exe_sources
 set(headers
   include/yart/math/math.h
   include/yart/math/vector3.h
-  include/yart/rendering/canvas.h
-  include/yart/rendering/color.h
-  include/yart/rendering/color_format.h
+  include/yart/image/canvas.h
+  include/yart/image/color.h
+  include/yart/image/color_format.h
   include/yart/file/ppm_writer.h
   include/yart/file/image_writer.h
 )

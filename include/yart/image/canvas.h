@@ -2,12 +2,12 @@
 #include <array>
 #include <cstdint>
 
-#include "yart/rendering/color.h"
+#include "yart/image/color.h"
 #include "yart/traits/sized.h"
 
 namespace yart {
 
-  namespace rendering {
+  namespace image {
     template <uint32_t W, uint32_t H> class Canvas : traits::Sized {
     private:
       int width = W;
@@ -66,8 +66,11 @@ namespace yart {
       uint32_t getWidth() const override { return width; }
       uint32_t getHeight() const override { return height; }
 
-      Color* getPixels() const { return pixels.data(); }
+      const Color* getPixels() const { return pixels.data(); }
+      void fill(const Color& color) {
+        pixels.fill(color);
+      }
     };
-  }  // namespace rendering
+  }  // namespace image
 
 }  // namespace yart

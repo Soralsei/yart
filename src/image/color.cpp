@@ -1,4 +1,4 @@
-#include "yart/rendering/color.h"
+#include "yart/image/color.h"
 
 #include <algorithm>
 
@@ -6,7 +6,7 @@
 
 namespace yart  // namespace color
 {
-  namespace rendering {
+  namespace image {
     Color BLACK(0, 0, 0);
     Color WHITE(1, 1, 1);
     Color RED(1, 0, 0);

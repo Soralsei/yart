@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include "yart/rendering/color_format.h"
+#include "yart/image/color_format.h"
 
 namespace yart {
   namespace file {
@@ -9,7 +9,7 @@ namespace yart {
       ImageWriter() = default;
       virtual ~ImageWriter() = default;
 
-      virtual bool write(const char* filename, const rendering::Color* data, int width, int height) = 0;
+      virtual bool write(const char* filename, const image::Color* data, int width, int height) = 0;
     };
   }  // namespace file
 

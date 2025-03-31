@@ -1,12 +1,12 @@
-#include "yart/rendering/color.h"
-#include "yart/rendering/canvas.h"
+#include "yart/image/color.h"
+#include "yart/image/canvas.h"
 
 #include <gtest/gtest.h>
 
 using namespace yart;
 
 TEST(CanvasTest, Initialization) {
-  rendering::Canvas<10, 20> canvas{};
+  image::Canvas<10, 20> canvas{};
   ASSERT_EQ(canvas.getWidth(), 10);
   ASSERT_EQ(canvas.getHeight(), 20);
 
@@ -15,7 +15,7 @@ TEST(CanvasTest, Initialization) {
   {
     for (int x = 0; x < canvas.getWidth(); x++)
     {
-      if (canvas(x, y) != rendering::BLACK)
+      if (canvas(x, y) != image::BLACK)
       {
         is_all_black = false;
         break;
@@ -26,10 +26,10 @@ TEST(CanvasTest, Initialization) {
   EXPECT_TRUE(true);
 }
 TEST(CanvasTest, SetGetPixel) {
-  rendering::Canvas<10, 20> canvas{};
-  rendering::Color color(0.5f, 0.5f, 0.5f);
+  image::Canvas<10, 20> canvas{};
+  image::Color color(0.5f, 0.5f, 0.5f);
   canvas.setPixel(5, 10, color);
-  rendering::Color result = canvas.getPixel(5, 10);
+  image::Color result = canvas.getPixel(5, 10);
   ASSERT_EQ(result, color);
   EXPECT_TRUE(true);
 }

@@ -1,11 +1,11 @@
 #pragma once
 #include <cstdint>
 
-#include "yart/rendering/color.h"
+#include "yart/image/color.h"
 
 namespace yart {
 
-  namespace rendering {
+  namespace image {
 
     template <typename T> class ColorFormat {
     public:
@@ -45,6 +45,6 @@ namespace yart {
       Color formatToColor(const uint16_t& format) override;
     };
 
-  }  // namespace rendering
+  }  // namespace image
 
 }  // namespace yart

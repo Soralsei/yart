@@ -1,10 +1,10 @@
-#include "yart/rendering/color_format.h"
+#include "yart/image/color_format.h"
 
-#include "yart/rendering/color.h"
+#include "yart/image/color.h"
 
 namespace yart {
 
-  namespace rendering {
+  namespace image {
     uint32_t RGB888Format::colorToFormat(const Color& color) {
       uint8_t r = static_cast<uint8_t>(color.getR() * 255);
       uint8_t g = static_cast<uint8_t>(color.getG() * 255);
@@ -57,6 +57,6 @@ namespace yart {
       uint8_t a = format & 0x0F;
       return Color(r / 15.0f, g / 15.0f, b / 15.0f, a / 15.0f);
     }
-  }  // namespace rendering
+  }  // namespace image
 
 }  // namespace yart

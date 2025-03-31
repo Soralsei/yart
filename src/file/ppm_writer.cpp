@@ -5,14 +5,14 @@
 #include <iostream>
 
 #include "yart/file/image_writer.h"
-#include "yart/rendering/color.h"
-#include "yart/rendering/color_format.h"
+#include "yart/image/color.h"
+#include "yart/image/color_format.h"
 
 namespace yart {
   namespace file {
 
     PPMWriter::PPMWriter(PPMFormat _format) : format(_format) {}
-    bool PPMWriter::write(const char* filename, const rendering::Color* data, int width,
+    bool PPMWriter::write(const char* filename, const image::Color* data, int width,
                           int height) {
       std::ofstream file(filename, std::ios::binary);
       if (!file.good()) {
@@ -28,10 +28,10 @@ namespace yart {
       } else if (format == PPMFormat::P6) {
         writeDataP6(file, data, width, height);
       } else {
-        std::cerr << "Unsupported PPM format" << std::endl;
+        std::cerr << "Unsupported PPM format" << NEWLINE;
         return false;
       }
-      file.flush();
+      file << std::endl;
       bool ret = !file.bad();
       file.close();
 
@@ -39,15 +39,18 @@ namespace yart {
     }
 
     void PPMWriter::writeHeader(std::ofstream& file, int width, int height) {
+      char separator;
       if (format == PPMFormat::P3) {
-        file << "P3\n";
+        file << "P3";
+        separator = NEWLINE;
       } else if (format == PPMFormat::P6) {
-        file << "P6\n";
+        file << "P6";
+        separator = '\n';
       }
-      file << width << " " << height << "\n255\n";
+      file << separator << width << ' ' << height << separator << "255" << separator;
     }
 
-    void PPMWriter::writeDataP3(std::ofstream& file, const rendering::Color* data, int width,
+    void PPMWriter::writeDataP3(std::ofstream& file, const image::Color* data, int width,
                                 int height) {
       for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -58,7 +61,7 @@ namespace yart {
           uint8_t b = color & 0xFF;
           file << std::to_string(r) << " " << std::to_string(g) << " " << std::to_string(b);
           if (index % 70 == 0 && index != 0) {
-            file << "\n";
+            file << std::endl;
           } else {
             file << " ";
           }
@@ -66,7 +69,7 @@ namespace yart {
       }
     }
 
-    void PPMWriter::writeDataP6(std::ofstream& file, const rendering::Color* data, int width,
+    void PPMWriter::writeDataP6(std::ofstream& file, const image::Color* data, int width,
                                 int height) {
       for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
