@@ -6,7 +6,7 @@
 
 TEST(InitTests, CheckCorrectInit) {
   yart::vector::Vector3 test = {1, 1, 1};
-  ASSERT_EQ(test, yart::vector::ONE);
+  ASSERT_EQ(test, yart::vector::Vector3::ONE);
   EXPECT_TRUE(true);
 }
 
@@ -41,7 +41,7 @@ TEST(ArithmeticTests, CheckSelfIncrement) {
 
 TEST(ArithmeticTests, CheckAddition) {
   yart::vector::Vector3 test = {4, 3, 1};
-  auto result = test + yart::vector::ONE;
+  auto result = test + yart::vector::Vector3::ONE;
   yart::vector::Vector3 expected = {5, 4, 2};
   ASSERT_EQ(result, expected);
   EXPECT_TRUE(true);
@@ -49,7 +49,7 @@ TEST(ArithmeticTests, CheckAddition) {
 
 TEST(ArithmeticTests, CheckSubtraction) {
   yart::vector::Vector3 test = {4, 3, 1};
-  auto result = test - yart::vector::ONE;
+  auto result = test - yart::vector::Vector3::ONE;
   yart::vector::Vector3 expected = {3, 2, 0};
   ASSERT_EQ(result, expected);
   EXPECT_TRUE(true);
@@ -57,7 +57,7 @@ TEST(ArithmeticTests, CheckSubtraction) {
 
 TEST(ArithmeticTests, CheckSubtractionZero) {
   yart::vector::Vector3 test = {4, 3, 1};
-  auto result = test - yart::vector::ZERO;
+  auto result = test - yart::vector::Vector3::ZERO;
   ASSERT_EQ(result, test);
   EXPECT_TRUE(true);
 }
@@ -65,20 +65,20 @@ TEST(ArithmeticTests, CheckSubtractionZero) {
 TEST(ArithmeticTests, CheckSubtractionSelf) {
   yart::vector::Vector3 test = {4, 3, 1};
   auto result = test - test;
-  ASSERT_EQ(result, yart::vector::ZERO);
+  ASSERT_EQ(result, yart::vector::Vector3::ZERO);
   EXPECT_TRUE(true);
 }
 
 TEST(ArithmeticTests, CheckMultiplicationOne) {
   yart::vector::Vector3 test = {4, 3, 1};
-  auto result = test * yart::vector::ONE;
+  auto result = test * yart::vector::Vector3::ONE;
   ASSERT_EQ(result, test);
   EXPECT_TRUE(true);
 }
 
 TEST(ArithmeticTests, CheckDivisionOne) {
   yart::vector::Vector3 test = {4, 3, 1};
-  auto result = test / yart::vector::ONE;
+  auto result = test / yart::vector::Vector3::ONE;
   ASSERT_EQ(result, test);
   EXPECT_TRUE(true);
 }
@@ -134,8 +134,8 @@ TEST(OperationTests, CheckNormalized){
 }
 
 TEST(OperationTests, CheckNormalizedZero){
-  auto result = yart::vector::ZERO.normalized();
-  ASSERT_EQ(result, yart::vector::ZERO);
+  auto result = yart::vector::Vector3::ZERO.normalized();
+  ASSERT_EQ(result, yart::vector::Vector3::ZERO);
   EXPECT_TRUE(true);
 }
 
@@ -150,7 +150,7 @@ TEST(OperationTests, CheckAbs){
 TEST(OperationTests, CheckAbsZero){
   yart::vector::Vector3 test = {0, 0, 0};
   auto result = test.abs();
-  ASSERT_EQ(result, yart::vector::ZERO);
+  ASSERT_EQ(result, yart::vector::Vector3::ZERO);
   EXPECT_TRUE(true);
 }
 

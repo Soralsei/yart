@@ -10,8 +10,8 @@ namespace yart {
   namespace image {
     template <uint32_t W, uint32_t H> class Canvas : traits::Sized {
     private:
-      int width = W;
-      int height = H;
+      uint32_t width = W;
+      uint32_t height = H;
       std::array<Color, W * H> pixels;
 
     public:

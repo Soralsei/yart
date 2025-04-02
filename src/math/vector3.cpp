@@ -6,14 +6,14 @@
 
 namespace yart {
   namespace vector {
-    Vector3 ZERO = {0, 0, 0};
-    Vector3 ONE = {1, 1, 1};
-    Vector3 UP = {0, 1, 0};
-    Vector3 DOWN = {0, -1, 0};
-    Vector3 LEFT = {-1, 0, 0};
-    Vector3 RIGHT = {1, 0, 0};
-    Vector3 FORWARD = {0, 0, 1};
-    Vector3 BACKWARD = {0, 0, -1};
+    const Vector3 Vector3::ZERO = {0, 0, 0};
+    const Vector3 Vector3::ONE = {1, 1, 1};
+    const Vector3 Vector3::UP = {0, 1, 0};
+    const Vector3 Vector3::DOWN = {0, -1, 0};
+    const Vector3 Vector3::LEFT = {-1, 0, 0};
+    const Vector3 Vector3::RIGHT = {1, 0, 0};
+    const Vector3 Vector3::FORWARD = {0, 0, 1};
+    const Vector3 Vector3::BACKWARD = {0, 0, -1};
 
     Vector3::Vector3(float x, float y, float z) {
       data[0] = x;
@@ -32,15 +32,15 @@ namespace yart {
 
     // ADDITION / SUBTRACTION ######################################################################
     Vector3& Vector3::operator+=(float rhs) {
-      data[0] += rhs;
-      data[1] += rhs;
-      data[2] += rhs;
+      for (size_t i = 0; i < 3; i++) {
+        data[i] += rhs;
+      }
       return *this;
     }
     Vector3& Vector3::operator+=(const Vector3& rhs) {
-      data[0] += rhs[0];
-      data[1] += rhs[1];
-      data[2] += rhs[2];
+      for (size_t i = 0; i < 3; i++) {
+        data[i] += rhs[i];
+      }
       return *this;
     }
     Vector3 operator+(const Vector3& lhs, float rhs) {
@@ -51,15 +51,15 @@ namespace yart {
     }
 
     Vector3& Vector3::operator-=(float rhs) {
-      data[0] -= rhs;
-      data[1] -= rhs;
-      data[2] -= rhs;
+      for (size_t i = 0; i < 3; i++) {
+        data[i] -= rhs;
+      }
       return *this;
     }
     Vector3& Vector3::operator-=(const Vector3& rhs) {
-      data[0] -= rhs[0];
-      data[1] -= rhs[1];
-      data[2] -= rhs[2];
+      for (size_t i = 0; i < 3; i++) {
+        data[i] -= rhs[i];
+      }
       return *this;
     }
     Vector3 operator-(const Vector3& lhs, float rhs) {
@@ -72,15 +72,15 @@ namespace yart {
 
     // MULTIPLICATION / DIVISION ###################################################################
     Vector3& Vector3::operator*=(float rhs) {
-      data[0] *= rhs;
-      data[1] *= rhs;
-      data[2] *= rhs;
+      for (size_t i = 0; i < 3; i++) {
+        data[i] *= rhs;
+      }
       return *this;
     }
     Vector3& Vector3::operator*=(const Vector3& rhs) {
-      data[0] *= rhs[0];
-      data[1] *= rhs[1];
-      data[2] *= rhs[2];
+      for (size_t i = 0; i < 3; i++) {
+        data[i] *= rhs[i];
+      }
       return *this;
     }
     Vector3 operator*(const Vector3& lhs, float rhs) {
@@ -91,15 +91,15 @@ namespace yart {
     }
 
     Vector3& Vector3::operator/=(float rhs) {
-      data[0] /= rhs;
-      data[1] /= rhs;
-      data[2] /= rhs;
+      for (size_t i = 0; i < 3; i++) {
+        data[i] /= rhs;
+      }
       return *this;
     }
     Vector3& Vector3::operator/=(const Vector3& rhs) {
-      data[0] /= rhs[0];
-      data[1] /= rhs[1];
-      data[2] /= rhs[2];
+      for (size_t i = 0; i < 3; i++) {
+        data[i] /= rhs[i];
+      }
       return *this;
     }
     Vector3 operator/(const Vector3& lhs, float rhs) {
@@ -116,7 +116,11 @@ namespace yart {
     // #############################################################################################
 
     float Vector3::norm() const {
-      return std::sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]);
+      float res = 0;
+      for (size_t i = 0; i < 3; i++) {
+        res += data[i] * data[i];
+      }
+      return std::sqrt(res);
     }
 
     Vector3 Vector3::abs() const {
@@ -132,7 +136,11 @@ namespace yart {
     }
 
     float Vector3::dot(const Vector3& other) const {
-      return data[0] * other[0] + data[1] * other[1] + data[2] * other[2];
+      float ret = 0.0;
+      for (size_t i = 0; i < 3; i++) {
+        ret += data[i] * other[i];
+      }
+      return ret;
     }
 
     Vector3 Vector3::cross(const Vector3& other) const {
