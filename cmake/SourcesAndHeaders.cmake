@@ -1,5 +1,6 @@
 set(sources
   src/math/math.cpp
+  src/math/vector4.cpp
   src/math/vector3.cpp
   src/math/vector2.cpp
   src/image/color.cpp
@@ -15,6 +16,7 @@ set(exe_sources
 set(headers
   include/yart/simd.h
   include/yart/math/math.h
+  include/yart/math/vector4.h
   include/yart/math/vector3.h
   include/yart/math/vector2.h
   include/yart/math/vector.h
@@ -26,7 +28,9 @@ set(headers
 )
 
 set(test_sources
+  src/vector4_test.cpp
   src/vector3_test.cpp
+  src/vector2_test.cpp
   src/math_test.cpp
   src/color_test.cpp
   src/canvas_test.cpp

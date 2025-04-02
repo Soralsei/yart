@@ -21,85 +21,84 @@ namespace yart {
     protected:
       float data[U];
 
-      VectorN(float d[U]) {
+    public:
+      VectorN() = default;
+      VectorN<SelfType, U>(float d[U]) {
         for (size_t i = 0; i < U; i++) {
           data[i] = d[i];
         }
       }
-
-    public:
-      VectorN() = default;
       float operator[](const int i) const { return data[i]; }
 
-      SelfType& operator+=(float rhs) {
+      auto operator+=(float rhs) {
         for (size_t i = 0; i < U; i++) {
           data[i] += rhs;
         }
         return *this;
       }
-      SelfType& operator-=(float rhs) {
-        for (size_t i = 0; i < 3; i++) {
+
+      auto operator-=(float rhs) {
+        for (size_t i = 0; i < U; i++) {
           data[i] -= rhs;
         }
         return *this;
       }
 
-      SelfType& operator+=(const SelfType& rhs) {
+      auto operator+=(const SelfType& rhs) {
         for (size_t i = 0; i < U; i++) {
           data[i] += rhs[i];
         }
         return *this;
       }
-      SelfType& operator-=(const SelfType& rhs) {
-        for (size_t i = 0; i < 3; i++) {
+      auto operator-=(const SelfType& rhs) {
+        for (size_t i = 0; i < U; i++) {
           data[i] -= rhs[i];
         }
         return *this;
       }
 
-      SelfType& operator*=(float rhs) {
-        for (size_t i = 0; i < 3; i++) {
+      auto operator*=(float rhs) {
+        for (size_t i = 0; i < U; i++) {
           data[i] *= rhs;
         }
         return *this;
       }
-      SelfType& operator/=(float rhs) {
-        for (size_t i = 0; i < 3; i++) {
+      auto operator/=(float rhs) {
+        for (size_t i = 0; i < U; i++) {
           data[i] /= rhs;
         }
         return *this;
       }
 
-      SelfType& operator*=(const SelfType& rhs) {
-        for (size_t i = 0; i < 3; i++) {
+      auto operator*=(const SelfType& rhs) {
+        for (size_t i = 0; i < U; i++) {
           data[i] *= rhs[i];
         }
         return *this;
       }
-      SelfType& operator/=(const SelfType& rhs) {
-        for (size_t i = 0; i < 3; i++) {
+      auto operator/=(const SelfType& rhs) {
+        for (size_t i = 0; i < U; i++) {
           data[i] /= rhs[i];
         }
         return *this;
       }
 
-      friend SelfType operator+(const SelfType& lhs, float rhs);
-      friend SelfType operator-(const SelfType& lhs, float rhs);
+      friend SelfType operator+ <>(const SelfType& lhs, float rhs);
+      friend SelfType operator- <>(const SelfType& lhs, float rhs);
 
-      friend SelfType operator+(const SelfType& lhs, const SelfType& rhs);
-      friend SelfType operator-(const SelfType& lhs, const SelfType& rhs);
+      friend SelfType operator+ <>(const SelfType& lhs, const SelfType& rhs);
+      friend SelfType operator- <>(const SelfType& lhs, const SelfType& rhs);
 
-      friend SelfType operator*(const SelfType& lhs, float rhs);
-      friend SelfType operator/(const SelfType& lhs, float rhs);
+      friend SelfType operator* <>(const SelfType& lhs, float rhs);
+      friend SelfType operator/ <>(const SelfType& lhs, float rhs);
 
-      friend SelfType operator*(const SelfType& lhs, const SelfType& rhs);
-      friend SelfType operator/(const SelfType& lhs, const SelfType& rhs);
+      friend SelfType operator* <>(const SelfType& lhs, const SelfType& rhs);
+      friend SelfType operator/ <>(const SelfType& lhs, const SelfType& rhs);
 
       friend bool operator==(const SelfType& lhs, const SelfType& rhs) {
         bool is_equal = true;
-        for (size_t i = 0; i < U; i++)
-        {
-          is_equal |= math::approx_equals(lhs[i], rhs[i]);
+        for (size_t i = 0; i < U; i++) {
+          is_equal &= math::approx_equals(lhs[i], rhs[i]);
         }
         return is_equal;
       }
@@ -122,19 +121,34 @@ namespace yart {
         return std::sqrt(res);
       }
 
-      SelfType normalized() const { return (*this) / this->norm(); }
+      SelfType normalized() const {
+        float norm = this->norm();
+        if (norm == 0) {
+          float d[U]{0};
+          return static_cast<SelfType>(VectorN{d});
+        }
+        SelfType v = static_cast<SelfType>(*this);
+        return v / norm;
+      }
+
       SelfType abs() const {
         float d[U]{0};
         for (size_t i = 0; i < U; i++) {
-          d[i] = data[i];
+          d[i] = std::abs(data[i]);
         }
         return SelfType{d};
       }
       // SelfType cross(const SelfType& other) const;
-      // float dot(const SelfType& other) const;
+      float dot(const SelfType& other) const {
+        float res = 0;
+        for (size_t i = 0; i < U; i++) {
+          res += data[i] * other[i];
+        }
+        return res;
+      }
 
       // static SelfType cross(const SelfType& first, const SelfType& second);
-      // static float dot(const SelfType& first, const SelfType& second);
+      static float dot(const SelfType& first, const SelfType& second) { return first.dot(second); }
 
       // float angleBetween(const SelfType& other) const;
       // void rotateArroundVector(const SelfType& axis, float rotation);

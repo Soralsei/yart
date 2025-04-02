@@ -28,7 +28,7 @@ TEST(PPMTest, HeaderP3) {
     }
     header += current;
   }
-  std::cout << header;
+  // std::cout << header;
   std::string expected = "P3\n5 3\n255\n";
 
   ASSERT_EQ(header, expected);
@@ -55,7 +55,7 @@ TEST(PPMTest, HeaderP6) {
     }
     header += current;
   }
-  std::cout << header;
+  // std::cout << header;
   std::string expected = "P6\n5 3\n255\n";
 
   ASSERT_EQ(header, expected);
