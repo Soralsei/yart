@@ -7,7 +7,7 @@ namespace yart {
   namespace math {
     constexpr double ATOL = 1e-8;
     constexpr double RTOL = 1e-5;
-    constexpr double TAU = 6.28318530717958647692;
+    constexpr double TAU = M_PI * 2;
 
     // Function to compare two floating point numbers for approximate equality
     // This function uses a relative tolerance (rtol) and an absolute tolerance (atol)

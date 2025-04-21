@@ -158,6 +158,12 @@ include(cmake/Doxygen.cmake)
 
 # Identify and link with the specific "packages" the project uses
 #find_package(package_name package_version REQUIRED package_type [other_options])
+find_package(Eigen3 3.4 REQUIRED NO_MODULE)
+target_link_libraries(
+  ${PROJECT_NAME}
+  PRIVATE
+    Eigen3::Eigen
+)
 #target_link_libraries(
 #  ${PROJECT_NAME}
 #  PUBLIC
