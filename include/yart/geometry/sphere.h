@@ -15,7 +15,7 @@ namespace yart {
       Sphere(float _radius);
       ~Sphere();
 
-      std::vector<float> intersections(const Ray& ray);
+      std::vector<Intersection<Sphere>> intersections(const Ray& ray);
 
       friend std::ostream& operator<<(std::ostream& out, const Sphere& sphere);
     };

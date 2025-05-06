@@ -1,7 +1,9 @@
-#include "yart/geometry/sphere.h"
-
-#include "yart/math/ray.h"
 #include <iostream>
+
+#include "yart/geometry/intersection.h"
+#include "yart/geometry/sphere.h"
+#include "yart/math/ray.h"
+#include "yart/util/vector.h"
 
 namespace yart {
 
@@ -15,7 +17,7 @@ namespace yart {
 
     Sphere::~Sphere() {}
 
-    std::vector<float> Sphere::intersections(const yart::Ray& ray) {
+    std::vector<Intersection<Sphere>> Sphere::intersections(const yart::Ray& ray) {
       auto self_to_ray = ray.get_origin() - origin;
       auto direction = ray.get_direction();
       float a = direction.dot(direction);
@@ -33,15 +35,17 @@ namespace yart {
 
       // No intersections
       if (delta < 0) {
-        return std::vector<float>{};
+        return std::vector<Intersection<Sphere>>{};
       }
+      Intersection<Sphere> i1 = {this->weak_from_this(), (-b - std::sqrt(delta)) / (2 * a)};
+      Intersection<Sphere> i2 = {this->weak_from_this(), (-b + std::sqrt(delta)) / (2 * a)};
       // Return 2 intersections whether ray is tangent or not
-      return std::vector<float>{(-b - std::sqrt(delta)) / (2 * a),
-                                (-b + std::sqrt(delta)) / (2 * a)};
+      return make_vec(i1, i2);
     }
 
     std::ostream& operator<<(std::ostream& out, const Sphere& sphere) {
-      return out << "Sphere([" << sphere.origin.x() << ", " << sphere.origin.y() << ", " << sphere.origin.z() << "], radius: " << sphere.radius <<")\n";
+      return out << "Sphere([" << sphere.origin.x() << ", " << sphere.origin.y() << ", "
+                 << sphere.origin.z() << "], radius: " << sphere.radius << ")\n";
     }
 
   }  // namespace geometry
