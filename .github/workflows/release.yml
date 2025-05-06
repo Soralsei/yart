@@ -54,12 +54,12 @@ jobs:
       run: echo ::set-output name=name::${GITHUB_REF#refs/tags/}
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
     - name: cache dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       id: cache
       with:
         path: ${{ github.HOME }}/.local
