@@ -31,9 +31,6 @@ namespace yart {
 
       float delta = b * b - 4 * a * c;
 
-      std::cout << ray << "\n";
-      std::cout << self_to_ray.transpose() << "\n";
-
       // No intersections
       if (delta < 0) {
         return std::vector<Intersection<Sphere>>{};
@@ -46,7 +43,7 @@ namespace yart {
 
     std::ostream& operator<<(std::ostream& out, const Sphere& sphere) {
       return out << "Sphere([" << sphere.position().x() << ", " << sphere.position().y() << ", "
-                 << sphere.position().z() << "], radius: " << sphere.radius << ")\n";
+                 << sphere.position().z() << "], radius: " << sphere.radius << ")";
     }
 
   }  // namespace geometry
