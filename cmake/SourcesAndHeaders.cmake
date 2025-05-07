@@ -7,8 +7,21 @@ set(sources
   src/file/ppm_writer.cpp
 )
 
-set(exe_sources
+set(main_sources
   src/main.cpp
+  ${sources}
+)
+
+set(clock_sources
+  src/clock.cpp
+  ${sources}
+)
+set(trajectory_sources
+  src/trajectory.cpp
+  ${sources}
+)
+set(projection_sources
+  src/projection.cpp
   ${sources}
 )
 
@@ -16,8 +29,8 @@ set(headers
   include/yart/simd.h
   include/yart/math/math.h
   include/yart/math/ray.h
-  include/yart/math/transform.h
-
+  
+  include/yart/geometry/transform.h
   include/yart/geometry/shape.h
   include/yart/geometry/sphere.h
 

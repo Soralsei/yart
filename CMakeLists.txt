@@ -62,11 +62,11 @@ include(cmake/Vcpkg.cmake)
 include(cmake/SourcesAndHeaders.cmake)
 
 if(${PROJECT_NAME}_BUILD_EXECUTABLE)
-  add_executable(${PROJECT_NAME} ${exe_sources})
+  add_executable(${PROJECT_NAME} ${main_sources})
 
   if(${PROJECT_NAME}_VERBOSE_OUTPUT)
     verbose_message("Found the following sources:")
-    foreach(source IN LISTS exe_sources)
+    foreach(source IN LISTS main_sources)
       verbose_message("* ${source}")
     endforeach()
   endif()
@@ -135,6 +135,14 @@ message(STATUS "Added all header and implementation files.\n")
 if(${PROJECT_NAME}_BUILD_HEADERS_ONLY)
   target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
 else()
+  target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+  )
   target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
   if(${PROJECT_NAME}_BUILD_EXECUTABLE AND ${PROJECT_NAME}_ENABLE_UNIT_TESTING)
@@ -159,11 +167,6 @@ include(cmake/Doxygen.cmake)
 # Identify and link with the specific "packages" the project uses
 #find_package(package_name package_version REQUIRED package_type [other_options])
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
-target_link_libraries(
-  ${PROJECT_NAME}
-  PRIVATE
-    Eigen3::Eigen
-)
 #target_link_libraries(
 #  ${PROJECT_NAME}
 #  PUBLIC
@@ -187,7 +190,8 @@ add_subdirectory(vendored)
 target_link_libraries(
  ${PROJECT_NAME}
  PRIVATE
-   vendored
+    Eigen3::Eigen
+    vendored
 )
 
 # For Windows, it is necessary to link with the MultiThreaded library.
@@ -250,6 +254,10 @@ else()
 endif()
 
 verbose_message("Project is now aliased as ${PROJECT_NAME}::${PROJECT_NAME}.\n")
+
+add_executable_target(Trajectory "${trajectory_sources}")
+add_executable_target(Clock "${clock_sources}")
+add_executable_target(Projection "${projection_sources}")
 
 #
 # Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)
