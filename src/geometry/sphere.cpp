@@ -1,7 +1,8 @@
+#include "yart/geometry/sphere.h"
+
 #include <iostream>
 
 #include "yart/geometry/intersection.h"
-#include "yart/geometry/sphere.h"
 #include "yart/math/ray.h"
 #include "yart/util/vector.h"
 
@@ -9,29 +10,29 @@ namespace yart {
 
   namespace geometry {
 
-    Sphere::Sphere(Eigen::Vector4f _origin, float _radius)
-        : Shape<Sphere>::Shape(_origin), radius(_radius) {}
+    Sphere::Sphere(Transform3d _transform, float _radius)
+        : Shape<Sphere>::Shape(_transform), radius(_radius) {}
 
-    Sphere::Sphere(float _radius)
-        : Shape<Sphere>::Shape(Eigen::Vector4f{0, 0, 0, 1}), radius(_radius) {}
+    Sphere::Sphere(Eigen::Vector3f _position, float _radius)
+        : Shape<Sphere>::Shape(_position), radius(_radius) {}
+
+    Sphere::Sphere(float _radius) : Shape<Sphere>::Shape(), radius(_radius) {}
 
     Sphere::~Sphere() {}
 
     std::vector<Intersection<Sphere>> Sphere::intersections(const yart::Ray& ray) {
-      auto self_to_ray = ray.get_origin() - origin;
-      auto direction = ray.get_direction();
+      // Transform the ray to the local space of the shape
+      auto transformed_ray = ray * transform.inverse();
+      Eigen::Vector3f self_to_ray = transformed_ray.get_origin() - position();
+      auto direction = transformed_ray.get_direction();
       float a = direction.dot(direction);
       float b = 2 * direction.dot(self_to_ray);
       float c = self_to_ray.dot(self_to_ray) - radius * radius;
 
       float delta = b * b - 4 * a * c;
 
-      std::cout << "self_to_ray : " << self_to_ray << "\n";
-
-      std::cout << "a : " << a << "\n";
-      std::cout << "b : " << b << "\n";
-      std::cout << "c : " << c << "\n";
-      std::cout << "Delta : " << delta << "\n";
+      std::cout << ray << "\n";
+      std::cout << self_to_ray.transpose() << "\n";
 
       // No intersections
       if (delta < 0) {
@@ -44,8 +45,8 @@ namespace yart {
     }
 
     std::ostream& operator<<(std::ostream& out, const Sphere& sphere) {
-      return out << "Sphere([" << sphere.origin.x() << ", " << sphere.origin.y() << ", "
-                 << sphere.origin.z() << "], radius: " << sphere.radius << ")\n";
+      return out << "Sphere([" << sphere.position().x() << ", " << sphere.position().y() << ", "
+                 << sphere.position().z() << "], radius: " << sphere.radius << ")\n";
     }
 
   }  // namespace geometry
