@@ -3,12 +3,12 @@
 #include <ostream>
 
 #include "Eigen/Dense"
+#include "yart/core/ray.h"
 #include "yart/file/ppm_writer.h"
 #include "yart/geometry/intersection.h"
 #include "yart/geometry/sphere.h"
 #include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
-#include "yart/core/ray.h"
 
 using namespace yart;
 
@@ -23,8 +23,8 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
   auto sphere = std::make_shared<geometry::Sphere>(1.0f);
 
-  sphere->transform = geometry::Transform3d::Identity() * transform::shear<float>(1, 0, 0, 0, 0, 0)
-                      ;//* transform::scaling<float>(1, 0.5, 1);
+  auto transform = geometry::Transform3D{transform::shear<float>(1, 0, 0, 0, 0, 0)};
+  sphere->set_transform(transform);
 
   double half_width = canvas_world_width / 2;
   double half_height = canvas_world_height / 2;

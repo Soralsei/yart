@@ -6,7 +6,7 @@ namespace yart
 {
   namespace geometry
   {
-    using Transform3d = Eigen::Affine3f;
+    using Transform3D = Eigen::Affine3f;
     using Quaternion = Eigen::Quaternionf;
   } // namespace geometry
 } // namespace yart

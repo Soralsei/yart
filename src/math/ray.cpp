@@ -1,5 +1,5 @@
-
 #include "yart/core/ray.h"
+
 using namespace Eigen;
 namespace yart {
 
@@ -22,7 +22,7 @@ namespace yart {
   const Eigen::Vector4f Ray::get_direction_homogeneous() const { return direction_homogeneous; }
   const Eigen::Vector4f Ray::get_origin_homogeneous() const { return origin_homogeneous; }
 
-  Ray Ray::operator*(const geometry::Transform3d& transform) const {
+  Ray Ray::operator*(const geometry::Transform3D& transform) const {
     return (*this) * transform.matrix();
   }
 

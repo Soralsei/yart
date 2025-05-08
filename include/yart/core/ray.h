@@ -22,9 +22,9 @@ namespace yart {
 
     Eigen::Vector3f position(double t);
 
-    Ray operator*(const geometry::Transform3d& transform) const;
+    Ray operator*(const geometry::Transform3D& transform) const;
     Ray operator*(const Eigen::Matrix4f& transform) const;
-    // Ray operator*(geometry::Transform3d& transform);
+    // Ray operator*(geometry::Transform3D& transform);
     // Ray operator*(Eigen::Matrix4f& transform);
 
     friend std::ostream& operator<<(std::ostream& out, const Ray& ray);

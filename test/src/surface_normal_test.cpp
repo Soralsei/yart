@@ -51,7 +51,7 @@ TEST(Normals, NormalIsNormalized) {
 }
 
 TEST(Normals, SphereNormalTranslated) {
-  auto transform = geometry::Transform3d::Identity();
+  auto transform = geometry::Transform3D::Identity();
   transform.translate(Vector3f(0, 1, 0));
   auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
   auto normal = sphere->normal_at(Vector3f(0, 1.70711f, -0.70711f));
@@ -64,7 +64,7 @@ TEST(Normals, SphereNormalTranslated) {
 }
 
 TEST(Normals, SphereNormalTransformed) {
-  auto transform = geometry::Transform3d::Identity();
+  auto transform = geometry::Transform3D::Identity();
   transform.scale(Vector3f(1, 0.5, 1)).rotate(transform::rotationZ<float>(M_PI / 5));
   auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
   auto normal = sphere->normal_at(Vector3f(0, std::sqrt(2)/2, -std::sqrt(2)/2));

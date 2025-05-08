@@ -13,7 +13,7 @@ namespace yart {
       float radius = 1.0f;
 
     public:
-      Sphere(Transform3d transform, float _radius);
+      Sphere(Transform3D transform, float _radius);
       Sphere(Eigen::Vector3f _origin, float _radius);
       Sphere(float _radius);
       Sphere();

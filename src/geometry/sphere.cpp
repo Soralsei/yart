@@ -10,7 +10,7 @@ namespace yart {
 
   namespace geometry {
 
-    Sphere::Sphere(Transform3d _transform, float _radius)
+    Sphere::Sphere(Transform3D _transform, float _radius)
         : Shape3D<Sphere>::Shape3D(_transform), radius(_radius) {}
 
     Sphere::Sphere(Eigen::Vector3f _position, float _radius)
