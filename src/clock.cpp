@@ -10,7 +10,7 @@ using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
   image::Canvas<900, 550> canvas;
-  image::Color clock_color{1.0, 1.0, 1.0};
+  color::Color clock_color{1.0, 1.0, 1.0};
 
   file::PPMWriter writer;
   int radius = 100;  // pixels

@@ -9,7 +9,7 @@ namespace yart {
       ImageWriter() = default;
       virtual ~ImageWriter() = default;
 
-      virtual bool write(const char* filename, const image::Color* data, int width, int height) = 0;
+      virtual bool write(const char* filename, const color::Color* data, int width, int height) = 0;
     };
   }  // namespace file
 

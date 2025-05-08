@@ -5,7 +5,7 @@
 
 namespace yart {
 
-  namespace image {
+  namespace color {
     class Color {
       template<uint32_t W, uint32_t H> friend class Canvas;
 
@@ -42,14 +42,14 @@ namespace yart {
       inline float getA() const { return a; }
     };
 
-    extern Color BLACK;
-    extern Color WHITE;
-    extern Color RED;
-    extern Color GREEN;
-    extern Color BLUE;
-    extern Color CYAN;
-    extern Color MAGENTA;
-    extern Color YELLOW;
+    extern Color Black;
+    extern Color White;
+    extern Color Red;
+    extern Color Green;
+    extern Color Blue;
+    extern Color Cyan;
+    extern Color Magenta;
+    extern Color Yellow;
   }  // namespace image
 
 }  // namespace yart

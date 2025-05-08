@@ -15,7 +15,7 @@ TEST(CanvasTest, Initialization) {
   {
     for (int x = 0; x < canvas.getWidth(); x++)
     {
-      if (canvas(x, y) != image::BLACK)
+      if (canvas(x, y) != color::Black)
       {
         is_all_black = false;
         break;
@@ -27,9 +27,9 @@ TEST(CanvasTest, Initialization) {
 }
 TEST(CanvasTest, SetGetPixel) {
   image::Canvas<10, 20> canvas{};
-  image::Color color(0.5f, 0.5f, 0.5f);
+  color::Color color(0.5f, 0.5f, 0.5f);
   canvas.setPixel(5, 10, color);
-  image::Color result = canvas.getPixel(5, 10);
+  color::Color result = canvas.getPixel(5, 10);
   ASSERT_EQ(result, color);
   EXPECT_TRUE(true);
 }

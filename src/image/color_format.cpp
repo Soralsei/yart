@@ -5,6 +5,7 @@
 namespace yart {
 
   namespace image {
+    using namespace color;
     uint32_t RGB888Format::colorToFormat(const Color& color) {
       uint8_t r = static_cast<uint8_t>(color.getR() * 255);
       uint8_t g = static_cast<uint8_t>(color.getG() * 255);

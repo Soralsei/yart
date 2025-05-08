@@ -6,15 +6,15 @@
 
 namespace yart  // namespace color
 {
-  namespace image {
-    Color BLACK(0, 0, 0);
-    Color WHITE(1, 1, 1);
-    Color RED(1, 0, 0);
-    Color GREEN(0, 1, 0);
-    Color BLUE(0, 0, 1);
-    Color YELLOW(1, 1, 0);
-    Color CYAN(0, 1, 1);
-    Color MAGENTA(1, 0, 1);
+  namespace color {
+    Color Black(0, 0, 0);
+    Color White(1, 1, 1);
+    Color Red(1, 0, 0);
+    Color Green(0, 1, 0);
+    Color Blue(0, 0, 1);
+    Color Yellow(1, 1, 0);
+    Color Cyan(0, 1, 1);
+    Color Magenta(1, 0, 1);
 
     Color::Color(float _r, float _g, float _b, float _a) : r(_r), g(_g), b(_b), a(_a) {
       a = std::clamp(a, 0.0f, 1.0f);

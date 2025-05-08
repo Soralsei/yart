@@ -25,13 +25,13 @@ namespace yart {
     public:
       PPMWriter(PPMFormat format = PPMFormat::P3);
       ~PPMWriter() override = default;
-      bool write(const char* filename, const image::Color* data, int width,
+      bool write(const char* filename, const color::Color* data, int width,
                  int height) override;
 
     private:
       void writeHeader(std::ofstream& file, int width, int height);
-      void writeDataP3(std::ofstream& file, const image::Color* data, int width, int height);
-      void writeDataP6(std::ofstream& file, const image::Color* data, int width, int height);
+      void writeDataP3(std::ofstream& file, const color::Color* data, int width, int height);
+      void writeDataP6(std::ofstream& file, const color::Color* data, int width, int height);
     };
 
   }  // namespace file

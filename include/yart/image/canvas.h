@@ -8,6 +8,7 @@
 namespace yart {
 
   namespace image {
+    using namespace color;
     template <uint32_t W, uint32_t H> class Canvas : traits::Sized {
     private:
       uint32_t width = W;
@@ -15,9 +16,7 @@ namespace yart {
       std::array<Color, W * H> pixels;
 
     public:
-      Canvas() {
-        pixels.fill(BLACK);
-      }
+      Canvas() { pixels.fill(color::Black); }
       Canvas(const Canvas& other)
           : width(other.width), height(other.height), pixels(other.pixels) {};
       Canvas(Canvas&& other) noexcept
@@ -47,7 +46,7 @@ namespace yart {
         return *this;
       };
 
-      Color operator()(int x, int y) const{
+      Color operator()(int x, int y) const {
         if (x < 0 || x >= width || y < 0 || y >= height) {
           throw std::out_of_range("Canvas coordinates out of range");
         }
@@ -67,9 +66,7 @@ namespace yart {
       uint32_t getHeight() const override { return height; }
 
       const Color* getPixels() const { return pixels.data(); }
-      void fill(const Color& color) {
-        pixels.fill(color);
-      }
+      void fill(const Color& color) { pixels.fill(color); }
     };
   }  // namespace image
 

@@ -12,7 +12,7 @@ namespace yart {
   namespace file {
 
     PPMWriter::PPMWriter(PPMFormat _format) : format(_format) {}
-    bool PPMWriter::write(const char* filename, const image::Color* data, int width,
+    bool PPMWriter::write(const char* filename, const color::Color* data, int width,
                           int height) {
       std::ofstream file(filename, std::ios::binary);
       if (!file.good()) {
@@ -50,7 +50,7 @@ namespace yart {
       file << separator << width << ' ' << height << separator << "255" << separator;
     }
 
-    void PPMWriter::writeDataP3(std::ofstream& file, const image::Color* data, int width,
+    void PPMWriter::writeDataP3(std::ofstream& file, const color::Color* data, int width,
                                 int height) {
       for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -69,7 +69,7 @@ namespace yart {
       }
     }
 
-    void PPMWriter::writeDataP6(std::ofstream& file, const image::Color* data, int width,
+    void PPMWriter::writeDataP6(std::ofstream& file, const color::Color* data, int width,
                                 int height) {
       for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {

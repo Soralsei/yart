@@ -14,7 +14,7 @@ using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
   image::Canvas<100, 100> canvas;
-  image::Color hit_color{1.0, 0, 0};
+  color::Color hit_color{1.0, 0, 0};
 
   file::PPMWriter writer;
 
@@ -41,7 +41,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
       auto intersections = sphere->intersections(r);
       auto hit = geometry::hit(intersections);
       if (hit == nullptr) {
-        canvas.setPixel(x, canvas.getHeight() - 1 - y, image::BLACK);
+        canvas.setPixel(x, canvas.getHeight() - 1 - y, color::Black);
         continue;
       }
 
