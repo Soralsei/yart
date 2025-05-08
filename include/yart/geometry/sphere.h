@@ -1,5 +1,5 @@
 #pragma once
-#include "shape.h"
+#include "yart/geometry/shape.h"
 
 namespace yart {
 
@@ -8,7 +8,7 @@ namespace yart {
   namespace geometry {
 
     template <class ShapeType> class Intersection;  // forward declaration
-    class Sphere : public Shape<Sphere> {
+    class Sphere : public Shape3D<Sphere> {
     private:
       float radius = 1.0f;
 
@@ -17,9 +17,15 @@ namespace yart {
       Sphere(Eigen::Vector3f _origin, float _radius);
       Sphere(float _radius);
       Sphere();
+
+      //Copy constructor
+      Sphere(const Sphere& other);
+
       ~Sphere();
 
       std::vector<Intersection<Sphere>> intersections(const yart::Ray& ray);
+
+      Eigen::Vector3f normal_at(const Eigen::Vector3f& point);
 
       friend std::ostream& operator<<(std::ostream& out, const Sphere& sphere);
     };

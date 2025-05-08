@@ -28,10 +28,11 @@ set(projection_sources
 set(headers
   include/yart/simd.h
   include/yart/math/math.h
-  include/yart/math/ray.h
+  
+  include/yart/core/ray.h
+  include/yart/core/object3d.h
   
   include/yart/geometry/transform.h
-  include/yart/geometry/object3d.h
   include/yart/geometry/sphere.h
 
   include/yart/image/canvas.h

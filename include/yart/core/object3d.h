@@ -3,7 +3,6 @@
 
 #include "Eigen/Dense"
 #include "yart/geometry/defines.h"
-#include "yart/traits/named_type.h"
 
 namespace yart {
 

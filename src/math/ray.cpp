@@ -1,5 +1,5 @@
 
-#include "yart/math/ray.h"
+#include "yart/core/ray.h"
 using namespace Eigen;
 namespace yart {
 

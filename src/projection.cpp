@@ -8,7 +8,7 @@
 #include "yart/geometry/sphere.h"
 #include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
-#include "yart/math/ray.h"
+#include "yart/core/ray.h"
 
 using namespace yart;
 

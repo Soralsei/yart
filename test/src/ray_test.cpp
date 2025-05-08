@@ -1,4 +1,4 @@
-#include "yart/math/ray.h"
+#include "yart/core/ray.h"
 
 #include <gtest/gtest.h>
 
