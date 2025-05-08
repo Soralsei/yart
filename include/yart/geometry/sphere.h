@@ -16,6 +16,7 @@ namespace yart {
       Sphere(Transform3d transform, float _radius);
       Sphere(Eigen::Vector3f _origin, float _radius);
       Sphere(float _radius);
+      Sphere();
       ~Sphere();
 
       std::vector<Intersection<Sphere>> intersections(const yart::Ray& ray);

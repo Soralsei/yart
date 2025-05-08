@@ -17,6 +17,7 @@ namespace yart {
         : Shape<Sphere>::Shape(_position), radius(_radius) {}
 
     Sphere::Sphere(float _radius) : Shape<Sphere>::Shape(), radius(_radius) {}
+    Sphere::Sphere() : Shape<Sphere>::Shape(), radius(1.0f) {}
 
     Sphere::~Sphere() {}
 
