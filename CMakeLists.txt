@@ -258,6 +258,7 @@ verbose_message("Project is now aliased as ${PROJECT_NAME}::${PROJECT_NAME}.\n")
 add_executable_target(Trajectory "${trajectory_sources}")
 add_executable_target(Clock "${clock_sources}")
 add_executable_target(Projection "${projection_sources}")
+add_executable_target(ShadedSphere "${shading_sources}")
 
 #
 # Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)

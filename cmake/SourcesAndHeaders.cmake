@@ -5,6 +5,8 @@ set(sources
   src/image/color.cpp
   src/image/color_format.cpp
   src/file/ppm_writer.cpp
+  src/core/material.cpp
+  src/light/point_light.cpp
 )
 
 set(main_sources
@@ -24,11 +26,15 @@ set(projection_sources
   src/projection.cpp
   ${sources}
 )
+set(shading_sources
+  src/shaded_sphere.cpp
+  ${sources}
+)
 
 set(headers
   include/yart/simd.h
   include/yart/math/math.h
-  
+
   include/yart/core/ray.h
   include/yart/core/object3d.h
   
@@ -52,4 +58,5 @@ set(test_sources
   src/ppm_test.cpp
   src/transform_test.cpp
   src/surface_normal_test.cpp
+  src/shading_test.cpp
 )
