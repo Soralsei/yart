@@ -12,26 +12,31 @@ namespace yart {
   namespace geometry {
     template <class ShapeType> class Intersection;
 
-    template <class Derived> class Shape : public std::enable_shared_from_this<Derived> {
+    template <class Derived> class Object3D : public std::enable_shared_from_this<Derived> {
     public:
-      Shape(Eigen::Vector3f _origin) {
+      Object3D(Eigen::Vector3f _origin) {
         transform = Transform3d::Identity();
         transform = transform.translate(_origin);
       }
 
-      Shape(Eigen::Vector3f _origin, Eigen::Vector4f _rotation) {
+      Object3D(Eigen::Vector3f _origin, Eigen::Vector4f _rotation) {
         transform = Transform3d::Identity();
         transform = transform.rotate(_rotation).translate(_origin);
       }
 
-      Shape() : transform(Transform3d::Identity()) {}
-      Shape(Transform3d _transform) : transform(_transform) {}
-      ~Shape() {}
+      Object3D(Transform3d _transform) : transform(_transform) {}
+      Object3D() : transform(Transform3d::Identity()) {}
+      ~Object3D() {}
 
-      Derived& derived() { return static_cast<Derived>((*this)); }
+      inline Derived& derived() { return *static_cast<Derived*>(this); }
+      inline const Derived& derived() const { return *static_cast<Derived*>(this); }
 
       std::vector<Intersection<Derived>> intersections(const yart::Ray& ray) {
         return derived().intersections(ray);
+      }
+
+      Eigen::Vector3f normal_at(const Eigen::Vector3f& point) {
+        return derived().normal_at(point);
       }
 
       inline Eigen::Vector3f position() const { return transform.translation(); }
@@ -43,7 +48,7 @@ namespace yart {
 
       friend bool operator==(const Derived& lhs, const Derived& rhs) { return lhs.equals(rhs); }
 
-      friend std::ostream& operator<<(std::ostream& out, const Shape<Derived>& shape) {
+      friend std::ostream& operator<<(std::ostream& out, const Object3D<Derived>& shape) {
         return out << shape.derived();
       }
 

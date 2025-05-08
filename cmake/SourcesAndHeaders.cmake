@@ -31,7 +31,7 @@ set(headers
   include/yart/math/ray.h
   
   include/yart/geometry/transform.h
-  include/yart/geometry/shape.h
+  include/yart/geometry/object3d.h
   include/yart/geometry/sphere.h
 
   include/yart/image/canvas.h
@@ -50,4 +50,5 @@ set(test_sources
   src/canvas_test.cpp
   src/ppm_test.cpp
   src/transform_test.cpp
+  src/surface_normal_test.cpp
 )
