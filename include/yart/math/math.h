@@ -1,7 +1,10 @@
 #pragma once
+
 #include <cmath>
 #include <stdexcept>
 #include <type_traits>
+
+#include "Eigen/Dense"
 
 namespace yart {
   namespace math {
@@ -43,6 +46,8 @@ namespace yart {
       }
       return (value - old_min) / static_cast<U>(old_max - old_min) * (new_max - new_min) + new_min;
     }
+
+    Eigen::Vector3f reflect(const Eigen::Vector3f& vector, const Eigen::Vector3f& normal);
 
   }  // namespace math
 }  // namespace yart
