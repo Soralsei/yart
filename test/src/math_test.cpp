@@ -51,6 +51,24 @@ TEST(RemapTest, Byte128ToFloat) {
   EXPECT_TRUE(true);
 }
 
+TEST(VectorOperations, Reflect45) {
+  auto vector = Eigen::Vector3f(1, -1, 0);
+  auto normal = Eigen::Vector3f(0, 1, 0);
+
+  auto expected = Eigen::Vector3f(1, 1, 0);
+  auto result = math::reflect(vector, normal);
+  ASSERT_TRUE(result.isApprox(expected, 1e-6));
+}
+
+TEST(VectorOperations, ReflectSlanted) {
+  auto vector = Eigen::Vector3f(0, -1, 0);
+  auto normal = Eigen::Vector3f(std::sqrt(2) / 2, std::sqrt(2) / 2, 0);
+
+  auto expected = Eigen::Vector3f(1, 0, 0);
+  auto result = math::reflect(vector, normal);
+  ASSERT_TRUE(result.isApprox(expected, 1e-6));
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
