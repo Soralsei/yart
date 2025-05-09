@@ -14,9 +14,6 @@ namespace yart {
     template <class ShapeType> class Intersection;
 
     template <class Derived> class Shape3D : public Object3D {
-    private:
-      yart::Material material;
-
     public:
       Shape3D(Eigen::Vector3f _origin) : Object3D::Object3D(_origin) {}
 
@@ -30,14 +27,11 @@ namespace yart {
       inline Derived& derived() { return *static_cast<Derived*>(this); }
       inline const Derived& derived() const { return *static_cast<Derived*>(this); }
 
-      std::vector<Intersection<Derived>> intersections(const yart::Ray& ray) {
+      virtual std::vector<Intersection<Object3D>> intersections(const yart::Ray& ray) {
         return derived().intersections(ray);
       }
 
       Eigen::Vector3f normal_at(const Eigen::Vector3f& point) { return derived().normal_at(point); }
-
-      const Material& get_material() const { return material; }
-      void set_material(const Material& _material) { material = _material; }
     };
 
   }  // namespace geometry
