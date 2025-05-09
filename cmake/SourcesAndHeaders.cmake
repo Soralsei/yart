@@ -1,11 +1,19 @@
 set(sources
   src/math/math.cpp
   src/math/ray.cpp
+
   src/geometry/sphere.cpp
+
   src/image/color.cpp
   src/image/color_format.cpp
+
   src/file/ppm_writer.cpp
+
+  src/core/object3d.cpp
   src/core/material.cpp
+  src/core/world.cpp
+
+  src/light/light.cpp
   src/light/point_light.cpp
 )
 
