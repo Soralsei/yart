@@ -41,7 +41,7 @@ set(shading_sources
 
 set(headers
   include/yart/simd.h
-  include/yart/math/math.h
+  include/yart/util/math.h
 
   include/yart/core/ray.h
   include/yart/core/object3d.h
