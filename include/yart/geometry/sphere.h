@@ -23,7 +23,7 @@ namespace yart {
 
       ~Sphere();
 
-      std::vector<Intersection<Sphere>> intersections(const yart::Ray& ray);
+      std::vector<Intersection<Object3D>> intersections(const yart::Ray& ray);
 
       Eigen::Vector3f normal_at(const Eigen::Vector3f& point);
 

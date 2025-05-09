@@ -23,7 +23,7 @@ namespace yart {
 
     Sphere::~Sphere() {}
 
-    std::vector<Intersection<Sphere>> Sphere::intersections(const yart::Ray& ray) {
+    std::vector<Intersection<Object3D>> Sphere::intersections(const yart::Ray& ray) {
       // Transform the ray to the local space of the shape
       auto transformed_ray = ray * transform.inverse();
       Eigen::Vector3f self_to_ray = transformed_ray.get_origin() - position();
@@ -36,11 +36,11 @@ namespace yart {
 
       // No intersections
       if (delta < 0) {
-        return std::vector<Intersection<Sphere>>{};
+        return std::vector<Intersection<Object3D>>{};
       }
-      auto this_ptr = std::dynamic_pointer_cast<Sphere>(this->shared_from_this());
-      Intersection<Sphere> i1 = {this_ptr, (-b - std::sqrt(delta)) / (2 * a)};
-      Intersection<Sphere> i2 = {this_ptr, (-b + std::sqrt(delta)) / (2 * a)};
+      auto this_ptr = this->shared_from_this();
+      Intersection<Object3D> i1 = {this_ptr, (-b - std::sqrt(delta)) / (2 * a)};
+      Intersection<Object3D> i2 = {this_ptr, (-b + std::sqrt(delta)) / (2 * a)};
       // Return 2 intersections whether ray is tangent or not
       return make_vec(i1, i2);
     }
