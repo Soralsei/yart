@@ -38,8 +38,9 @@ namespace yart {
       if (delta < 0) {
         return std::vector<Intersection<Sphere>>{};
       }
-      Intersection<Sphere> i1 = {this->weak_from_this(), (-b - std::sqrt(delta)) / (2 * a)};
-      Intersection<Sphere> i2 = {this->weak_from_this(), (-b + std::sqrt(delta)) / (2 * a)};
+      auto this_ptr = std::dynamic_pointer_cast<Sphere>(this->shared_from_this());
+      Intersection<Sphere> i1 = {this_ptr, (-b - std::sqrt(delta)) / (2 * a)};
+      Intersection<Sphere> i2 = {this_ptr, (-b + std::sqrt(delta)) / (2 * a)};
       // Return 2 intersections whether ray is tangent or not
       return make_vec(i1, i2);
     }

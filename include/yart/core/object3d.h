@@ -7,10 +7,9 @@
 namespace yart {
 
   class Ray;
-
   template <class ShapeType> class Intersection;
 
-  template <class Derived> class Object3D : public std::enable_shared_from_this<Derived> {
+  class Object3D : public std::enable_shared_from_this<Object3D> {
   protected:
     geometry::Transform3D transform;
 
@@ -22,21 +21,13 @@ namespace yart {
 
     Object3D(Eigen::Vector3f _origin, Eigen::Vector4f _rotation) {
       transform = geometry::Transform3D::Identity();
-      transform = transform.rotate(_rotation).translate(_origin);
+      auto rot = geometry::Quaternion{_rotation}.normalized().toRotationMatrix();
+      transform = transform.rotate(rot).translate(_origin);
     }
 
     Object3D(geometry::Transform3D _transform) : transform(_transform) {}
     Object3D() : transform(geometry::Transform3D::Identity()) {}
-    ~Object3D() {}
-
-    inline Derived& derived() { return *static_cast<Derived*>(this); }
-    inline const Derived& derived() const { return *static_cast<Derived*>(this); }
-
-    std::vector<Intersection<Derived>> intersections(const yart::Ray& ray) {
-      return derived().intersections(ray);
-    }
-
-    Eigen::Vector3f normal_at(const Eigen::Vector3f& point) { return derived().normal_at(point); }
+    virtual ~Object3D() = default;
 
     inline const geometry::Transform3D& get_transform() const { return transform; }
     inline void set_transform(const geometry::Transform3D& _transform) { transform = _transform; }
@@ -49,10 +40,8 @@ namespace yart {
       return static_cast<geometry::Quaternion>(transform.rotation());
     }
 
-    friend bool operator==(const Derived& lhs, const Derived& rhs) { return lhs.equals(rhs); }
-
-    friend std::ostream& operator<<(std::ostream& out, const Object3D<Derived>& shape) {
-      return out << shape.derived();
+    friend std::ostream& operator<<(std::ostream& out, const Object3D& shape) {
+      return out << "Object3D(transform : " << shape.transform.matrix() << ")";
     }
   };
 

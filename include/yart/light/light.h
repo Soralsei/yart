@@ -12,7 +12,7 @@ namespace yart {
   namespace light {
 
     // CRTP based polymorphism
-    template <class Derived> class Light : public Object3D<Derived> {
+    template <class Derived> class Light : public Object3D {
     protected:
       float light_energy = 1.0f;
       float light_specular = 1.0f;
@@ -23,12 +23,12 @@ namespace yart {
 
       Light(Eigen::Vector3f _position, float _light_energy, float _light_specular,
             color::Color _light_color)
-          : Object3D<Derived>::Object3D(_position),
+          : Object3D::Object3D(_position),
             light_energy(_light_energy),
             light_specular(_light_specular),
             light_color(_light_color) {}
 
-      Light(Eigen::Vector3f _position) : Object3D<Derived>::Object3D(_position) {}
+      Light(Eigen::Vector3f _position) : Object3D::Object3D(_position) {}
 
       ~Light() {}
 
