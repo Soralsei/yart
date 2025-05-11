@@ -1,6 +1,6 @@
 #pragma once
-#include <array>
 #include <cstdint>
+#include <memory>
 
 #include "yart/image/color.h"
 #include "yart/traits/sized.h"
@@ -9,64 +9,31 @@ namespace yart {
 
   namespace image {
     using namespace color;
-    template <uint32_t W, uint32_t H> class Canvas : traits::Sized {
+    class Canvas : public traits::Sized {
     private:
-      uint32_t width = W;
-      uint32_t height = H;
-      std::array<Color, W * H> pixels;
+      uint32_t width;
+      uint32_t height;
+      std::unique_ptr<Color[]> pixels;
 
     public:
-      Canvas() { pixels.fill(color::Black); }
-      Canvas(const Canvas& other)
-          : width(other.width), height(other.height), pixels(other.pixels) {};
-      Canvas(Canvas&& other) noexcept
-          : width(other.width), height(other.height), pixels(std::move(other.pixels)) {
-        other.width = 0;
-        other.height = 0;
-      }
+      Canvas(uint32_t width, uint32_t height);
+      Canvas(const Canvas& other);
+      Canvas(Canvas&& other) noexcept;
       ~Canvas() = default;
 
-      Canvas& operator=(Canvas&& other) noexcept {
-        if (this != &other) {
-          width = other.width;
-          height = other.height;
-          pixels = std::move(other.pixels);
-          other.width = 0;
-          other.height = 0;
-        }
-        return *this;
-      }
+      Canvas& operator=(Canvas&& other) noexcept;
+      Canvas& operator=(const Canvas& other);
 
-      Canvas& operator=(const Canvas& other) {
-        if (this != &other) {
-          width = other.width;
-          height = other.height;
-          pixels = other.pixels;
-        }
-        return *this;
-      };
-
-      Color operator()(int x, int y) const {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-          throw std::out_of_range("Canvas coordinates out of range");
-        }
-        return pixels[y * width + x];
-      }
-
-      void setPixel(int x, int y, const Color& color) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-          throw std::out_of_range("Canvas coordinates out of range");
-        }
-        pixels[y * width + x] = color;
-      }
-      Color getPixel(int x, int y) const { return (*this)(x, y); }
+      Color operator()(uint32_t x, uint32_t y) const;
+      void setPixel(uint32_t x, uint32_t y, const Color& color);
+      Color getPixel(uint32_t x, uint32_t y) const;
 
       // Implementing the Sized interface
-      uint32_t getWidth() const override { return width; }
-      uint32_t getHeight() const override { return height; }
+      uint32_t getWidth() const override;
+      uint32_t getHeight() const override;
 
-      const Color* getPixels() const { return pixels.data(); }
-      void fill(const Color& color) { pixels.fill(color); }
+      const Color* getPixels() const;
+      void fill(const Color& color);
     };
   }  // namespace image
 

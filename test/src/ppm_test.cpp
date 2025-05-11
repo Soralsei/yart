@@ -11,7 +11,7 @@ using namespace yart;
 
 TEST(PPMTest, HeaderP3) {
   auto filename = "/home/sora/testp3.ppm";
-  image::Canvas<5, 3> canvas{};
+  image::Canvas canvas{5, 3};
   file::PPMWriter writer;
 
   bool success = writer.write(filename, canvas.getPixels(), canvas.getWidth(),
@@ -38,7 +38,7 @@ TEST(PPMTest, HeaderP3) {
 
 TEST(PPMTest, HeaderP6) {
   auto filename = "/home/sora/testp6.ppm";
-  image::Canvas<5, 3> canvas{};
+  image::Canvas canvas{5, 3};
   file::PPMWriter writer{file::PPMWriter::PPMFormat::P6};
 
   bool success = writer.write(filename, canvas.getPixels(), canvas.getWidth(),

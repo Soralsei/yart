@@ -25,7 +25,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
   };
   Environment e = {.gravity = {0, -0.1f, 0}, .wind{-0.01f, 0, 0}};
 
-  image::Canvas<900, 550> canvas;
+  image::Canvas canvas{900, 550};
   color::Color trajectory_color{1.0, 192 / 255.0f, 203 / 255.0f};
   color::Color clock_color{1.0, 1.0, 1.0};
 

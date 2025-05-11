@@ -10,7 +10,7 @@
 using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
-  image::Canvas<900, 550> canvas;
+  image::Canvas canvas{900, 550};
 
   SDL_Window *window = nullptr;
   SDL_Renderer *renderer = nullptr;

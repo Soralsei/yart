@@ -6,7 +6,7 @@
 using namespace yart;
 
 TEST(CanvasTest, Initialization) {
-  image::Canvas<10, 20> canvas{};
+  image::Canvas canvas{10, 20};
   ASSERT_EQ(canvas.getWidth(), 10);
   ASSERT_EQ(canvas.getHeight(), 20);
 
@@ -26,7 +26,7 @@ TEST(CanvasTest, Initialization) {
   EXPECT_TRUE(true);
 }
 TEST(CanvasTest, SetGetPixel) {
-  image::Canvas<10, 20> canvas{};
+  image::Canvas canvas{10, 20};
   color::Color color(0.5f, 0.5f, 0.5f);
   canvas.setPixel(5, 10, color);
   color::Color result = canvas.getPixel(5, 10);

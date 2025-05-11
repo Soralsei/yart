@@ -15,7 +15,7 @@
 using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
-  image::Canvas<200, 200> canvas;
+  image::Canvas canvas{200, 200};
 
   file::PPMWriter writer;
 

@@ -7,6 +7,7 @@ set(sources
   src/geometry/hit.cpp
   src/geometry/intersection.cpp
 
+  src/image/canvas.cpp
   src/image/color.cpp
   src/image/color_format.cpp
 

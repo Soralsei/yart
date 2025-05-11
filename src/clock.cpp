@@ -9,7 +9,7 @@
 using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
-  image::Canvas<900, 550> canvas;
+  image::Canvas canvas{900, 550};
   color::Color clock_color{1.0, 1.0, 1.0};
 
   file::PPMWriter writer;

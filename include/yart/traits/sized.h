@@ -4,6 +4,9 @@
 namespace yart {
   namespace traits {
     class Sized {
+    protected:
+      virtual ~Sized() {};
+
     public:
       virtual uint32_t getWidth() const = 0;
       virtual uint32_t getHeight() const = 0;

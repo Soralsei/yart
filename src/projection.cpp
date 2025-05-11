@@ -13,7 +13,7 @@
 using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
-  image::Canvas<100, 100> canvas;
+  image::Canvas canvas{100, 100};
   color::Color hit_color{1.0, 0, 0};
 
   file::PPMWriter writer;
