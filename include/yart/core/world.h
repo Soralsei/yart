@@ -7,6 +7,7 @@
 namespace yart {
 
   class Object3D;
+  class Camera;
   namespace geometry {
     class Intersection;
     class Shape3D;
@@ -16,6 +17,10 @@ namespace yart {
   namespace light {
     class Light;
   }  // namespace light
+
+  namespace image {
+    class Canvas;
+  }  // namespace image
 
   using ObjectPtr = std::shared_ptr<geometry::Shape3D>;
   using LightPtr = std::shared_ptr<light::Light>;
@@ -39,6 +44,7 @@ namespace yart {
     Intersections intersections(const Ray& ray);
 
     color::Color color_at(const Ray& ray);
+    std::unique_ptr<image::Canvas> render(const Camera& camera);
 
     static std::unique_ptr<World> default_world();
   };

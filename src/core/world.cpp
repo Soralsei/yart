@@ -1,10 +1,12 @@
 #include "yart/core/world.h"
 
+#include "yart/core/camera.h"
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
 #include "yart/geometry/hit.h"
 #include "yart/geometry/sphere.h"
 #include "yart/geometry/transform.h"
+#include "yart/image/canvas.h"
 #include "yart/light/light.h"
 #include "yart/light/point_light.h"
 
@@ -64,6 +66,23 @@ namespace yart {
 
     auto hit = geometry::Hit::precompute_hit(ray, *h);
     return light::shade_hit(*this, *hit);
+  }
+
+  std::unique_ptr<image::Canvas> World::render(const Camera &camera) {
+    uint32_t hsize = camera.get_hsize();
+    uint32_t vsize = camera.get_vsize();
+
+    std::unique_ptr<image::Canvas> image = std::make_unique<image::Canvas>(hsize, vsize);
+
+    for (uint32_t y = 0; y < vsize; y++) {
+      for (uint32_t x = 0; x < hsize; x++) {
+        auto ray = camera.ray_to(x, y);
+        auto color = color_at(ray);
+
+        image->setPixel(x, y, color);
+      }
+    }
+    return image;
   }
 
 }  // namespace yart
