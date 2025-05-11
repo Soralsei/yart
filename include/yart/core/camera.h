@@ -2,22 +2,35 @@
 #include "yart/core/object3d.h"
 
 namespace yart {
-  class Camera : Object3D {
+  class Ray;
+  class Camera : public Object3D {
   private:
-    float width;
-    float height;
+    float hsize;
+    float vsize;
+
+    float half_width;
+    float half_height;
+
     float fov;
     float pixel_size;
 
-  public:
-    Camera(float width, float height, float fov);
-    ~Camera();
+    Eigen::Matrix4f view_matrix;
 
+  public:
+    Camera(float hsize, float vsize, float fov);
+    ~Camera() = default;
+
+    Ray ray_to(int x, int y) const;
+
+    void look_at(const Eigen::Vector3f& target, const Eigen::Vector3f& up);
+
+    uint32_t get_hsize() const;
+    uint32_t get_vsize() const;
+    float get_fov() const;
     float get_pixel_size() const;
 
-    void look_at(Eigen::Vector3f target, Eigen::Vector3f up);
-
-    static Eigen::Matrix4f get_view_matrix(Eigen::Vector3f from, Eigen::Vector3f to,
-                                           Eigen::Vector3f up);
+    static geometry::Transform3D get_view_transform(const Eigen::Vector3f& from,
+                                                    const Eigen::Vector3f& to,
+                                                    const Eigen::Vector3f& up);
   };
 }  // namespace yart
