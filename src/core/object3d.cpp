@@ -27,7 +27,7 @@ namespace yart {
   }
   Object3D::Object3D() : transform(geometry::Transform3D::Identity()) { object_id = global_id++; }
   Object3D::~Object3D() {}
-  
+
   // Object3D::Object3D(const Object3D& other)
   //     : transform(other.transform), object_id(other.object_id), material(other.material) {}
 
@@ -50,8 +50,6 @@ namespace yart {
   bool Object3D::is_equal(const Object3D& other) const { return self_equal(other); }
 
   bool Object3D::self_equal(const Object3D& other) const {
-    std::cout << "Self : " << (*this) << '\n';
-    std::cout << "Other : " << other << '\n';
     return object_id == other.object_id && transform.isApprox(other.transform);
   }
 
