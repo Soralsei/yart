@@ -2,6 +2,9 @@
 
 #include "yart/core/material.h"
 #include "yart/core/object3d.h"
+#include "yart/core/world.h"
+#include "yart/geometry/hit.h"
+#include "yart/geometry/shape.h"
 
 namespace yart {
 
@@ -9,14 +12,14 @@ namespace yart {
 
     Light::Light(Eigen::Vector3f _position, float _light_energy, float _light_specular,
                  color::Color _light_color)
-        : Object3D::Object3D(_position),
+        : Parent(_position),
           light_energy(_light_energy),
           light_specular(_light_specular),
           light_color(_light_color) {}
 
-    Light::Light(Eigen::Vector3f _position) : Object3D::Object3D(_position) {}
+    Light::Light(Eigen::Vector3f _position) : Parent(_position) {}
 
-    Light::Light() : Object3D::Object3D() {}
+    Light::Light() : Parent() {}
 
     float Light::get_energy() const { return light_energy; }
 
@@ -34,6 +37,12 @@ namespace yart {
 
     void Light::set_light_color(float r, float g, float b, float a) {
       light_color = color::Color(r, g, b, a);
+    }
+
+    bool Light::self_equal(const Light& other) const {
+      return math::approx_equals(light_energy, other.light_energy)
+             && math::approx_equals(light_specular, other.light_specular)
+             && light_color == other.light_color;
     }
 
     color::Color phong_lighting(const Material& material, const Light& light,
@@ -61,6 +70,23 @@ namespace yart {
       }
 
       return ambient + diffuse + specular;
+    }
+
+    color::Color shade_hit(const World& world, const geometry::Hit& hit) {
+      color::Color shade;
+      auto object = hit.get_object().lock();
+      if (object == nullptr) return shade;
+
+      auto material = object->get_material();
+      auto position = hit.get_position();
+      auto eye = hit.get_eye();
+      auto normal = hit.get_normal();
+
+      for (auto&& light : world.get_light_sources()) {
+        shade += phong_lighting(material, *light, position, eye, normal);
+      }
+
+      return shade;
     }
 
   }  // namespace light

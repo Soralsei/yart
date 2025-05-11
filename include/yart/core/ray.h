@@ -20,12 +20,10 @@ namespace yart {
     const Eigen::Vector4f get_origin_homogeneous() const;
     const Eigen::Vector4f get_direction_homogeneous() const;
 
-    Eigen::Vector3f position(double t);
+    Eigen::Vector3f position(double t) const;
 
     Ray operator*(const geometry::Transform3D& transform) const;
     Ray operator*(const Eigen::Matrix4f& transform) const;
-    // Ray operator*(geometry::Transform3D& transform);
-    // Ray operator*(Eigen::Matrix4f& transform);
 
     friend std::ostream& operator<<(std::ostream& out, const Ray& ray);
   };

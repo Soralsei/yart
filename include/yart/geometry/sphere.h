@@ -1,16 +1,21 @@
 #pragma once
+#include "yart/geometry/defines.h"
+#include "yart/geometry/intersection.h"
 #include "yart/geometry/shape.h"
 
 namespace yart {
 
-  class Ray;
-
   namespace geometry {
 
-    template <class ShapeType> class Intersection;  // forward declaration
-    class Sphere : public Shape3D<Sphere> {
+    class Sphere : public comparable<Sphere, Object3D, Shape3D> {
+      using Parent = comparable<Sphere, Object3D, Shape3D>;
+
     private:
+      virtual std::vector<Intersection> _intersections(const Ray& ray) override;
       float radius = 1.0f;
+
+    protected:
+      virtual bool self_equal(const Sphere& other) const override;
 
     public:
       Sphere(Transform3D transform, float _radius);
@@ -18,14 +23,14 @@ namespace yart {
       Sphere(float _radius);
       Sphere();
 
-      //Copy constructor
+      // Copy constructor
       Sphere(const Sphere& other);
 
       ~Sphere();
 
-      std::vector<Intersection<Object3D>> intersections(const yart::Ray& ray);
+      virtual Eigen::Vector3f normal_at(const Eigen::Vector3f& point) const override;
 
-      Eigen::Vector3f normal_at(const Eigen::Vector3f& point);
+      std::string as_string() const override;
 
       friend std::ostream& operator<<(std::ostream& out, const Sphere& sphere);
     };

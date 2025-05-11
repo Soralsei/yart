@@ -1,33 +1,32 @@
-#include <iostream>
-
 #include "yart/geometry/sphere.h"
 
-#include "yart/geometry/intersection.h"
+#include <iostream>
+
+#include "yart/core/object3d.h"
 #include "yart/core/ray.h"
+#include "yart/geometry/intersection.h"
+#include "yart/geometry/shape.h"
+#include "yart/util/math.h"
 #include "yart/util/vector.h"
 
 namespace yart {
 
   namespace geometry {
 
-    Sphere::Sphere(Transform3D _transform, float _radius)
-        : Shape3D<Sphere>::Shape3D(_transform), radius(_radius) {}
+    Sphere::Sphere(Transform3D _transform, float _radius) : Parent(_transform), radius(_radius) {}
 
-    Sphere::Sphere(Eigen::Vector3f _position, float _radius)
-        : Shape3D<Sphere>::Shape3D(_position), radius(_radius) {}
+    Sphere::Sphere(Eigen::Vector3f _position, float _radius) : Parent(_position), radius(_radius) {}
 
-    Sphere::Sphere(float _radius) : Shape3D<Sphere>::Shape3D(), radius(_radius) {}
-    Sphere::Sphere(const Sphere& other)
-        : Shape3D<Sphere>::Shape3D(other.transform), radius(other.radius) {}
-    Sphere::Sphere() : Shape3D<Sphere>::Shape3D(), radius(1.0f) {}
+    Sphere::Sphere(float _radius) : Parent(), radius(_radius) {}
+    Sphere::Sphere(const Sphere& other) : Parent(other.transform), radius(other.radius) {}
+    Sphere::Sphere() : Parent(), radius(1.0f) {}
 
     Sphere::~Sphere() {}
 
-    std::vector<Intersection<Object3D>> Sphere::intersections(const yart::Ray& ray) {
+    std::vector<Intersection> Sphere::_intersections(const Ray& ray) {
       // Transform the ray to the local space of the shape
-      auto transformed_ray = ray * transform.inverse();
-      Eigen::Vector3f self_to_ray = transformed_ray.get_origin() - position();
-      auto direction = transformed_ray.get_direction();
+      Eigen::Vector3f self_to_ray = ray.get_origin() - position();
+      auto direction = ray.get_direction();
       float a = direction.dot(direction);
       float b = 2 * direction.dot(self_to_ray);
       float c = self_to_ray.dot(self_to_ray) - radius * radius;
@@ -36,18 +35,20 @@ namespace yart {
 
       // No intersections
       if (delta < 0) {
-        return std::vector<Intersection<Object3D>>{};
+        return std::vector<Intersection>{};
       }
-      auto this_ptr = this->shared_from_this();
-      Intersection<Object3D> i1 = {this_ptr, (-b - std::sqrt(delta)) / (2 * a)};
-      Intersection<Object3D> i2 = {this_ptr, (-b + std::sqrt(delta)) / (2 * a)};
+      auto this_ptr = shared_from_this();
+      Intersection i1 = {this_ptr, (-b - std::sqrt(delta)) / (2 * a)};
+      Intersection i2 = {this_ptr, (-b + std::sqrt(delta)) / (2 * a)};
       // Return 2 intersections whether ray is tangent or not
       return make_vec(i1, i2);
     }
 
-    Eigen::Vector3f Sphere::normal_at(const Eigen::Vector3f& point) {
+    Eigen::Vector3f Sphere::normal_at(const Eigen::Vector3f& point) const {
+      printf("Called from Sphere...\n");
       // Transform the point to the local space of the shape
       auto transformed_point = transform.inverse() * point;
+      std::cout << transformed_point.transpose() << ", transformed\n";
       auto normal_object = (transformed_point).normalized();
       // Transform the normal back to the world space
       auto transform_world = transform.linear().inverse().transpose();
@@ -57,6 +58,20 @@ namespace yart {
     std::ostream& operator<<(std::ostream& out, const Sphere& sphere) {
       return out << "Sphere([" << sphere.position().x() << ", " << sphere.position().y() << ", "
                  << sphere.position().z() << "], radius: " << sphere.radius << ")";
+    }
+
+    bool Sphere::self_equal(const Sphere& other) const {
+      std::cout << (*this) << '\n';
+      return math::approx_equals(radius, other.radius);
+    }
+
+    std::string Sphere::as_string() const {
+      std::stringstream repr;
+      repr << "Sphere(transform : " << transform.matrix() << "radius : " << radius
+           << /*", material : " << (material) <<*/ ")";
+      std::string out;
+      repr >> out;
+      return out;
     }
 
   }  // namespace geometry

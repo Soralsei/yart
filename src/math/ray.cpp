@@ -13,7 +13,7 @@ namespace yart {
 
   Ray::~Ray() {}
 
-  Eigen::Vector3f Ray::position(double t) {
+  Eigen::Vector3f Ray::position(double t) const {
     auto result = origin + direction * t;
     return result.head<3>();
   }

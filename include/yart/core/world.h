@@ -2,11 +2,14 @@
 #include <memory>
 #include <vector>
 
+#include "yart/image/color.h"
+
 namespace yart {
 
   class Object3D;
   namespace geometry {
-    template <class ObjectType> class Intersection;
+    class Intersection;
+    class Shape3D;
   }  // namespace geometry
 
   class Ray;
@@ -14,9 +17,9 @@ namespace yart {
     class Light;
   }  // namespace light
 
-  using ObjectPtr = std::shared_ptr<Object3D>;
+  using ObjectPtr = std::shared_ptr<geometry::Shape3D>;
   using LightPtr = std::shared_ptr<light::Light>;
-  using Intersections = std::vector<geometry::Intersection<Object3D>>;
+  using Intersections = std::vector<geometry::Intersection>;
 
   class World {
   private:
@@ -27,7 +30,15 @@ namespace yart {
     World();
     ~World() = default;
 
+    const std::vector<ObjectPtr> get_objects() const;
+    const std::vector<LightPtr> get_light_sources() const;
+
+    void add_object(ObjectPtr object);
+    void add_light(LightPtr light);
+
     Intersections intersections(const Ray& ray);
+
+    color::Color color_at(const Ray& ray);
 
     static std::unique_ptr<World> default_world();
   };

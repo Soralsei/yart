@@ -2,7 +2,10 @@ set(sources
   src/math/math.cpp
   src/math/ray.cpp
 
+  src/geometry/shape.cpp
   src/geometry/sphere.cpp
+  src/geometry/hit.cpp
+  src/geometry/intersection.cpp
 
   src/image/color.cpp
   src/image/color_format.cpp
@@ -12,6 +15,7 @@ set(sources
   src/core/object3d.cpp
   src/core/material.cpp
   src/core/world.cpp
+  src/core/camera.cpp
 
   src/light/light.cpp
   src/light/point_light.cpp
@@ -67,4 +71,6 @@ set(test_sources
   src/transform_test.cpp
   src/surface_normal_test.cpp
   src/shading_test.cpp
+  src/world_test.cpp
+  src/camera_test.cpp
 )

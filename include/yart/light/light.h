@@ -1,18 +1,33 @@
 #pragma once
 #include <iostream>
 
-#include "yart/core/material.h"
 #include "yart/core/object3d.h"
 #include "yart/geometry/defines.h"
 #include "yart/image/color.h"
-#include "yart/math/math.h"
+#include "yart/traits/comparable.h"
+#include "yart/util/math.h"
 
 namespace yart {
 
+  using namespace traits;
+
+  class Material;
+  class World;
+
+  namespace geometry
+  {
+    class Hit;
+  } // namespace geometry
+  
+
   namespace light {
 
-    class Light : public Object3D {
+    class Light : public comparable<Light, Object3D> {
+      using Parent = comparable<Light, Object3D>;
+
     protected:
+      virtual bool self_equal(const Light& other) const override;
+
       float light_energy = 1.0f;
       float light_specular = 1.0f;
       color::Color light_color = color::White;
@@ -40,6 +55,8 @@ namespace yart {
     color::Color phong_lighting(const Material& material, const Light& light,
                                 const Eigen::Vector3f& point, const Eigen::Vector3f& eye,
                                 const Eigen::Vector3f& normal);
+
+    color::Color shade_hit(const World& world, const geometry::Hit& hit);
 
   }  // namespace light
 

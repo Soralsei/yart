@@ -39,7 +39,7 @@ TEST(MaterialTest, MaterialAssign) {
 
   yart::Material material;
   material.set_ambient(1);
-  sphere.set_material(material);
+  sphere.get_material() = material;
 
   EXPECT_FLOAT_EQ(sphere.get_material().get_ambient(), 1.0f);
   EXPECT_FLOAT_EQ(sphere.get_material().get_diffuse(), 0.9f);

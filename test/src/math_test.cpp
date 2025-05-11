@@ -1,4 +1,4 @@
-#include "yart/math/math.h"
+#include "yart/util/math.h"
 
 #include <gtest/gtest.h>
 using namespace yart;

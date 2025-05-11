@@ -1,4 +1,4 @@
-#include "yart/math/math.h"
+#include "yart/util/math.h"
 
 #include <cmath>
 #include <type_traits>

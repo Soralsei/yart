@@ -3,7 +3,8 @@
 
 #include "yart/image/color.h"
 
-namespace yart {
+namespace yart { 
+
   class Material {
   private:
     color::Color diffuse_color = color::White;
@@ -36,5 +37,7 @@ namespace yart {
     Material& set_diffuse_color(const color::Color& _diffuse_color);
     Material& set_diffuse_color(float r, float g, float b);
     Material& set_diffuse_color(float r, float g, float b, float a);
+
+    friend bool operator==(const Material& lhs, const Material& rhs);
   };
 }  // namespace yart

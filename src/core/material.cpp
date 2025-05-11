@@ -1,5 +1,7 @@
 #include "yart/core/material.h"
 
+#include "yart/util/math.h"
+
 namespace yart {
   Material::~Material() {}
 
@@ -36,6 +38,14 @@ namespace yart {
   Material& Material::set_diffuse_color(float r, float g, float b, float a) {
     diffuse_color = color::Color(r, g, b, a);
     return (*this);
+  }
+
+  bool operator==(const Material& lhs, const Material& rhs) {
+    return math::approx_equals(lhs.diffuse, rhs.diffuse)
+           && math::approx_equals(lhs.ambient, rhs.ambient)
+           && math::approx_equals(lhs.specular, rhs.specular)
+           && math::approx_equals(lhs.shininess, rhs.shininess)
+           && lhs.diffuse_color == rhs.diffuse_color;
   }
 
 }  // namespace yart

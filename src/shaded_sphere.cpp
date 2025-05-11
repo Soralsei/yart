@@ -4,6 +4,7 @@
 
 #include "Eigen/Dense"
 #include "yart/core/ray.h"
+#include "yart/core/material.h"
 #include "yart/file/ppm_writer.h"
 #include "yart/geometry/intersection.h"
 #include "yart/geometry/sphere.h"
@@ -30,7 +31,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
   .rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitX()));
   
   auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
-  sphere->set_material(material);
+  sphere->get_material() = material;
 
   auto light = light::PointLight{Eigen::Vector3f{-10, 10, -10}};
 

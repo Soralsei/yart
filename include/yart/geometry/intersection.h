@@ -1,50 +1,34 @@
 #pragma once
+
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <vector>
 
 namespace yart {
   namespace geometry {
-    template <class ShapeType> class Intersection {
+    class Shape3D;
+
+    class Intersection {
     private:
       float t;
-      std::weak_ptr<ShapeType> object;
+      std::weak_ptr<Shape3D> object;
 
     public:
-      Intersection(std::weak_ptr<ShapeType> obj, float _t) : t(_t), object(obj) {}
-      ~Intersection() {}
+      Intersection(std::weak_ptr<Shape3D> obj, float _t);
+      ~Intersection();
 
-      std::weak_ptr<ShapeType> get_object() const { return object; }
+      std::weak_ptr<Shape3D> get_object() const;
 
-      inline float get_t() const { return t; }
+      float get_t() const;
 
-      friend bool operator==(const Intersection<ShapeType>& lhs,
-                             const Intersection<ShapeType>& rhs) {
-        return lhs.get_t() == rhs.get_t() && lhs.get_object().lock() == rhs.get_object().lock();
-      }
+      friend bool operator==(const Intersection& lhs, const Intersection& rhs);
 
-      template <class T>
-      friend std::ostream& operator<<(std::ostream& out, const Intersection<T>& intersection);
+      friend std::ostream& operator<<(std::ostream& out, const Intersection& intersection);
     };
 
-    template <class ShapeType>
-    std::ostream& operator<<(std::ostream& out, const Intersection<ShapeType>& intersection) {
-      return out << "Intersection(t: " << intersection.get_t()
-                 << ", object: " << *(intersection.get_object().lock()) << ")";
-    }
+    std::ostream& operator<<(std::ostream& out, const Intersection& intersection);
 
-    template <class ShapeType>
-    Intersection<ShapeType>* hit(std::vector<Intersection<ShapeType>>& intersections) {
-      float min_t = std::numeric_limits<float>::max();
-      Intersection<ShapeType>* min_intersection = nullptr;
-      for (auto&& i : intersections) {
-        if (i.get_t() >= 0 && i.get_t() < min_t) {
-          min_t = i.get_t();
-          min_intersection = &i;
-        }
-      }
-
-      return min_intersection;
-    }
+    Intersection* hit(std::vector<Intersection>& intersections);
   }  // namespace geometry
 }  // namespace yart

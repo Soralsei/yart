@@ -64,7 +64,7 @@ TEST(Intersection, SphereBehindRay) {
 
 TEST(Intersection, IntersectionInit) {
   auto s = std::make_shared<yart::geometry::Sphere>(1.0f);
-  yart::geometry::Intersection<yart::geometry::Sphere> i = {s, 3.5f};
+  yart::geometry::Intersection i = {s, 3.5f};
 
   ASSERT_FLOAT_EQ(i.get_t(), 3.5f);
   ASSERT_EQ(i.get_object().lock(), s);
@@ -72,8 +72,8 @@ TEST(Intersection, IntersectionInit) {
 
 TEST(Intersection, MakeVecIntersection) {
   auto s = std::make_shared<yart::geometry::Sphere>(1.0f);
-  yart::geometry::Intersection<yart::geometry::Sphere> i1 = {s, 1};
-  yart::geometry::Intersection<yart::geometry::Sphere> i2 = {s, 2};
+  yart::geometry::Intersection i1 = {s, 1};
+  yart::geometry::Intersection i2 = {s, 2};
   auto intersections = yart::make_vec(i1, i2);
 
   ASSERT_EQ(intersections.size(), 2);
@@ -83,8 +83,8 @@ TEST(Intersection, MakeVecIntersection) {
 
 TEST(Intersection, HitTestPositive) {
   auto s = std::make_shared<yart::geometry::Sphere>(1.0f);
-  yart::geometry::Intersection<yart::geometry::Sphere> i1 = {s, 1};
-  yart::geometry::Intersection<yart::geometry::Sphere> i2 = {s, 2};
+  yart::geometry::Intersection i1 = {s, 1};
+  yart::geometry::Intersection i2 = {s, 2};
   auto intersections = yart::make_vec(i1, i2);
 
   auto hit = yart::geometry::hit(intersections);
@@ -94,8 +94,8 @@ TEST(Intersection, HitTestPositive) {
 
 TEST(Intersection, HitTestNegative) {
   auto s = std::make_shared<yart::geometry::Sphere>(1.0f);
-  yart::geometry::Intersection<yart::geometry::Sphere> i1 = {s, -1};
-  yart::geometry::Intersection<yart::geometry::Sphere> i2 = {s, 1};
+  yart::geometry::Intersection i1 = {s, -1};
+  yart::geometry::Intersection i2 = {s, 1};
   auto intersections = yart::make_vec(i1, i2);
 
   auto hit = yart::geometry::hit(intersections);
@@ -105,8 +105,8 @@ TEST(Intersection, HitTestNegative) {
 
 TEST(Intersection, HitTestAllNegative) {
   auto s = std::make_shared<yart::geometry::Sphere>(1.0f);
-  yart::geometry::Intersection<yart::geometry::Sphere> i1 = {s, -1};
-  yart::geometry::Intersection<yart::geometry::Sphere> i2 = {s, -2};
+  yart::geometry::Intersection i1 = {s, -1};
+  yart::geometry::Intersection i2 = {s, -2};
   auto intersections = yart::make_vec(i1, i2);
 
   auto hit = yart::geometry::hit(intersections);
@@ -116,10 +116,10 @@ TEST(Intersection, HitTestAllNegative) {
 
 TEST(Intersection, HitTest) {
   auto s = std::make_shared<yart::geometry::Sphere>(1.0f);
-  yart::geometry::Intersection<yart::geometry::Sphere> i1 = {s, 5};
-  yart::geometry::Intersection<yart::geometry::Sphere> i2 = {s, 7};
-  yart::geometry::Intersection<yart::geometry::Sphere> i3 = {s, -3};
-  yart::geometry::Intersection<yart::geometry::Sphere> i4 = {s, 2};
+  yart::geometry::Intersection i1 = {s, 5};
+  yart::geometry::Intersection i2 = {s, 7};
+  yart::geometry::Intersection i3 = {s, -3};
+  yart::geometry::Intersection i4 = {s, 2};
   auto intersections = yart::make_vec(i1, i2, i3, i4);
 
   auto hit = yart::geometry::hit(intersections);

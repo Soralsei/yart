@@ -1,0 +1,1 @@
+#include "yart/core/camera.h"
