@@ -21,7 +21,6 @@ namespace yart {
     virtual bool is_equal(const Object3D& rhs) const override;
     virtual bool self_equal(const Object3D& other) const override;
 
-    geometry::Transform3D transform;
     uint32_t object_id;
 
   public:
@@ -36,9 +35,6 @@ namespace yart {
 
     virtual ~Object3D();
 
-    const geometry::Transform3D& get_transform() const;
-    void set_transform(const geometry::Transform3D& _transform);
-
     Eigen::Vector3f position() const;
     Eigen::Vector3f orientation() const;
     geometry::Quaternion quaternion() const;
@@ -46,6 +42,8 @@ namespace yart {
     friend std::ostream& operator<<(std::ostream& out, const Object3D& shape);
 
     friend bool operator==(const Object3D& lhs, const Object3D& rhs);
+
+    geometry::Transform3D transform;
   };
 
 }  // namespace yart

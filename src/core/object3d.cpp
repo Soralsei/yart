@@ -28,12 +28,6 @@ namespace yart {
   Object3D::Object3D() : transform(geometry::Transform3D::Identity()) { object_id = global_id++; }
   Object3D::~Object3D() {}
 
-  // Object3D::Object3D(const Object3D& other)
-  //     : transform(other.transform), object_id(other.object_id), material(other.material) {}
-
-  const geometry::Transform3D& Object3D::get_transform() const { return transform; }
-  void Object3D::set_transform(const geometry::Transform3D& _transform) { transform = _transform; }
-
   Eigen::Vector3f Object3D::position() const { return transform.translation(); }
   Eigen::Vector3f Object3D::orientation() const {
     return transform.rotation().eulerAngles(2, 1, 0);
