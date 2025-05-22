@@ -45,10 +45,8 @@ namespace yart {
     }
 
     Eigen::Vector3f Sphere::normal_at(const Eigen::Vector3f& point) const {
-      printf("Called from Sphere...\n");
       // Transform the point to the local space of the shape
       auto transformed_point = transform.inverse() * point;
-      std::cout << transformed_point.transpose() << ", transformed\n";
       auto normal_object = (transformed_point).normalized();
       // Transform the normal back to the world space
       auto transform_world = transform.linear().inverse().transpose();
@@ -67,11 +65,8 @@ namespace yart {
 
     std::string Sphere::as_string() const {
       std::stringstream repr;
-      repr << "Sphere(transform : " << transform.matrix() << "radius : " << radius
-           << /*", material : " << (material) <<*/ ")";
-      std::string out;
-      repr >> out;
-      return out;
+      repr << "Sphere(\ntransform : " << transform.matrix() << ", radius : " << radius << ")";
+      return repr.str();
     }
 
   }  // namespace geometry
