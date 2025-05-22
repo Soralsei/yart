@@ -30,6 +30,7 @@ namespace yart {
     }
 
     Material& Shape3D::get_material() { return (*material); }
+    void Shape3D::set_material(const Material& mat) { *material = mat; }
 
     bool Shape3D::self_equal(const Shape3D& other) const {
       return (*material) == (*other.material);

@@ -42,6 +42,7 @@ namespace yart {
       virtual Eigen::Vector3f normal_at(const Eigen::Vector3f& point) const = 0;
 
       Material& get_material();
+      void set_material(const Material& mat);
 
       friend std::ostream& operator<<(std::ostream& out, const Shape3D&);
     };
