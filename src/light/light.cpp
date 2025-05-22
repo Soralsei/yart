@@ -25,7 +25,7 @@ namespace yart {
 
     float Light::get_specular() const { return light_specular; }
 
-    const color::Color& Light::get_light_color() const { return light_color; }
+    const color::Color& Light::get_color() const { return light_color; }
 
     void Light::set_energy(float _light_energy) { light_energy = _light_energy; }
 
@@ -35,7 +35,7 @@ namespace yart {
 
     void Light::set_color(float r, float g, float b) { light_color = color::Color(r, g, b); }
 
-    void Light::set_light_color(float r, float g, float b, float a) {
+    void Light::set_color(float r, float g, float b, float a) {
       light_color = color::Color(r, g, b, a);
     }
 
@@ -49,7 +49,7 @@ namespace yart {
                                 const Eigen::Vector3f& point, const Eigen::Vector3f& eye,
                                 const Eigen::Vector3f& normal) {
       color::Color effective_color
-          = material.get_diffuse_color() * (light.get_light_color() * light.get_energy());
+          = material.get_diffuse_color() * (light.get_color() * light.get_energy());
       Eigen::Vector3f lightv = (light.position() - point).normalized();
       color::Color ambient = effective_color * material.get_ambient();
       float light_dot_normal = lightv.dot(normal);
@@ -65,7 +65,7 @@ namespace yart {
         if (reflect_dot_eye > 0) {
           float factor = std::pow(reflect_dot_eye, material.get_shininess());
           specular
-              = (light.get_light_color() * light.get_energy()) * material.get_specular() * factor;
+              = (light.get_color() * light.get_energy()) * material.get_specular() * factor;
         }
       }
 

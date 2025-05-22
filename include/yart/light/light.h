@@ -14,11 +14,9 @@ namespace yart {
   class Material;
   class World;
 
-  namespace geometry
-  {
+  namespace geometry {
     class Hit;
-  } // namespace geometry
-  
+  }  // namespace geometry
 
   namespace light {
 
@@ -44,12 +42,12 @@ namespace yart {
 
       float get_energy() const;
       float get_specular() const;
-      const color::Color& get_light_color() const;
+      const color::Color& get_color() const;
       void set_energy(float _light_energy);
       void set_specular(float _light_specular);
       void set_color(const color::Color& _light_color);
       void set_color(float r, float g, float b);
-      void set_light_color(float r, float g, float b, float a);
+      void set_color(float r, float g, float b, float a);
     };
 
     color::Color phong_lighting(const Material& material, const Light& light,
