@@ -17,8 +17,14 @@ namespace yart {
   const std::vector<ObjectPtr> World::get_objects() const { return objects; }
   const std::vector<LightPtr> World::get_light_sources() const { return lights; }
 
-  void World::add_object(ObjectPtr obj) { objects.push_back(obj); }
-  void World::add_light(LightPtr light) { lights.push_back(light); }
+  World &World::add_object(ObjectPtr obj) {
+    objects.push_back(obj);
+    return (*this);
+  }
+  World &World::add_light(LightPtr light) {
+    lights.push_back(light);
+    return (*this);
+  }
 
   std::unique_ptr<World> World::default_world() {
     World *world = new World();
@@ -34,7 +40,7 @@ namespace yart {
     world->objects.push_back(sphere1);
 
     geometry::Transform3D transform
-        = geometry::Transform3D::Identity() * transform::scaling<float>(0.5f, 0.5f, 0.5f);
+        = geometry::Transform3D::Identity() * transform::scale<float>(0.5f, 0.5f, 0.5f);
     auto sphere2 = std::make_shared<geometry::Sphere>(transform, 1.0f);
     world->objects.push_back(sphere2);
 

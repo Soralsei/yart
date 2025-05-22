@@ -38,8 +38,8 @@ namespace yart {
     const std::vector<ObjectPtr> get_objects() const;
     const std::vector<LightPtr> get_light_sources() const;
 
-    void add_object(ObjectPtr object);
-    void add_light(LightPtr light);
+    World& add_object(ObjectPtr object);
+    World& add_light(LightPtr light);
 
     Intersections intersections(const Ray& ray);
 
