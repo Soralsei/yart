@@ -23,7 +23,7 @@ endif()
 message(STATUS "Started CMake for ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
 
 if (UNIX)
-    add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")    #this will allow to use same _DEBUG macro available in both Linux as well as Windows - MSCV environment. Easy to put Debug specific code.
+  add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")    #this will allow to use same _DEBUG macro available in both Linux as well as Windows - MSCV environment. Easy to put Debug specific code.
 endif (UNIX)
 
 
@@ -167,6 +167,7 @@ include(cmake/Doxygen.cmake)
 # Identify and link with the specific "packages" the project uses
 #find_package(package_name package_version REQUIRED package_type [other_options])
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
+include_directories(${EIGEN3_INCLUDE_DIR})
 #target_link_libraries(
 #  ${PROJECT_NAME}
 #  PUBLIC
@@ -193,6 +194,15 @@ target_link_libraries(
     Eigen3::Eigen
     vendored
 )
+
+if(${PROJECT_NAME}_USE_OPENMP)
+  FIND_PACKAGE(OpenMP REQUIRED)
+  message(STATUS "Found OpenMP, adding flags '${OpenMP_CXX_FLAGS}' to compiler and linker")
+  add_compile_options(${OpenMP_CXX_FLAGS})
+  add_link_options(${OpenMP_CXX_FLAGS})
+  # add_link_options(-fopenmp)
+  target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 # For Windows, it is necessary to link with the MultiThreaded library.
 # Depending on how the rest of the project's dependencies are linked, it might be necessary

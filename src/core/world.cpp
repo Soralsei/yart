@@ -1,5 +1,8 @@
 #include "yart/core/world.h"
 
+#include <iostream>
+
+#include "omp.h"
 #include "yart/core/camera.h"
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
@@ -81,11 +84,11 @@ namespace yart {
 
     std::unique_ptr<image::Canvas> image = std::make_unique<image::Canvas>(hsize, vsize);
 
+#pragma omp parallel for collapse(2)
     for (uint32_t y = 0; y < vsize; y++) {
       for (uint32_t x = 0; x < hsize; x++) {
-        auto ray = camera.ray_to(x, y);
-        auto color = color_at(ray);
-
+        Ray ray = camera.ray_to(x, y);
+        color::Color color = color_at(ray);
         image->setPixel(x, y, color);
       }
     }
