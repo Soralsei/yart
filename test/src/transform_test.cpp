@@ -23,7 +23,7 @@ TEST(Transforms, TranslationInverse) {
 }
 
 TEST(Transforms, Scaling) {
-  auto scale = yart::transform::scaling(2.0f, 3.0f, 4.0f);
+  auto scale = yart::transform::scale(2.0f, 3.0f, 4.0f);
   Vector3f point;
   point << -4, 6, 8;
   Vector3f expected = {-8, 18, 32};
@@ -31,7 +31,7 @@ TEST(Transforms, Scaling) {
 }
 
 TEST(Transforms, ScalingInverse) {
-  Matrix3f scale = yart::transform::scaling(2.0f, 3.0f, 4.0f);
+  Matrix3f scale = yart::transform::scale(2.0f, 3.0f, 4.0f);
   Vector3f point;
   point << -4, 6, 8;
   Vector3f expected = {-2, 2, 2};
@@ -39,7 +39,7 @@ TEST(Transforms, ScalingInverse) {
 }
 
 TEST(Transforms, Reflect) {
-  Matrix3f scale = yart::transform::scaling(-1.0f, 1.0f, 1.0f);
+  Matrix3f scale = yart::transform::scale(-1.0f, 1.0f, 1.0f);
   Vector3f point;
   point << 2, 3, 4;
   Vector3f expected = {-2, 3, 4};
@@ -47,7 +47,8 @@ TEST(Transforms, Reflect) {
 }
 
 TEST(Rotation, RotateX) {
-  Matrix3f rotation = yart::transform::rotationX(static_cast<float>(M_PI / 4.0f));
+  Matrix3f rotation
+      = yart::transform::rotationX(static_cast<float>(M_PI / 4.0f)).toRotationMatrix();
   Vector3f point = {0, 1, 0};
   Vector3f expected = {0, std::sqrt(2) / 2, std::sqrt(2) / 2};
   ASSERT_TRUE((rotation * point).isApprox(expected));
@@ -57,14 +58,16 @@ TEST(Rotation, RotateX) {
 }
 
 TEST(Rotation, RotateXInverse) {
-  Matrix3f rotation = yart::transform::rotationX(static_cast<float>(M_PI / 4.0f));
+  Matrix3f rotation
+      = yart::transform::rotationX(static_cast<float>(M_PI / 4.0f)).toRotationMatrix();
   Vector3f point = {0, 1, 0};
   Vector3f expected = {0, std::sqrt(2) / 2, -std::sqrt(2) / 2};
   ASSERT_TRUE((rotation.inverse() * point).isApprox(expected));
 }
 
 TEST(Rotation, RotateY) {
-  Matrix3f rotation = yart::transform::rotationY(static_cast<float>(M_PI / 4.0f));
+  Matrix3f rotation
+      = yart::transform::rotationY(static_cast<float>(M_PI / 4.0f)).toRotationMatrix();
   Vector3f point = {0, 0, 1};
   Vector3f expected = {std::sqrt(2) / 2, 0, std::sqrt(2) / 2};
   ASSERT_TRUE((rotation * point).isApprox(expected));
@@ -74,14 +77,16 @@ TEST(Rotation, RotateY) {
 }
 
 TEST(Rotation, RotateYInverse) {
-  Matrix3f rotation = yart::transform::rotationY(static_cast<float>(M_PI / 4.0f));
+  Matrix3f rotation
+      = yart::transform::rotationY(static_cast<float>(M_PI / 4.0f)).toRotationMatrix();
   Vector3f point = {0, 0, 1};
   Vector3f expected = {-std::sqrt(2) / 2, 0, std::sqrt(2) / 2};
   ASSERT_TRUE((rotation.inverse() * point).isApprox(expected));
 }
 
 TEST(Rotation, RotateZ) {
-  Matrix3f rotation = yart::transform::rotationZ(static_cast<float>(M_PI / 4.0f));
+  Matrix3f rotation
+      = yart::transform::rotationZ(static_cast<float>(M_PI / 4.0f)).toRotationMatrix();
   Vector3f point = {0, 1, 0};
   Vector3f expected = {-std::sqrt(2) / 2, std::sqrt(2) / 2, 0};
   ASSERT_TRUE((rotation * point).isApprox(expected));
@@ -91,7 +96,8 @@ TEST(Rotation, RotateZ) {
 }
 
 TEST(Rotation, RotateZInverse) {
-  Matrix3f rotation = yart::transform::rotationZ(static_cast<float>(M_PI / 4.0f));
+  Matrix3f rotation
+      = yart::transform::rotationZ(static_cast<float>(M_PI / 4.0f)).toRotationMatrix();
   Vector3f point = {0, 1, 0};
   Vector3f expected = {std::sqrt(2) / 2, std::sqrt(2) / 2, 0};
   ASSERT_TRUE((rotation.inverse() * point).isApprox(expected));

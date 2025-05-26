@@ -24,8 +24,9 @@ namespace yart {
     Sphere::~Sphere() {}
 
     std::vector<Intersection> Sphere::_intersections(const Ray& ray) {
-      // Transform the ray to the local space of the shape
-      Eigen::Vector3f self_to_ray = ray.get_origin() - position();
+      // Ray should already be in local frame of the sphere
+      // So we can use the ray origin and direction directly
+      Eigen::Vector4f self_to_ray = ray.get_origin() - Eigen::Vector4f::UnitW();
       auto direction = ray.get_direction();
       float a = direction.dot(direction);
       float b = 2 * direction.dot(self_to_ray);
@@ -44,13 +45,15 @@ namespace yart {
       return make_vec(i1, i2);
     }
 
-    Eigen::Vector3f Sphere::normal_at(const Eigen::Vector3f& point) const {
+    Eigen::Vector4f Sphere::normal_at(const Eigen::Vector4f& point) const {
       // Transform the point to the local space of the shape
-      auto transformed_point = transform.inverse() * point;
-      auto normal_object = (transformed_point).normalized();
+      Eigen::Vector4f transformed_point = transform.inverse() * point;
+      Eigen::Vector4f normal_object = (transformed_point - Eigen::Vector4f::UnitW()).normalized();
       // Transform the normal back to the world space
-      auto transform_world = transform.linear().inverse().transpose();
-      return (transform_world * normal_object).normalized();
+      Eigen::Matrix3f transform_world = transform.linear().inverse().transpose();
+      Eigen::Vector4f normal_world = normal_object;
+      normal_world.head<3>() = transform_world * normal_world.head<3>();
+      return normal_world.normalized();
     }
 
     std::ostream& operator<<(std::ostream& out, const Sphere& sphere) {
@@ -65,7 +68,8 @@ namespace yart {
 
     std::string Sphere::as_string() const {
       std::stringstream repr;
-      repr << "Sphere(\ntransform : " << transform.matrix() << ", radius : " << radius << ")";
+      repr << "Sphere(\ntransform : \n[" << transform.matrix() << " ], radius : " << radius
+           << "\n)";
       return repr.str();
     }
 

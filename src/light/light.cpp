@@ -46,11 +46,12 @@ namespace yart {
     }
 
     color::Color phong_lighting(const Material& material, const Light& light,
-                                const Eigen::Vector3f& point, const Eigen::Vector3f& eye,
-                                const Eigen::Vector3f& normal) {
+                                const Eigen::Vector4f& point, const Eigen::Vector4f& eye,
+                                const Eigen::Vector4f& normal) {
       color::Color effective_color
           = material.get_diffuse_color() * (light.get_color() * light.get_energy());
-      Eigen::Vector3f lightv = (light.position() - point).normalized();
+      Eigen::Vector4f lightv = (light.position().homogeneous() - point).normalized();
+      // std::cout << "Light vector to hit position : " << lightv.transpose() << "\n";
       color::Color ambient = effective_color * material.get_ambient();
       float light_dot_normal = lightv.dot(normal);
 
@@ -59,13 +60,13 @@ namespace yart {
 
       if (light_dot_normal >= 0) {
         diffuse = effective_color * material.get_diffuse() * light_dot_normal;
-        Eigen::Vector3f reflectv = math::reflect(-lightv, normal);
+        Eigen::Vector4f reflectv = math::reflect(-lightv, normal);
         float reflect_dot_eye = reflectv.dot(eye);
 
         if (reflect_dot_eye > 0) {
           float factor = std::pow(reflect_dot_eye, material.get_shininess());
-          specular
-              = (light.get_color() * light.get_energy()) * material.get_specular() * factor;
+          specular = light.get_color() * light.get_energy() * material.get_specular() * factor
+                     * light.get_specular();
         }
       }
 
@@ -78,9 +79,9 @@ namespace yart {
       if (object == nullptr) return shade;
 
       auto material = object->get_material();
-      auto position = hit.get_position();
-      auto eye = hit.get_eye();
-      auto normal = hit.get_normal();
+      Eigen::Vector4f position = hit.get_position();
+      Eigen::Vector4f eye = hit.get_eye();
+      Eigen::Vector4f normal = hit.get_normal();
 
       for (auto&& light : world.get_light_sources()) {
         shade += phong_lighting(material, *light, position, eye, normal);

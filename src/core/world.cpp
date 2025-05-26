@@ -39,8 +39,8 @@ namespace yart {
     sphere1->get_material() = mat;
     world->objects.push_back(sphere1);
 
-    geometry::Transform3D transform
-        = geometry::Transform3D::Identity() * transform::scale<float>(0.5f, 0.5f, 0.5f);
+    geometry::Transform3D transform = geometry::Transform3D::Identity();
+    transform.scale(transform::scale<float>(0.5f, 0.5f, 0.5f).diagonal().head<3>().eval());
     auto sphere2 = std::make_shared<geometry::Sphere>(transform, 1.0f);
     world->objects.push_back(sphere2);
 
@@ -71,6 +71,7 @@ namespace yart {
     }
 
     auto hit = geometry::Hit::precompute_hit(ray, *h);
+    // std::cout << "Hit position : " << hit->get_position().transpose() << "\n######\n";
     return light::shade_hit(*this, *hit);
   }
 

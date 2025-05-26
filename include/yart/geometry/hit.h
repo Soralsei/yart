@@ -18,9 +18,9 @@ namespace yart {
       std::weak_ptr<Shape3D> object;
       float t;
 
-      Eigen::Vector3f position;
-      Eigen::Vector3f eye;
-      Eigen::Vector3f normal;
+      Eigen::Vector4f position;
+      Eigen::Vector4f eye;
+      Eigen::Vector4f normal;
 
       bool inside = false;
 
@@ -30,9 +30,9 @@ namespace yart {
 
       float get_t() const;
       std::weak_ptr<Shape3D> get_object() const;
-      Eigen::Vector3f get_position() const;
-      Eigen::Vector3f get_eye() const;
-      Eigen::Vector3f get_normal() const;
+      Eigen::Vector4f get_position() const;
+      Eigen::Vector4f get_eye() const;
+      Eigen::Vector4f get_normal() const;
 
       bool is_inside() const;
 

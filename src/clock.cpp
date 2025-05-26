@@ -20,7 +20,8 @@ int main(int /*argc*/, char* /*argv*/[]) {
   Eigen::Vector3f start = {0, 1, 0};
 
   for (size_t i = 0; i < 12; i++) {
-    Eigen::Matrix3f rotation = yart::transform::rotationZ(static_cast<float>(-M_PI / 6 * i));
+    Eigen::Matrix3f rotation
+        = yart::transform::rotationZ(static_cast<float>(-M_PI / 6 * i)).toRotationMatrix();
     auto rotated = rotation * (start * radius);
     canvas.setPixel(offset_x + rotated.x(), offset_y - rotated.y(), clock_color);
   }

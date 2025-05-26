@@ -34,10 +34,13 @@ namespace yart {
     float world_x = half_width - x_offset;
     float world_y = half_height - y_offset;
 
-    auto pixel = transform.inverse() * Eigen::Vector3f{world_x, world_y, -1};
-    auto origin = transform.inverse() * Eigen::Vector3f::Zero();
+    Eigen::Matrix4f inverse = transform.matrix().inverse();
+    Eigen::Vector4f pixel = inverse * Eigen::Vector3f{world_x, world_y, -1}.homogeneous();
+    Eigen::Vector4f origin = inverse * Eigen::Vector3f::Zero().homogeneous();
+    // std::cout << "Camera origin: " << origin.transpose() << "\n";
+    // std::cout << "Camera transform:\n" << transform.matrix() << "\n";
 
-    auto direction = (pixel - origin).normalized();
+    Eigen::Vector4f direction = (pixel - origin).normalized();
 
     return Ray{origin, direction};
   }
@@ -56,11 +59,11 @@ namespace yart {
     auto left = forward.cross(up_normalized);
     auto true_up = left.cross(forward);
 
-    view_matrix.matrix().block(0, 0, Eigen::fix<1>, Eigen::fix<3>) = left.transpose();
-    view_matrix.matrix().block(1, 0, Eigen::fix<1>, Eigen::fix<3>) = true_up.transpose();
-    view_matrix.matrix().block(2, 0, Eigen::fix<1>, Eigen::fix<3>) = -forward.transpose();
+    view_matrix.matrix().block<1, 3>(Eigen::fix<0>, Eigen::fix<0>) = left.transpose();
+    view_matrix.matrix().block<1, 3>(Eigen::fix<1>, Eigen::fix<0>) = true_up.transpose();
+    view_matrix.matrix().block<1, 3>(Eigen::fix<2>, Eigen::fix<0>) = -forward.transpose();
 
-    view_matrix *= transform::translation(-from.x(), -from.y(), -from.z());
+    view_matrix.translate(-from);
 
     return view_matrix;
   }

@@ -7,7 +7,7 @@ namespace yart {
 
   namespace math {
 
-    Eigen::Vector3f reflect(const Eigen::Vector3f& vector, const Eigen::Vector3f& normal) {
+    Eigen::Vector4f reflect(const Eigen::Vector4f& vector, const Eigen::Vector4f& normal) {
       return vector - normal * 2 * vector.dot(normal);
     }
 

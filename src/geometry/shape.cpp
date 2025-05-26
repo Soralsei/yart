@@ -25,12 +25,16 @@ namespace yart {
     Shape3D::~Shape3D() {}
 
     std::vector<Intersection> Shape3D::intersections(const Ray& ray) {
-      Ray transformed_ray = ray * transform.inverse();
+      // std::cout << "Self : " << *this << "\n";
+      Ray transformed_ray = ray.transform(transform.inverse());
+      // std::cout << "Ray : " << ray << "\n";
+      // std::cout << "Local space ray : " << transformed_ray << "\n";
       return _intersections(transformed_ray);
     }
 
     Material& Shape3D::get_material() { return (*material); }
     void Shape3D::set_material(const Material& mat) { *material = mat; }
+    void Shape3D::set_material(std::shared_ptr<Material> mat) { material = mat; }
 
     bool Shape3D::self_equal(const Shape3D& other) const {
       return (*material) == (*other.material);

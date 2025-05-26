@@ -6,6 +6,7 @@ set(sources
   src/geometry/sphere.cpp
   src/geometry/hit.cpp
   src/geometry/intersection.cpp
+  src/geometry/transform.cpp
 
   src/image/canvas.cpp
   src/image/color.cpp
@@ -41,6 +42,10 @@ set(projection_sources
 )
 set(shading_sources
   src/shaded_sphere.cpp
+  ${sources}
+)
+set(render_sources
+  src/world_render.cpp
   ${sources}
 )
 

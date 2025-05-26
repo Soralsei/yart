@@ -130,22 +130,22 @@ TEST(Intersection, HitTest) {
 TEST(TransformRay, Translate) {
   yart::Ray r = {Vector3f{1, 2, 3}, Vector3f{0, 1, 0}};
   yart::geometry::Transform3D translation{yart::transform::translation<float>(3, 4, 5)};
-  auto translated_ray = r * translation;
-  ASSERT_EQ(translated_ray.get_origin(), (Vector3f{4, 6, 8}));
-  ASSERT_EQ(translated_ray.get_direction(), (Vector3f{0, 1, 0}));
+  auto translated_ray = r.transform(translation);
+  ASSERT_EQ(translated_ray.get_origin(), (Vector4f{4, 6, 8, 1}));
+  ASSERT_EQ(translated_ray.get_direction(), (Vector4f{0, 1, 0, 0}));
 }
 
 TEST(TransformRay, Scaling) {
   yart::Ray r = {Vector3f{1, 2, 3}, Vector3f{0, 1, 0}};
-  yart::geometry::Transform3D scale{yart::transform::scaling<float>(2, 3, 4)};
-  auto translated_ray = r * scale;
-  ASSERT_EQ(translated_ray.get_origin(), (Vector3f{2, 6, 12}));
-  ASSERT_EQ(translated_ray.get_direction(), (Vector3f{0, 3, 0}));
+  yart::geometry::Transform3D scale{yart::transform::scale<float>(2, 3, 4)};
+  auto translated_ray = r.transform(scale);
+  ASSERT_EQ(translated_ray.get_origin(), (Vector4f{2, 6, 12, 1}));
+  ASSERT_EQ(translated_ray.get_direction(), (Vector4f{0, 3, 0, 0}));
 }
 
 TEST(TransformRay, IntersectionScaled) {
   yart::Ray r = {Vector3f{0, 0, -5}, Vector3f{0, 0, 1}};
-  yart::geometry::Transform3D scale{yart::transform::scaling<float>(2, 2, 2)};
+  yart::geometry::Transform3D scale{yart::transform::scale<float>(2, 2, 2)};
 
   auto s = std::make_shared<yart::geometry::Sphere>(scale, 1);
 

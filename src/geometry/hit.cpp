@@ -15,11 +15,11 @@ namespace yart {
 
     std::weak_ptr<Shape3D> Hit::get_object() const { return object; }
 
-    Eigen::Vector3f Hit::get_position() const { return position; }
+    Eigen::Vector4f Hit::get_position() const { return position; }
 
-    Eigen::Vector3f Hit::get_eye() const { return eye; }
+    Eigen::Vector4f Hit::get_eye() const { return eye; }
 
-    Eigen::Vector3f Hit::get_normal() const { return normal; }
+    Eigen::Vector4f Hit::get_normal() const { return normal; }
 
     bool Hit::is_inside() const { return inside; }
 
@@ -32,7 +32,7 @@ namespace yart {
       hit->position = ray.position(intersection.get_t());
       hit->eye = -ray.get_direction();
 
-      auto normal = hit->object.lock()->normal_at(hit->position);
+      Eigen::Vector4f normal = hit->object.lock()->normal_at(hit->position);
 
       bool is_inside = normal.dot(hit->eye) < 0;
       hit->inside = is_inside;

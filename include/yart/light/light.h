@@ -51,8 +51,8 @@ namespace yart {
     };
 
     color::Color phong_lighting(const Material& material, const Light& light,
-                                const Eigen::Vector3f& point, const Eigen::Vector3f& eye,
-                                const Eigen::Vector3f& normal);
+                                const Eigen::Vector4f& point, const Eigen::Vector4f& eye,
+                                const Eigen::Vector4f& normal);
 
     color::Color shade_hit(const World& world, const geometry::Hit& hit);
 

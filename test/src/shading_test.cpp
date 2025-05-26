@@ -48,46 +48,46 @@ TEST(MaterialTest, MaterialAssign) {
 }
 
 TEST_F(ShadingTest, EyeBetweenLightAndSurface) {
-  auto eye = Eigen::Vector3f{0, 0, -1};
-  auto normal = Eigen::Vector3f{0, 0, -1};
+  auto eye = Eigen::Vector4f{0, 0, -1, 0};
+  auto normal = Eigen::Vector4f{0, 0, -1, 0};
   yart::light::PointLight light{Eigen::Vector3f{0, 0, -10}};
 
-  auto result = yart::light::phong_lighting(material, light, position, eye, normal);
+  auto result = yart::light::phong_lighting(material, light, position.homogeneous(), eye, normal);
   ASSERT_EQ(result, (yart::color::Color{1.9f, 1.9f, 1.9f}));
 }
 
 TEST_F(ShadingTest, EyeOffset45Degrees) {
-  auto eye = Eigen::Vector3f{0, std::sqrt(2)/2, -std::sqrt(2) / 2};
-  auto normal = Eigen::Vector3f{0, 0, -1};
+  auto eye = Eigen::Vector4f{0, std::sqrt(2) / 2, -std::sqrt(2) / 2, 0};
+  auto normal = Eigen::Vector4f{0, 0, -1, 0};
   yart::light::PointLight light{Eigen::Vector3f{0, 0, -10}};
 
-  auto result = yart::light::phong_lighting(material, light, position, eye, normal);
+  auto result = yart::light::phong_lighting(material, light, position.homogeneous(), eye, normal);
   ASSERT_EQ(result, (yart::color::Color{1.0f, 1.0f, 1.0f}));
 }
 
 TEST_F(ShadingTest, LightOffset45Degrees) {
-  auto eye = Eigen::Vector3f{0, 0, -1};
-  auto normal = Eigen::Vector3f{0, 0, -1};
+  auto eye = Eigen::Vector4f{0, 0, -1, 0};
+  auto normal = Eigen::Vector4f{0, 0, -1, 0};
   yart::light::PointLight light{Eigen::Vector3f{0, 10, -10}};
 
-  auto result = yart::light::phong_lighting(material, light, position, eye, normal);
+  auto result = yart::light::phong_lighting(material, light, position.homogeneous(), eye, normal);
   ASSERT_EQ(result, (yart::color::Color{0.7364f, 0.7364f, 0.7364f}));
 }
 
 TEST_F(ShadingTest, LightAndEyeOffset45Degrees) {
-  auto eye = Eigen::Vector3f{0, -std::sqrt(2)/2, -std::sqrt(2) / 2};
-  auto normal = Eigen::Vector3f{0, 0, -1};
+  auto eye = Eigen::Vector4f{0, -std::sqrt(2) / 2, -std::sqrt(2) / 2, 0};
+  auto normal = Eigen::Vector4f{0, 0, -1, 0};
   yart::light::PointLight light{Eigen::Vector3f{0, 10, -10}};
 
-  auto result = yart::light::phong_lighting(material, light, position, eye, normal);
+  auto result = yart::light::phong_lighting(material, light, position.homogeneous(), eye, normal);
   ASSERT_EQ(result, (yart::color::Color{1.6364, 1.6364, 1.6364}));
 }
 TEST_F(ShadingTest, LightBehindSurface) {
-  auto eye = Eigen::Vector3f{0, 0, -1};
-  auto normal = Eigen::Vector3f{0, 0, -1};
+  auto eye = Eigen::Vector4f{0, 0, -1, 0};
+  auto normal = Eigen::Vector4f{0, 0, -1, 0};
   yart::light::PointLight light{Eigen::Vector3f{0, 0, 10}};
 
-  auto result = yart::light::phong_lighting(material, light, position, eye, normal);
+  auto result = yart::light::phong_lighting(material, light, position.homogeneous(), eye, normal);
   ASSERT_EQ(result, (yart::color::Color{0.1, 0.1, 0.1}));
 }
 

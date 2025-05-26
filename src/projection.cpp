@@ -24,7 +24,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
   auto sphere = std::make_shared<geometry::Sphere>(1.0f);
 
   auto transform = geometry::Transform3D{transform::shear<float>(1, 0, 0, 0, 0, 0)};
-  sphere->set_transform(transform);
+  sphere->transform = transform;
 
   double half_width = canvas_world_width / 2;
   double half_height = canvas_world_height / 2;

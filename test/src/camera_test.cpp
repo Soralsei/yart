@@ -7,6 +7,7 @@
 #include "Eigen/Dense"
 #include "yart/core/ray.h"
 #include "yart/core/world.h"
+#include "yart/file/ppm_writer.h"
 #include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 
@@ -29,7 +30,7 @@ TEST(ViewMatrix, Mirror) {
   Eigen::Vector3f up{0, 1, 0};
 
   auto view = Camera::get_view_transform(from, to, up);
-  auto expected = geometry::Transform3D{transform::scaling<float>(-1, 1, -1)};
+  auto expected = geometry::Transform3D{transform::scale<float>(-1, 1, -1)};
 
   ASSERT_TRUE(view.isApprox(expected))
       << "Expected " << expected.matrix() << " view matrix, got : " << view.matrix();
@@ -47,6 +48,20 @@ TEST(ViewMatrix, Translation) {
       << "Expected " << expected.matrix() << " view matrix, got : " << view.matrix();
 }
 
+TEST(ViewMatrix, Arbitrary) {
+  Eigen::Vector3f from{1, 3, 2};
+  Eigen::Vector3f to{4, -2, 8};
+  Eigen::Vector3f up{1, 1, 0};
+
+  auto view = Camera::get_view_transform(from, to, up);
+  Eigen::Matrix4f expected;
+  expected << -0.50709, 0.50709, 0.67612, -2.36643, 0.76772, 0.60609, 0.12122, -2.82843, -0.35857,
+      0.59761, -0.71714, 0.00000, 0.00000, 0.00000, 0.00000, 1.00000;
+
+  ASSERT_TRUE(view.matrix().isApprox(expected))
+      << "Expected " << expected << " view matrix, got : " << view.matrix();
+}
+
 TEST(CameraTests, Initialization) {
   float hsize = 160;
   float vsize = 120;
@@ -58,7 +73,7 @@ TEST(CameraTests, Initialization) {
   ASSERT_FLOAT_EQ(cam.get_vsize(), vsize);
   ASSERT_FLOAT_EQ(cam.get_fov(), fov);
 
-  ASSERT_TRUE(cam.get_transform().isApprox(geometry::Transform3D::Identity()));
+  ASSERT_TRUE(cam.transform.isApprox(geometry::Transform3D::Identity()));
 }
 
 TEST(CameraTests, PixelSizeHorizontal) {
@@ -89,8 +104,8 @@ TEST(CameraTests, RayCentered) {
 
   std::cout << ray << '\n';
 
-  ASSERT_TRUE(ray.get_origin().isApprox(Eigen::Vector3f::Zero()));
-  ASSERT_TRUE(ray.get_direction().isApprox(Eigen::Vector3f{0, 0, -1}));
+  ASSERT_TRUE(ray.get_origin().isApprox(Eigen::Vector3f::Zero().homogeneous()));
+  ASSERT_TRUE(ray.get_direction().isApprox(Eigen::Vector4f{0, 0, -1, 0}));
 }
 
 TEST(CameraTests, RayCorner) {
@@ -102,8 +117,8 @@ TEST(CameraTests, RayCorner) {
   auto ray = cam.ray_to(0, 0);
   std::cout << ray << '\n';
 
-  ASSERT_TRUE(ray.get_origin().isApprox(Eigen::Vector3f::Zero()));
-  ASSERT_TRUE(ray.get_direction().isApprox(Eigen::Vector3f{{0.66519, 0.33259, -0.66851}}));
+  ASSERT_TRUE(ray.get_origin().isApprox(Eigen::Vector3f::Zero().homogeneous()));
+  ASSERT_TRUE(ray.get_direction().isApprox(Eigen::Vector4f{{0.66519, 0.33259, -0.66851, 0}}));
 }
 
 TEST(CameraTests, RayTransformedCamera) {
@@ -112,27 +127,30 @@ TEST(CameraTests, RayTransformedCamera) {
   float fov = M_PI_2;
 
   Camera cam{hsize, vsize, fov};
-  auto t = transform::rotationY<float>(M_PI_4) * transform::translation<float>(0, -2, 5);
-  geometry::Transform3D transform{t};
-  cam.set_transform(transform);
-  auto ray = cam.ray_to(100, 50);
+  geometry::Transform3D transform
+      = transform::rotationY<float>(M_PI_4) * transform::translation<float>(0, -2, 5);
+  // geometry::Transform3D transform{t};
+  cam.transform = transform;
+  Ray ray = cam.ray_to(100, 50);
   std::cout << ray << '\n';
 
-  ASSERT_TRUE(ray.get_origin().isApprox(Eigen::Vector3f{0, 2, -5}));
+  ASSERT_TRUE(ray.get_origin().isApprox(Eigen::Vector3f{0, 2, -5}.homogeneous()));
   ASSERT_TRUE(
-      ray.get_direction().isApprox(Eigen::Vector3f{std::sqrt(2) / 2, 0, -std::sqrt(2) / 2}));
+      ray.get_direction().isApprox(Eigen::Vector4f{std::sqrt(2) / 2, 0, -std::sqrt(2) / 2, 0}));
 }
 
 TEST(CameraTests, RenderWorld) {
   auto world = World::default_world();
   auto camera = Camera{11, 11, M_PI_2};
-  camera.set_transform(geometry::Transform3D{transform::translation<float>(0, 0, -5)});
+  camera.transform = geometry::Transform3D{transform::translation<float>(0, 0, -5)};
 
   auto target = Eigen::Vector3f::Zero();
   auto up = Eigen::Vector3f::UnitY();
 
   camera.look_at(target, up);
   auto image = world->render(camera);
+  file::PPMWriter writer;
+  writer.write("test_output.ppm", image->getPixels(), image->getWidth(), image->getHeight());
 
   ASSERT_EQ(image->getPixel(5, 5), (color::Color{0.38066, 0.47583, 0.2855}));
 }

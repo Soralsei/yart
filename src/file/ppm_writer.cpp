@@ -12,8 +12,7 @@ namespace yart {
   namespace file {
 
     PPMWriter::PPMWriter(PPMFormat _format) : format(_format) {}
-    bool PPMWriter::write(const char* filename, const color::Color* data, int width,
-                          int height) {
+    bool PPMWriter::write(const char* filename, const color::Color* data, int width, int height) {
       std::ofstream file(filename, std::ios::binary);
       if (!file.good()) {
         std::cerr << "Error opening file for writing: " << filename << std::endl;
@@ -61,7 +60,7 @@ namespace yart {
           uint8_t b = color & 0xFF;
           file << std::to_string(r) << " " << std::to_string(g) << " " << std::to_string(b);
           if (index % 70 == 0 && index != 0) {
-            file << std::endl;
+            file << "\n";
           } else {
             file << " ";
           }

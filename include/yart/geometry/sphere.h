@@ -28,7 +28,7 @@ namespace yart {
 
       ~Sphere();
 
-      virtual Eigen::Vector3f normal_at(const Eigen::Vector3f& point) const override;
+      virtual Eigen::Vector4f normal_at(const Eigen::Vector4f& point) const override;
 
       std::string as_string() const override;
 

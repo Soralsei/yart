@@ -39,10 +39,11 @@ namespace yart {
       ~Shape3D();
 
       std::vector<geometry::Intersection> intersections(const Ray& ray);
-      virtual Eigen::Vector3f normal_at(const Eigen::Vector3f& point) const = 0;
+      virtual Eigen::Vector4f normal_at(const Eigen::Vector4f& point) const = 0;
 
       Material& get_material();
       void set_material(const Material& mat);
+      void set_material(std::shared_ptr<Material> mat);
 
       friend std::ostream& operator<<(std::ostream& out, const Shape3D&);
     };

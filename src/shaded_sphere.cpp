@@ -3,8 +3,8 @@
 #include <ostream>
 
 #include "Eigen/Dense"
-#include "yart/core/ray.h"
 #include "yart/core/material.h"
+#include "yart/core/ray.h"
 #include "yart/file/ppm_writer.h"
 #include "yart/geometry/intersection.h"
 #include "yart/geometry/sphere.h"
@@ -15,7 +15,7 @@
 using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
-  image::Canvas canvas{200, 200};
+  image::Canvas canvas{50, 50};
 
   file::PPMWriter writer;
 
@@ -23,20 +23,24 @@ int main(int /*argc*/, char* /*argv*/[]) {
   float canvas_world_height = 7.0f;
 
   Material material;
-  material.set_diffuse_color(0.2, 0.4, 1);
+  material.set_diffuse_color(1, 0.2, 1);
 
   geometry::Transform3D transform = geometry::Transform3D::Identity();
-  transform = transform * transform::shear<float>(1, 0, 0, 0, 0, 0);
-  transform.rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitY()))
-  .rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitX()));
-  
+  // transform = transform * transform::shear<float>(1, 0, 0, 0, 0, 0);
+  transform
+      = transform * transform::translation<float>(0, 0, 1) /** transform::rotationY<float>(M_PI_4) * transform::scale<float>(1, 0.5, 0.5)*/;
+
+  // transform.rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitY()))
+  // .rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitX()))
+  // .;
+
   auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
   sphere->get_material() = material;
 
   auto light = light::PointLight{Eigen::Vector3f{-10, 10, -10}};
 
   // auto transform = geometry::Transform3D{transform::shear<float>(1, 0, 0, 0, 0, 0)};
-  // sphere->set_transform(transform);
+  // sphere->transform = transform;
 
   double half_width = canvas_world_width / 2;
   double half_height = canvas_world_height / 2;
@@ -61,9 +65,9 @@ int main(int /*argc*/, char* /*argv*/[]) {
         continue;
       }
 
-      auto point = r.position(hit->get_t());
-      auto normal = sphere->normal_at(point);
-      auto eye = -ray_direction;
+      Eigen::Vector4f point = r.position(hit->get_t());
+      Eigen::Vector4f normal = sphere->normal_at(point);
+      Eigen::Vector4f eye = -r.get_direction();
 
       auto color = light::phong_lighting(sphere->get_material(), light, point, eye, normal);
 

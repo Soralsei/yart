@@ -38,9 +38,9 @@ TEST(IntersectionsTests, PrecomputingIntersectionStates) {
   auto intersection = geometry::Intersection(sphere, 4);
   auto hit = geometry::Hit::precompute_hit(ray, intersection);
 
-  auto expected_pos = Eigen::Vector3f(0, 0, -1);
-  auto expected_eye = Eigen::Vector3f(0, 0, -1);
-  auto expected_normal = Eigen::Vector3f(0, 0, -1);
+  auto expected_pos = Eigen::Vector4f(0, 0, -1, 1);
+  auto expected_eye = Eigen::Vector4f(0, 0, -1, 0);
+  auto expected_normal = Eigen::Vector4f(0, 0, -1, 0);
 
   ASSERT_FLOAT_EQ(hit->get_t(), intersection.get_t());
   ASSERT_TRUE((*(hit->get_object().lock())) == (*(intersection.get_object().lock())))
@@ -73,9 +73,9 @@ TEST(IntersectionsTests, HitInside) {
 
   auto hit = geometry::Hit::precompute_hit(ray, intersection);
 
-  auto expected_pos = Eigen::Vector3f(0, 0, 1);
-  auto expected_eye = Eigen::Vector3f(0, 0, -1);
-  auto expected_normal = Eigen::Vector3f(0, 0, -1);
+  auto expected_pos = Eigen::Vector4f(0, 0, 1, 1);
+  auto expected_eye = Eigen::Vector4f(0, 0, -1, 0);
+  auto expected_normal = Eigen::Vector4f(0, 0, -1, 0);
 
   ASSERT_TRUE(hit->is_inside());
 
