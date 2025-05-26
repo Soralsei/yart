@@ -149,8 +149,8 @@ TEST(CameraTests, RenderWorld) {
 
   camera.look_at(target, up);
   auto image = world->render(camera);
-  file::PPMWriter writer;
-  writer.write("test_output.ppm", image->getPixels(), image->getWidth(), image->getHeight());
+  // file::PPMWriter writer;
+  // writer.write("test_output.ppm", image->getPixels(), image->getWidth(), image->getHeight());
 
   ASSERT_EQ(image->getPixel(5, 5), (color::Color{0.38066, 0.47583, 0.2855}));
 }
