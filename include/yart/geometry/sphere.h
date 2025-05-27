@@ -11,7 +11,8 @@ namespace yart {
       using Parent = comparable<Sphere, Object3D, Shape3D>;
 
     private:
-      virtual std::vector<Intersection> _intersections(const Ray& ray) override;
+      virtual std::vector<Intersection> local_intersections(const Ray& ray) override;
+      virtual Eigen::Vector4f local_normal_at(const Eigen::Vector4f& point) const override;
       float radius = 1.0f;
 
     protected:
@@ -27,8 +28,6 @@ namespace yart {
       Sphere(const Sphere& other);
 
       ~Sphere();
-
-      virtual Eigen::Vector4f normal_at(const Eigen::Vector4f& point) const override;
 
       std::string as_string() const override;
 

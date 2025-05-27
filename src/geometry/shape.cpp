@@ -29,7 +29,16 @@ namespace yart {
       Ray transformed_ray = ray.transform(transform.inverse());
       // std::cout << "Ray : " << ray << "\n";
       // std::cout << "Local space ray : " << transformed_ray << "\n";
-      return _intersections(transformed_ray);
+      return local_intersections(transformed_ray);
+    }
+
+    Eigen::Vector4f Shape3D::normal_at(const Eigen::Vector4f& point) {
+      Eigen::Vector4f local_point = transform.inverse() * point;
+      Eigen::Vector4f local_normal = local_normal_at(local_point);
+      Eigen::Vector4f world_normal = Eigen::Vector4f::Zero();
+      world_normal.head<3>() = transform.linear().inverse().transpose() * local_normal.head<3>();
+
+      return world_normal.normalized();
     }
 
     Material& Shape3D::get_material() { return (*material); }

@@ -26,7 +26,8 @@ namespace yart {
       std::shared_ptr<Material> material;
 
     private:
-      virtual std::vector<Intersection> _intersections(const Ray& ray) = 0;
+      virtual std::vector<Intersection> local_intersections(const Ray& ray) = 0;
+      virtual Eigen::Vector4f local_normal_at(const Eigen::Vector4f& local_point) const = 0;
       virtual std::string as_string() const = 0;
 
     public:
@@ -39,7 +40,7 @@ namespace yart {
       ~Shape3D();
 
       std::vector<geometry::Intersection> intersections(const Ray& ray);
-      virtual Eigen::Vector4f normal_at(const Eigen::Vector4f& point) const = 0;
+      Eigen::Vector4f normal_at(const Eigen::Vector4f& point);
 
       Material& get_material();
       void set_material(const Material& mat);
