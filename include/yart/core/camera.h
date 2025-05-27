@@ -20,7 +20,7 @@ namespace yart {
     Camera(float hsize, float vsize, float fov);
     ~Camera() = default;
 
-    Ray ray_to(int x, int y) const;
+    Ray ray_to(uint32_t x, uint32_t y) const;
 
     void look_at(const Eigen::Vector3f& target, const Eigen::Vector3f& up);
 

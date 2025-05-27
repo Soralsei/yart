@@ -26,7 +26,7 @@ namespace yart {
   float Camera::get_fov() const { return fov; }
   float Camera::get_pixel_size() const { return pixel_size; }
 
-  Ray Camera::ray_to(int x, int y) const {
+  Ray Camera::ray_to(uint32_t x, uint32_t y) const {
     // Offset from edge of pixel (index passed as x and y) and center of pixel
     float x_offset = (x + 0.5) * pixel_size;
     float y_offset = (y + 0.5) * pixel_size;
