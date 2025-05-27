@@ -195,12 +195,7 @@ target_link_libraries(
     vendored
 )
 
-if(${PROJECT_NAME}_USE_OPENMP)
-  FIND_PACKAGE(OpenMP REQUIRED)
-  message(STATUS "Found OpenMP, adding flags '${OpenMP_CXX_FLAGS}' to compiler and linker")
-  add_compile_options(${OpenMP_CXX_FLAGS})
-  add_link_options(${OpenMP_CXX_FLAGS})
-  # add_link_options(-fopenmp)
+if(${PROJECT_NAME}_ENABLE_OPENMP)
   target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
 
