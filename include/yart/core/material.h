@@ -1,9 +1,8 @@
 #pragma once
-#include <cstdint>
 
 #include "yart/image/color.h"
 
-namespace yart { 
+namespace yart {
 
   class Material {
   private:

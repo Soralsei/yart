@@ -1,11 +1,9 @@
 #pragma once
-#include <iostream>
 
+#include "Eigen/Dense"
 #include "yart/core/object3d.h"
-#include "yart/geometry/defines.h"
 #include "yart/image/color.h"
 #include "yart/traits/comparable.h"
-#include "yart/util/math.h"
 
 namespace yart {
 
@@ -52,9 +50,10 @@ namespace yart {
 
     color::Color phong_lighting(const Material& material, const Light& light,
                                 const Eigen::Vector4f& point, const Eigen::Vector4f& eye,
-                                const Eigen::Vector4f& normal);
+                                const Eigen::Vector4f& normal, bool is_shadowed = false);
 
     color::Color shade_hit(const World& world, const geometry::Hit& hit);
+    bool is_shadowed(const World& world, const Light& light, const Eigen::Vector4f& point);
 
   }  // namespace light
 

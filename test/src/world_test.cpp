@@ -5,10 +5,8 @@
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
 #include "yart/geometry/hit.h"
-#include "yart/geometry/sphere.h"
-#include "yart/geometry/transform.h"
+#include "yart/geometry/primitives/sphere.h"
 #include "yart/light/light.h"
-#include "yart/light/point_light.h"
 
 using namespace yart;
 

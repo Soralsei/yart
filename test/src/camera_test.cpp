@@ -7,7 +7,6 @@
 #include "Eigen/Dense"
 #include "yart/core/ray.h"
 #include "yart/core/world.h"
-#include "yart/file/ppm_writer.h"
 #include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 
@@ -63,8 +62,8 @@ TEST(ViewMatrix, Arbitrary) {
 }
 
 TEST(CameraTests, Initialization) {
-  float hsize = 160;
-  float vsize = 120;
+  int hsize = 160;
+  int vsize = 120;
   float fov = M_PI_2;
 
   Camera cam{hsize, vsize, fov};
@@ -77,8 +76,8 @@ TEST(CameraTests, Initialization) {
 }
 
 TEST(CameraTests, PixelSizeHorizontal) {
-  float hsize = 200;
-  float vsize = 125;
+  int hsize = 200;
+  int vsize = 125;
   float fov = M_PI_2;
 
   Camera cam{hsize, vsize, fov};
@@ -86,8 +85,8 @@ TEST(CameraTests, PixelSizeHorizontal) {
 }
 
 TEST(CameraTests, PixelSizeVertical) {
-  float hsize = 125;
-  float vsize = 200;
+  int hsize = 125;
+  int vsize = 200;
   float fov = M_PI_2;
 
   Camera cam{hsize, vsize, fov};
@@ -95,8 +94,8 @@ TEST(CameraTests, PixelSizeVertical) {
 }
 
 TEST(CameraTests, RayCentered) {
-  float hsize = 201;
-  float vsize = 101;
+  int hsize = 201;
+  int vsize = 101;
   float fov = M_PI_2;
 
   Camera cam{hsize, vsize, fov};
@@ -109,8 +108,8 @@ TEST(CameraTests, RayCentered) {
 }
 
 TEST(CameraTests, RayCorner) {
-  float hsize = 201;
-  float vsize = 101;
+  int hsize = 201;
+  int vsize = 101;
   float fov = M_PI_2;
 
   Camera cam{hsize, vsize, fov};
@@ -122,8 +121,8 @@ TEST(CameraTests, RayCorner) {
 }
 
 TEST(CameraTests, RayTransformedCamera) {
-  float hsize = 201;
-  float vsize = 101;
+  int hsize = 201;
+  int vsize = 101;
   float fov = M_PI_2;
 
   Camera cam{hsize, vsize, fov};
@@ -135,8 +134,8 @@ TEST(CameraTests, RayTransformedCamera) {
   std::cout << ray << '\n';
 
   ASSERT_TRUE(ray.get_origin().isApprox(Eigen::Vector3f{0, 2, -5}.homogeneous()));
-  ASSERT_TRUE(
-      ray.get_direction().isApprox(Eigen::Vector4f{std::sqrt(2) / 2, 0, -std::sqrt(2) / 2, 0}));
+  ASSERT_TRUE(ray.get_direction().isApprox(
+      Eigen::Vector4f{std::sqrt(2.0f) / 2, 0, -std::sqrt(2.0f) / 2, 0}));
 }
 
 TEST(CameraTests, RenderWorld) {

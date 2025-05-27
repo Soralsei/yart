@@ -1,13 +1,11 @@
 #include "yart/core/world.h"
 
-#include <iostream>
-
 #include "omp.h"
 #include "yart/core/camera.h"
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
 #include "yart/geometry/hit.h"
-#include "yart/geometry/sphere.h"
+#include "yart/geometry/primitives/sphere.h"
 #include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 #include "yart/light/light.h"
@@ -50,7 +48,7 @@ namespace yart {
     return std::unique_ptr<World>(world);
   }
 
-  Intersections World::intersections(const Ray &ray) {
+  Intersections World::intersections(const Ray &ray) const {
     Intersections intersections;
     intersections.reserve(10000);
 
@@ -74,19 +72,18 @@ namespace yart {
     }
 
     auto hit = geometry::Hit::precompute_hit(ray, *h);
-    // std::cout << "Hit position : " << hit->get_position().transpose() << "\n######\n";
     return light::shade_hit(*this, *hit);
   }
 
   std::unique_ptr<image::Canvas> World::render(const Camera &camera) {
-    uint32_t hsize = camera.get_hsize();
-    uint32_t vsize = camera.get_vsize();
+    int hsize = camera.get_hsize();
+    int vsize = camera.get_vsize();
 
     std::unique_ptr<image::Canvas> image = std::make_unique<image::Canvas>(hsize, vsize);
 
 #pragma omp parallel for collapse(2)
-    for (uint32_t y = 0; y < vsize; y++) {
-      for (uint32_t x = 0; x < hsize; x++) {
+    for (int y = 0; y < vsize; y++) {
+      for (int x = 0; x < hsize; x++) {
         Ray ray = camera.ray_to(x, y);
         color::Color color = color_at(ray);
         image->setPixel(x, y, color);

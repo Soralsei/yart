@@ -5,7 +5,6 @@
 
 #include "yart/file/ppm_writer.h"
 #include "yart/image/canvas.h"
-#include "yart/image/color.h"
 
 using namespace yart;
 
@@ -14,8 +13,7 @@ TEST(PPMTest, HeaderP3) {
   image::Canvas canvas{5, 3};
   file::PPMWriter writer;
 
-  bool success = writer.write(filename, canvas.getPixels(), canvas.getWidth(),
-                              canvas.getHeight());
+  bool success = writer.write(filename, canvas.getPixels(), canvas.getWidth(), canvas.getHeight());
   ASSERT_TRUE(success);
 
   std::ifstream file(filename, std::ios::binary);
@@ -41,8 +39,7 @@ TEST(PPMTest, HeaderP6) {
   image::Canvas canvas{5, 3};
   file::PPMWriter writer{file::PPMWriter::PPMFormat::P6};
 
-  bool success = writer.write(filename, canvas.getPixels(), canvas.getWidth(),
-                              canvas.getHeight());
+  bool success = writer.write(filename, canvas.getPixels(), canvas.getWidth(), canvas.getHeight());
   ASSERT_TRUE(success);
 
   std::ifstream file(filename, std::ios::binary);

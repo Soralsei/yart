@@ -1,7 +1,6 @@
 #include "yart/util/math.h"
 
 #include <cmath>
-#include <type_traits>
 
 namespace yart {
 
@@ -12,5 +11,5 @@ namespace yart {
     }
 
   }  // namespace math
-  
+
 }  // namespace yart

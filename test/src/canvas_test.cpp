@@ -1,7 +1,8 @@
-#include "yart/image/color.h"
 #include "yart/image/canvas.h"
 
 #include <gtest/gtest.h>
+
+#include "yart/image/color.h"
 
 using namespace yart;
 
@@ -11,12 +12,9 @@ TEST(CanvasTest, Initialization) {
   ASSERT_EQ(canvas.getHeight(), 20);
 
   bool is_all_black = true;
-  for (int y = 0; y < canvas.getHeight(); y++)
-  {
-    for (int x = 0; x < canvas.getWidth(); x++)
-    {
-      if (canvas(x, y) != color::Black)
-      {
+  for (int y = 0; y < canvas.getHeight(); y++) {
+    for (int x = 0; x < canvas.getWidth(); x++) {
+      if (canvas(x, y) != color::Black) {
         is_all_black = false;
         break;
       }

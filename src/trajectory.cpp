@@ -3,7 +3,6 @@
 
 #include "Eigen/Dense"
 #include "yart/file/ppm_writer.h"
-#include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 
 using namespace yart;

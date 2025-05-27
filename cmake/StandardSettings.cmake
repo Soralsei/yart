@@ -101,3 +101,5 @@ if(${PROJECT_NAME}_ENABLE_OPENMP)
   add_compile_options(${OpenMP_CXX_FLAGS})
   add_link_options(${OpenMP_CXX_FLAGS})
 endif()
+
+add_compile_options(-march=native)

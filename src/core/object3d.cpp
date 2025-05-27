@@ -1,10 +1,5 @@
 #include "yart/core/object3d.h"
 
-#include <memory>
-
-#include "yart/core/material.h"
-#include "yart/core/ray.h"
-
 namespace yart {
 
   Object3D::Object3D(Eigen::Vector3f _origin) {

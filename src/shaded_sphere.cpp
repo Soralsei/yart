@@ -1,13 +1,11 @@
-#include <iostream>
 #include <memory>
-#include <ostream>
 
 #include "Eigen/Dense"
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
 #include "yart/file/ppm_writer.h"
 #include "yart/geometry/intersection.h"
-#include "yart/geometry/sphere.h"
+#include "yart/geometry/primitives/sphere.h"
 #include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 #include "yart/light/point_light.h"
@@ -28,7 +26,10 @@ int main(int /*argc*/, char* /*argv*/[]) {
   geometry::Transform3D transform = geometry::Transform3D::Identity();
   // transform = transform * transform::shear<float>(1, 0, 0, 0, 0, 0);
   transform
-      = transform * transform::translation<float>(0, 0, 1) /** transform::rotationY<float>(M_PI_4) * transform::scale<float>(1, 0.5, 0.5)*/;
+      = transform
+        * transform::translation<float>(
+            0, 0,
+            1) /** transform::rotationY<float>(M_PI_4) * transform::scale<float>(1, 0.5, 0.5)*/;
 
   // transform.rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitY()))
   // .rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitX()))

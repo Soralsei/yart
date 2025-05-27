@@ -1,7 +1,5 @@
 #include "yart/light/point_light.h"
 
-#include "yart/core/object3d.h"
-
 namespace yart {
 
   namespace light {

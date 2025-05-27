@@ -9,7 +9,7 @@
 
 using namespace yart;
 
-int main(int /*argc*/, char* /*argv*/[]) {
+int main(int /*argc*/, char * /*argv*/[]) {
   image::Canvas canvas{900, 550};
 
   SDL_Window *window = nullptr;
@@ -26,8 +26,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
     return SDL_APP_FAILURE;
   }
 
-  while (true)
-  {
+  while (true) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_EVENT_QUIT) {

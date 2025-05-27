@@ -1,10 +1,14 @@
 #include "yart/light/light.h"
 
+#include <Eigen/Dense>
+
 #include "yart/core/material.h"
-#include "yart/core/object3d.h"
+#include "yart/core/ray.h"
 #include "yart/core/world.h"
 #include "yart/geometry/hit.h"
+#include "yart/geometry/intersection.h"
 #include "yart/geometry/shape.h"
+#include "yart/util/math.h"
 
 namespace yart {
 
@@ -47,12 +51,14 @@ namespace yart {
 
     color::Color phong_lighting(const Material& material, const Light& light,
                                 const Eigen::Vector4f& point, const Eigen::Vector4f& eye,
-                                const Eigen::Vector4f& normal) {
+                                const Eigen::Vector4f& normal, bool is_shadowed) {
       color::Color effective_color
           = material.get_diffuse_color() * (light.get_color() * light.get_energy());
-      Eigen::Vector4f lightv = (light.position().homogeneous() - point).normalized();
-      // std::cout << "Light vector to hit position : " << lightv.transpose() << "\n";
       color::Color ambient = effective_color * material.get_ambient();
+      if (is_shadowed) {
+        return ambient;
+      }
+      Eigen::Vector4f lightv = (light.position().homogeneous() - point).normalized();
       float light_dot_normal = lightv.dot(normal);
 
       color::Color specular = color::Black;
@@ -80,14 +86,30 @@ namespace yart {
 
       auto material = object->get_material();
       Eigen::Vector4f position = hit.get_position();
+      Eigen::Vector4f over_position = hit.get_over_position();
       Eigen::Vector4f eye = hit.get_eye();
       Eigen::Vector4f normal = hit.get_normal();
 
       for (auto&& light : world.get_light_sources()) {
-        shade += phong_lighting(material, *light, position, eye, normal);
+        bool in_shadows = is_shadowed(world, *light, over_position);
+        shade += phong_lighting(material, *light, position, eye, normal, in_shadows);
       }
 
       return shade;
+    }
+
+    bool is_shadowed(const World& world, const Light& light, const Eigen::Vector4f& point) {
+      Eigen::Vector4f lightv = light.position().homogeneous() - point;
+      float distance = lightv.norm();
+      Eigen::Vector4f direction = lightv.normalized();
+
+      Ray r = {point, direction};
+      auto intersections = world.intersections(r);
+      geometry::Intersection* hit = geometry::hit(intersections);
+
+      // if (hit != nullptr) std::cout << "Hit : " << *hit << "\n";
+
+      return hit != nullptr && hit->get_t() < distance;
     }
 
   }  // namespace light

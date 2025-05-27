@@ -6,7 +6,7 @@
 #include "yart/core/ray.h"
 #include "yart/file/ppm_writer.h"
 #include "yart/geometry/intersection.h"
-#include "yart/geometry/sphere.h"
+#include "yart/geometry/primitives/sphere.h"
 #include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 

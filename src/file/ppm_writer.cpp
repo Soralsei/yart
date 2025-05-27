@@ -42,7 +42,7 @@ namespace yart {
       if (format == PPMFormat::P3) {
         file << "P3";
         separator = NEWLINE;
-      } else if (format == PPMFormat::P6) {
+      } else {
         file << "P6";
         separator = '\n';
       }

@@ -1,9 +1,8 @@
 #include "yart/geometry/hit.h"
 
-#include <iostream>
-
 #include "yart/core/object3d.h"
 #include "yart/core/ray.h"
+#include "yart/geometry/defines.h"
 #include "yart/geometry/intersection.h"
 #include "yart/geometry/shape.h"
 
@@ -16,6 +15,7 @@ namespace yart {
     std::weak_ptr<Shape3D> Hit::get_object() const { return object; }
 
     Eigen::Vector4f Hit::get_position() const { return position; }
+    Eigen::Vector4f Hit::get_over_position() const { return over_position; }
 
     Eigen::Vector4f Hit::get_eye() const { return eye; }
 
@@ -23,8 +23,7 @@ namespace yart {
 
     bool Hit::is_inside() const { return inside; }
 
-    std::shared_ptr<Hit> Hit::precompute_hit(const Ray& ray,
-                                             const Intersection& intersection) {
+    std::shared_ptr<Hit> Hit::precompute_hit(const Ray& ray, const Intersection& intersection) {
       auto hit = std::make_shared<Hit>();
 
       hit->object = intersection.get_object();
@@ -39,6 +38,7 @@ namespace yart {
 
       int direction = is_inside ? -1 : 1;
       hit->normal = direction * normal;
+      hit->over_position = hit->position + hit->normal * SHADOW_EPSILON;
 
       return hit;
     }

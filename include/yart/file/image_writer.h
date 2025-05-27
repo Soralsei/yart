@@ -1,8 +1,9 @@
 #pragma once
-#include <cstdint>
-#include "yart/image/color_format.h"
 
 namespace yart {
+  namespace color {
+    class Color;
+  }
   namespace file {
     class ImageWriter {
     public:

@@ -7,7 +7,6 @@ namespace yart {
   namespace light {
 
     class PointLight : public Light {
-
     public:
       PointLight() = default;
       ~PointLight();

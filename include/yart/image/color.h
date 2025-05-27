@@ -1,13 +1,12 @@
 #pragma once
 
-#include <cstdint>
 #include <ostream>
 
 namespace yart {
 
   namespace color {
     class Color {
-      template<uint32_t W, uint32_t H> friend class Canvas;
+      friend class Canvas;
 
     private:
       float r = 0.0f;
@@ -50,6 +49,6 @@ namespace yart {
     extern Color Cyan;
     extern Color Magenta;
     extern Color Yellow;
-  }  // namespace image
+  }  // namespace color
 
 }  // namespace yart

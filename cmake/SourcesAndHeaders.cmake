@@ -3,7 +3,8 @@ set(sources
   src/math/ray.cpp
 
   src/geometry/shape.cpp
-  src/geometry/sphere.cpp
+  src/geometry/primitives/sphere.cpp
+  src/geometry/primitives/plane.cpp
   src/geometry/hit.cpp
   src/geometry/intersection.cpp
   src/geometry/transform.cpp
@@ -48,6 +49,10 @@ set(render_sources
   src/world_render.cpp
   ${sources}
 )
+set(plane_render_sources
+  src/plane_render.cpp
+  ${sources}
+)
 
 set(headers
   include/yart/simd.h
@@ -57,7 +62,7 @@ set(headers
   include/yart/core/object3d.h
   
   include/yart/geometry/transform.h
-  include/yart/geometry/sphere.h
+  include/yart/geometry/primitives/sphere.h
 
   include/yart/image/canvas.h
   include/yart/image/color.h

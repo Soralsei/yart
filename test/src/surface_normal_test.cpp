@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/sphere.h"
+#include "Eigen/Dense"
+#include "yart/geometry/primitives/plane.h"
+#include "yart/geometry/primitives/sphere.h"
 #include "yart/geometry/transform.h"
-#include "yart/util/vector.h"
 
 using namespace yart;
 using namespace Eigen;
@@ -39,11 +39,11 @@ TEST(Normals, SphereNormalZAxis) {
 
 TEST(Normals, SphereNormalNonAxial) {
   auto sphere = std::make_shared<geometry::Sphere>();
-  Eigen::Vector4f normal = sphere->normal_at(
+  Vector4f normal = sphere->normal_at(
       Vector3f(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3).homogeneous());
 
-  Eigen::Vector4f expected_normal
-      = Vector4f{std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3, 0};
+  Vector4f expected_normal
+      = Vector4f{std::sqrt(3.0f) / 3, std::sqrt(3.0f) / 3, std::sqrt(3.0f) / 3, 0};
   ASSERT_TRUE(normal.isApprox(expected_normal, 1e-6))
       << "Expected " << expected_normal.transpose() << ", got " << normal.transpose();
 }
@@ -80,6 +80,22 @@ TEST(Normals, SphereNormalTransformed) {
 
   ASSERT_TRUE(normal.isApprox(expected_normal, 1e-4))
       << "Expected " << expected_normal.transpose() << ", got " << normal.transpose();
+}
+
+TEST(PlaneNormals, ConstantNormal) {
+  geometry::Plane p;
+  auto n1 = p.normal_at(Vector4f::Zero());
+  auto n2 = p.normal_at(Vector3f{10, 0, -10}.homogeneous());
+  auto n3 = p.normal_at(Vector3f{-5, 0, 150}.homogeneous());
+
+  Vector4f expected_normal = Vector4f::UnitY();
+
+  ASSERT_TRUE(n1.isApprox(Vector4f::UnitY(), 1e-4))
+      << "Expected " << expected_normal.transpose() << ", got " << n1.transpose();
+  ASSERT_TRUE(n2.isApprox(Vector4f::UnitY(), 1e-4))
+      << "Expected " << expected_normal.transpose() << ", got " << n2.transpose();
+  ASSERT_TRUE(n3.isApprox(Vector4f::UnitY(), 1e-4))
+      << "Expected " << expected_normal.transpose() << ", got " << n3.transpose();
 }
 
 int main(int argc, char **argv) {

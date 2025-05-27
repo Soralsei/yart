@@ -41,7 +41,7 @@ namespace yart {
     World& add_object(ObjectPtr object);
     World& add_light(LightPtr light);
 
-    Intersections intersections(const Ray& ray);
+    Intersections intersections(const Ray& ray) const;
 
     color::Color color_at(const Ray& ray);
     std::unique_ptr<image::Canvas> render(const Camera& camera);

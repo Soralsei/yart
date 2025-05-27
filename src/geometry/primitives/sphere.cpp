@@ -1,4 +1,4 @@
-#include "yart/geometry/sphere.h"
+#include "yart/geometry/primitives/sphere.h"
 
 #include <iostream>
 
@@ -46,7 +46,6 @@ namespace yart {
     }
 
     Eigen::Vector4f Sphere::local_normal_at(const Eigen::Vector4f& local_point) const {
-      // Transform the point to the local space of the shape
       return (local_point - Eigen::Vector4f::UnitW()).normalized();
     }
 

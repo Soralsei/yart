@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <memory>
-#include <vector>
 
 #include "Eigen/Dense"
 #include "yart/geometry/defines.h"

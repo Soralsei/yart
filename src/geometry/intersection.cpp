@@ -2,7 +2,6 @@
 
 #include <limits>
 
-#include "yart/core/object3d.h"
 #include "yart/geometry/shape.h"
 
 namespace yart {

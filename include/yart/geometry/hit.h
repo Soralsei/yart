@@ -19,6 +19,7 @@ namespace yart {
       float t;
 
       Eigen::Vector4f position;
+      Eigen::Vector4f over_position;
       Eigen::Vector4f eye;
       Eigen::Vector4f normal;
 
@@ -31,6 +32,7 @@ namespace yart {
       float get_t() const;
       std::weak_ptr<Shape3D> get_object() const;
       Eigen::Vector4f get_position() const;
+      Eigen::Vector4f get_over_position() const;
       Eigen::Vector4f get_eye() const;
       Eigen::Vector4f get_normal() const;
 
