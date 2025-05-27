@@ -81,7 +81,7 @@ namespace yart {
 
     std::unique_ptr<image::Canvas> image = std::make_unique<image::Canvas>(hsize, vsize);
 
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for collapse(2) schedule(static, 5)
     for (int y = 0; y < vsize; y++) {
       for (int x = 0; x < hsize; x++) {
         Ray ray = camera.ray_to(x, y);
