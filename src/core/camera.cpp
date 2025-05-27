@@ -1,14 +1,13 @@
 #include "yart/core/camera.h"
 
 #include "yart/core/ray.h"
-#include "yart/geometry/transform.h"
 
 namespace yart {
 
-  Camera::Camera(float _hsize, float _vsize, float _fov)
+  Camera::Camera(int _hsize, int _vsize, float _fov)
       : Object3D::Object3D(), hsize(_hsize), vsize(_vsize), fov(_fov) {
     float half_view = std::tan(fov / 2);
-    float aspect_ratio = hsize / vsize;
+    float aspect_ratio = static_cast<float>(hsize) / static_cast<float>(vsize);
 
     if (aspect_ratio >= 1) {
       half_width = half_view;
@@ -18,18 +17,18 @@ namespace yart {
       half_height = half_view;
     }
 
-    pixel_size = (half_width * 2) / hsize;
+    pixel_size = (half_width * 2) / static_cast<float>(hsize);
   }
 
-  uint32_t Camera::get_hsize() const { return hsize; }
-  uint32_t Camera::get_vsize() const { return vsize; }
+  int Camera::get_hsize() const { return hsize; }
+  int Camera::get_vsize() const { return vsize; }
   float Camera::get_fov() const { return fov; }
   float Camera::get_pixel_size() const { return pixel_size; }
 
-  Ray Camera::ray_to(uint32_t x, uint32_t y) const {
+  Ray Camera::ray_to(int x, int y) const {
     // Offset from edge of pixel (index passed as x and y) and center of pixel
-    float x_offset = (x + 0.5) * pixel_size;
-    float y_offset = (y + 0.5) * pixel_size;
+    float x_offset = (static_cast<float>(x) + 0.5f) * pixel_size;
+    float y_offset = (static_cast<float>(y) + 0.5f) * pixel_size;
 
     float world_x = half_width - x_offset;
     float world_y = half_height - y_offset;

@@ -17,7 +17,7 @@ namespace yart {
 
   Ray::~Ray() {}
 
-  Eigen::Vector4f Ray::position(double t) const { return origin + direction * t; }
+  Eigen::Vector4f Ray::position(float t) const { return origin + direction * t; }
   const Eigen::Vector4f Ray::get_direction() const { return direction; }
   const Eigen::Vector4f Ray::get_origin() const { return origin; }
 

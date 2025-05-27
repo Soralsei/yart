@@ -19,7 +19,7 @@ namespace yart {
     const Eigen::Vector4f get_origin() const;
     const Eigen::Vector4f get_direction() const;
 
-    Eigen::Vector4f position(double t) const;
+    Eigen::Vector4f position(float t) const;
 
     Ray transform(const geometry::Transform3D& transform) const;
     Ray transform(const Eigen::Matrix4f& transform) const;

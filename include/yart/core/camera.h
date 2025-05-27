@@ -5,8 +5,8 @@ namespace yart {
   class Ray;
   class Camera : public Object3D {
   private:
-    float hsize;
-    float vsize;
+    int hsize;
+    int vsize;
 
     float half_width;
     float half_height;
@@ -17,15 +17,15 @@ namespace yart {
     Eigen::Matrix4f view_matrix;
 
   public:
-    Camera(float hsize, float vsize, float fov);
+    Camera(int hsize, int vsize, float fov);
     ~Camera() = default;
 
-    Ray ray_to(uint32_t x, uint32_t y) const;
+    Ray ray_to(int x, int y) const;
 
     void look_at(const Eigen::Vector3f& target, const Eigen::Vector3f& up);
 
-    uint32_t get_hsize() const;
-    uint32_t get_vsize() const;
+    int get_hsize() const;
+    int get_vsize() const;
     float get_fov() const;
     float get_pixel_size() const;
 

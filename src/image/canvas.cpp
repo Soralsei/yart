@@ -6,7 +6,7 @@ namespace yart {
 
   namespace image {
 
-    Canvas::Canvas(uint32_t _width, uint32_t _height)
+    Canvas::Canvas(int _width, int _height)
         : width(_width), height(_height), pixels(std::make_unique<Color[]>(_width * _height)) {}
 
     Canvas::Canvas(const Canvas& other) : Canvas(other.width, other.height) {
@@ -43,25 +43,25 @@ namespace yart {
       return *this;
     }
 
-    Color Canvas::operator()(uint32_t x, uint32_t y) const {
-      if (x >= width || y >= height) {
+    Color Canvas::operator()(int x, int y) const {
+      if (x >= width || y >= height || x < 0 || y < 0) {
         throw std::out_of_range("Canvas coordinates out of range");
       }
       return pixels[y * width + x];
     }
 
-    void Canvas::setPixel(uint32_t x, uint32_t y, const Color& color) {
-      if (x >= width || y >= height) {
+    void Canvas::setPixel(int x, int y, const Color& color) {
+      if (x >= width || y >= height || x < 0 || y < 0) {
         throw std::out_of_range("Canvas coordinates out of range");
       }
       pixels[y * width + x] = color;
     }
 
-    Color Canvas::getPixel(uint32_t x, uint32_t y) const { return (*this)(x, y); }
+    Color Canvas::getPixel(int x, int y) const { return (*this)(x, y); }
 
-    uint32_t Canvas::getWidth() const { return width; }
+    int Canvas::getWidth() const { return width; }
 
-    uint32_t Canvas::getHeight() const { return height; }
+    int Canvas::getHeight() const { return height; }
 
     const Color* Canvas::getPixels() const { return pixels.get(); }
 
