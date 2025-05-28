@@ -1,7 +1,7 @@
 #pragma once
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/vector_float4.hpp>
 #include <memory>
-
-#include "Eigen/Dense"
 
 namespace yart {
 
@@ -18,10 +18,10 @@ namespace yart {
       std::weak_ptr<Shape3D> object;
       float t;
 
-      Eigen::Vector4f position;
-      Eigen::Vector4f over_position;
-      Eigen::Vector4f eye;
-      Eigen::Vector4f normal;
+      glm::vec4 position;
+      glm::vec4 over_position;
+      glm::vec4 eye;
+      glm::vec4 normal;
 
       bool inside = false;
 
@@ -31,10 +31,10 @@ namespace yart {
 
       float get_t() const;
       std::weak_ptr<Shape3D> get_object() const;
-      Eigen::Vector4f get_position() const;
-      Eigen::Vector4f get_over_position() const;
-      Eigen::Vector4f get_eye() const;
-      Eigen::Vector4f get_normal() const;
+      glm::vec4 get_position() const;
+      glm::vec4 get_over_position() const;
+      glm::vec4 get_eye() const;
+      glm::vec4 get_normal() const;
 
       bool is_inside() const;
 

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <ostream>
 
-#include "Eigen/Dense"
 #include "SDL3/SDL.h"
 #include "yart/file/ppm_writer.h"
 #include "yart/geometry/transform.h"

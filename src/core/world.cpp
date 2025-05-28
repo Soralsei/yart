@@ -1,12 +1,13 @@
 #include "yart/core/world.h"
 
+#include <algorithm>
+
 #include "omp.h"
 #include "yart/core/camera.h"
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
 #include "yart/geometry/hit.h"
 #include "yart/geometry/primitives/sphere.h"
-#include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 #include "yart/light/light.h"
 #include "yart/light/point_light.h"
@@ -30,7 +31,7 @@ namespace yart {
   std::unique_ptr<World> World::default_world() {
     World *world = new World();
 
-    LightPtr default_light = std::make_shared<light::PointLight>(Eigen::Vector3f{-10, 10, -10});
+    LightPtr default_light = std::make_shared<light::PointLight>(glm::vec3{-10, 10, -10});
     world->lights.push_back(default_light);
 
     Material mat = Material{};
@@ -40,8 +41,8 @@ namespace yart {
     sphere1->get_material() = mat;
     world->objects.push_back(sphere1);
 
-    geometry::Transform3D transform = geometry::Transform3D::Identity();
-    transform.scale(transform::scale<float>(0.5f, 0.5f, 0.5f).diagonal().head<3>().eval());
+    geometry::Transform transform = geometry::Transform{};
+    transform.scale(0.5f, 0.5f, 0.5f);
     auto sphere2 = std::make_shared<geometry::Sphere>(transform, 1.0f);
     world->objects.push_back(sphere2);
 
@@ -75,7 +76,7 @@ namespace yart {
     return light::shade_hit(*this, *hit);
   }
 
-  std::unique_ptr<image::Canvas> World::render(const Camera &camera) {
+  std::unique_ptr<image::Canvas> World::render(Camera &camera) {
     int hsize = camera.get_hsize();
     int vsize = camera.get_vsize();
 

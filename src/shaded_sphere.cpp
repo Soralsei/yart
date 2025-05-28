@@ -1,12 +1,11 @@
+#include <glm/geometric.hpp>
 #include <memory>
 
-#include "Eigen/Dense"
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
 #include "yart/file/ppm_writer.h"
 #include "yart/geometry/intersection.h"
 #include "yart/geometry/primitives/sphere.h"
-#include "yart/geometry/transform.h"
 #include "yart/image/canvas.h"
 #include "yart/light/point_light.h"
 
@@ -23,22 +22,19 @@ int main(int /*argc*/, char* /*argv*/[]) {
   Material material;
   material.set_diffuse_color(1, 0.2, 1);
 
-  geometry::Transform3D transform = geometry::Transform3D::Identity();
+  geometry::Transform transform = geometry::Transform{};
   // transform = transform * transform::shear<float>(1, 0, 0, 0, 0, 0);
-  transform
-      = transform
-        * transform::translation<float>(
-            0, 0,
-            1) /** transform::rotationY<float>(M_PI_4) * transform::scale<float>(1, 0.5, 0.5)*/;
+  // transform = transform.translate(
+  //     0, 0, 0) /** transform::rotationY<float>(M_PI_4) * transform::scale<float>(1, 0.5, 0.5)*/;
 
-  // transform.rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitY()))
-  // .rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitX()))
+  // transform.rotate(Eigen::AngleAxisf(M_PI / 6, glm::vec3::UnitY()))
+  // .rotate(Eigen::AngleAxisf(M_PI / 6, glm::vec3::UnitX()))
   // .;
 
   auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
   sphere->get_material() = material;
 
-  auto light = light::PointLight{Eigen::Vector3f{-10, 10, -10}};
+  auto light = light::PointLight{glm::vec3{-10, 10, -10}};
 
   // auto transform = geometry::Transform3D{transform::shear<float>(1, 0, 0, 0, 0, 0)};
   // sphere->transform = transform;
@@ -53,8 +49,8 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
     for (size_t x = 0; x < canvas.getWidth(); x++) {
       float world_x = -half_width + x_pixel_size * x;
-      auto ray_origin = Eigen::Vector3f{0, 0, -5};
-      auto ray_direction = (Eigen::Vector3f{world_x, world_y, 10} - ray_origin).normalized();
+      auto ray_origin = glm::vec3{0, 0, -5};
+      auto ray_direction = glm::normalize(glm::vec3{world_x, world_y, 10} - ray_origin);
 
       Ray r{ray_origin, ray_direction};
 
@@ -66,9 +62,9 @@ int main(int /*argc*/, char* /*argv*/[]) {
         continue;
       }
 
-      Eigen::Vector4f point = r.position(hit->get_t());
-      Eigen::Vector4f normal = sphere->normal_at(point);
-      Eigen::Vector4f eye = -r.get_direction();
+      glm::vec4 point = r.position(hit->get_t());
+      glm::vec4 normal = sphere->normal_at(point);
+      glm::vec4 eye = -r.get_direction();
 
       auto color = light::phong_lighting(sphere->get_material(), light, point, eye, normal);
 

@@ -12,15 +12,15 @@ namespace yart {
 
     private:
       virtual std::vector<Intersection> local_intersections(const Ray& ray) override;
-      virtual Eigen::Vector4f local_normal_at(const Eigen::Vector4f& point) const override;
+      virtual glm::vec4 local_normal_at(const glm::vec4& point) const override;
       float radius = 1.0f;
 
     protected:
       virtual bool self_equal(const Sphere& other) const override;
 
     public:
-      Sphere(Transform3D transform, float _radius);
-      Sphere(Eigen::Vector3f _origin, float _radius);
+      Sphere(Transform transform, float _radius);
+      Sphere(glm::vec3 _origin, float _radius);
       Sphere(float _radius);
       Sphere();
 
@@ -29,7 +29,7 @@ namespace yart {
 
       ~Sphere();
 
-      std::string as_string() const override;
+      std::string as_string() override;
 
       friend std::ostream& operator<<(std::ostream& out, const Sphere& sphere);
     };

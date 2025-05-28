@@ -2,19 +2,18 @@
 
 #include <gtest/gtest.h>
 
+#include <glm/gtx/io.hpp>
 #include <memory>
 
 #include "yart/geometry/intersection.h"
 #include "yart/geometry/primitives/plane.h"
 #include "yart/geometry/primitives/sphere.h"
-#include "yart/geometry/transform.h"
 #include "yart/util/vector.h"
 
-using namespace Eigen;
 using namespace yart;
 
 TEST(Intersection, SphereIntersection1) {
-  Ray r = {Vector3f{0, 0, -5}, Vector3f{0, 0, 1}};
+  Ray r = {glm::vec3{0, 0, -5}, glm::vec3{0, 0, 1}};
   auto s = std::make_shared<geometry::Sphere>(1.0f);
   auto intersections = s->intersections(r);
   ASSERT_EQ(intersections.size(), 2);
@@ -23,7 +22,7 @@ TEST(Intersection, SphereIntersection1) {
 }
 
 TEST(Intersection, SphereIntersection2) {
-  Ray r = {Vector3f{0, 0, -5}, Vector3f{0, 0, 1}};
+  Ray r = {glm::vec3{0, 0, -5}, glm::vec3{0, 0, 1}};
   auto s = std::make_shared<geometry::Sphere>(2.0f);
   auto intersections = s->intersections(r);
   ASSERT_EQ(intersections.size(), 2);
@@ -32,7 +31,7 @@ TEST(Intersection, SphereIntersection2) {
 }
 
 TEST(Intersection, SphereTangent) {
-  Ray r = {Vector3f{0, 1, -5}, Vector3f{0, 0, 1}};
+  Ray r = {glm::vec3{0, 1, -5}, glm::vec3{0, 0, 1}};
   auto s = std::make_shared<geometry::Sphere>(1.0f);
   auto intersections = s->intersections(r);
   ASSERT_EQ(intersections.size(), 2);
@@ -40,14 +39,14 @@ TEST(Intersection, SphereTangent) {
 }
 
 TEST(Intersection, SphereNoIntersection) {
-  Ray r = {Vector3f{0, 2, -5}, Vector3f{0, 0, 1}};
+  Ray r = {glm::vec3{0, 2, -5}, glm::vec3{0, 0, 1}};
   auto s = std::make_shared<geometry::Sphere>(1.0f);
   auto intersections = s->intersections(r);
   ASSERT_EQ(intersections.size(), 0);
 }
 
 TEST(Intersection, RayInsideSphere) {
-  Ray r = {Vector3f{0, 0, 0}, Vector3f{0, 0, 1}};
+  Ray r = {glm::vec3{0, 0, 0}, glm::vec3{0, 0, 1}};
   auto s = std::make_shared<geometry::Sphere>(1.0f);
   auto intersections = s->intersections(r);
   ASSERT_EQ(intersections.size(), 2);
@@ -56,7 +55,7 @@ TEST(Intersection, RayInsideSphere) {
 }
 
 TEST(Intersection, SphereBehindRay) {
-  Ray r = {Vector3f{0, 0, 5}, Vector3f{0, 0, 1}};
+  Ray r = {glm::vec3{0, 0, 5}, glm::vec3{0, 0, 1}};
   auto s = std::make_shared<geometry::Sphere>(1.0f);
   auto intersections = s->intersections(r);
   ASSERT_EQ(intersections.size(), 2);
@@ -130,24 +129,28 @@ TEST(Intersection, HitTest) {
 }
 
 TEST(TransformRay, Translate) {
-  Ray r = {Vector3f{1, 2, 3}, Vector3f{0, 1, 0}};
-  geometry::Transform3D translation{transform::translation<float>(3, 4, 5)};
+  Ray r = {glm::vec3{1, 2, 3}, glm::vec3{0, 1, 0}};
+  geometry::Transform translation{};
+  std::cout << "Translation matrix:\n" << translation.matrix() << "\n";
+  translation.translate(glm::vec3{3, 4, 5});
   auto translated_ray = r.transform(translation);
-  ASSERT_EQ(translated_ray.get_origin(), (Vector4f{4, 6, 8, 1}));
-  ASSERT_EQ(translated_ray.get_direction(), (Vector4f{0, 1, 0, 0}));
+  ASSERT_EQ(translated_ray.get_origin(), (glm::vec4{4, 6, 8, 1}));
+  ASSERT_EQ(translated_ray.get_direction(), (glm::vec4{0, 1, 0, 0}));
 }
 
 TEST(TransformRay, Scaling) {
-  Ray r = {Vector3f{1, 2, 3}, Vector3f{0, 1, 0}};
-  geometry::Transform3D scale{transform::scale<float>(2, 3, 4)};
+  Ray r = {glm::vec3{1, 2, 3}, glm::vec3{0, 1, 0}};
+  geometry::Transform scale{};
+  scale.scale(glm::vec3{2, 3, 4});
   auto translated_ray = r.transform(scale);
-  ASSERT_EQ(translated_ray.get_origin(), (Vector4f{2, 6, 12, 1}));
-  ASSERT_EQ(translated_ray.get_direction(), (Vector4f{0, 3, 0, 0}));
+  ASSERT_EQ(translated_ray.get_origin(), (glm::vec4{2, 6, 12, 1}));
+  ASSERT_EQ(translated_ray.get_direction(), (glm::vec4{0, 3, 0, 0}));
 }
 
 TEST(TransformRay, IntersectionScaled) {
-  Ray r = {Vector3f{0, 0, -5}, Vector3f{0, 0, 1}};
-  geometry::Transform3D scale{transform::scale<float>(2, 2, 2)};
+  Ray r = {glm::vec3{0, 0, -5}, glm::vec3{0, 0, 1}};
+  geometry::Transform scale{};
+  scale.scale(glm::vec3{2, 2, 2});
 
   auto s = std::make_shared<geometry::Sphere>(scale, 1);
 
@@ -159,10 +162,11 @@ TEST(TransformRay, IntersectionScaled) {
 }
 
 TEST(TransformRay, IntersectionTranslated) {
-  Ray r = {Vector3f{0, 0, -5}, Vector3f{0, 0, 1}};
-  geometry::Transform3D scale{transform::translation<float>(5, 0, 0)};
+  Ray r = {glm::vec3{0, 0, -5}, glm::vec3{0, 0, 1}};
+  geometry::Transform translation{};
+  translation.translate(glm::vec3{5, 0, 0});
 
-  auto s = std::make_shared<geometry::Sphere>(scale, 1);
+  auto s = std::make_shared<geometry::Sphere>(translation, 1);
 
   auto intersections = s->intersections(r);
   ASSERT_EQ(intersections.size(), 0);
@@ -170,7 +174,7 @@ TEST(TransformRay, IntersectionTranslated) {
 
 TEST(PlaneNormals, RayParallel) {
   geometry::Plane p;
-  Ray r{Vector3f{0, 10, 0}, Vector3f{0, 0, 1}};
+  Ray r{glm::vec3{0, 10, 0}, glm::vec3{0, 0, 1}};
   auto i = p.intersections(r);
 
   ASSERT_TRUE(i.empty());
@@ -178,7 +182,7 @@ TEST(PlaneNormals, RayParallel) {
 
 TEST(PlaneNormals, RayCoplanar) {
   geometry::Plane p;
-  Ray r{Vector3f{0, 0, 0}, Vector3f{0, 0, 1}};
+  Ray r{glm::vec3{0, 0, 0}, glm::vec3{0, 0, 1}};
   auto i = p.intersections(r);
 
   ASSERT_TRUE(i.empty());
@@ -186,7 +190,7 @@ TEST(PlaneNormals, RayCoplanar) {
 
 TEST(PlaneNormals, RayFromAbove) {
   std::shared_ptr<geometry::Plane> p = std::make_shared<geometry::Plane>();
-  Ray r{Vector3f{0, 1, 0}, Vector3f{0, -1, 0}};
+  Ray r{glm::vec3{0, 1, 0}, glm::vec3{0, -1, 0}};
   auto i = p->intersections(r);
 
   ASSERT_EQ(i.size(), 1);
@@ -196,7 +200,7 @@ TEST(PlaneNormals, RayFromAbove) {
 
 TEST(PlaneNormals, RayFromBelow) {
   std::shared_ptr<geometry::Plane> p = std::make_shared<geometry::Plane>();
-  Ray r{Vector3f{0, -1, 0}, Vector3f{0, 1, 0}};
+  Ray r{glm::vec3{0, -1, 0}, glm::vec3{0, 1, 0}};
   auto i = p->intersections(r);
 
   ASSERT_EQ(i.size(), 1);

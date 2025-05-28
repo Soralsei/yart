@@ -1,26 +1,29 @@
+#include <glm/detail/type_vec2.hpp>
+#include <glm/ext/vector_float3.hpp>
+#include <glm/geometric.hpp>
+#include <glm/gtx/io.hpp>
 #include <iostream>
 #include <ostream>
 
-#include "Eigen/Dense"
 #include "yart/file/ppm_writer.h"
 #include "yart/image/canvas.h"
 
 using namespace yart;
 
 struct Environment {
-  Eigen::Vector3<float> gravity = {0, -9.81f, 0};
-  Eigen::Vector3<float> wind = {0, 0, 0};
+  glm::vec3 gravity = {0, -9.81f, 0};
+  glm::vec3 wind = {0, 0, 0};
 };
 
 struct Projectile {
-  Eigen::Vector3<float> position = {0, 0, 0};
-  Eigen::Vector3<float> velocity = {10, 0, 5};
+  glm::vec3 position = {0, 0, 0};
+  glm::vec3 velocity = {10, 0, 5};
 };
 
 int main(int /*argc*/, char* /*argv*/[]) {
   Projectile p = {
       .position = {0, 1, 0},
-      .velocity = Eigen::Vector3<float>{1, 1.8f, 0}.normalized() * 11.25f,
+      .velocity = glm::normalize(glm::vec3{1.0f, 1.8f, 0.0f}) * 11.25f,
   };
   Environment e = {.gravity = {0, -0.1f, 0}, .wind{-0.01f, 0, 0}};
 

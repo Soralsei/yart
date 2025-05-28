@@ -10,10 +10,10 @@ using namespace yart;
 
 class ShadingTest : public testing::Test {
 protected:
-  ShadingTest() { position = Eigen::Vector3f{0, 0, 0}; }
+  ShadingTest() { position = glm::vec4{0, 0, 0, 1}; }
 
   Material material;
-  Eigen::Vector3f position;
+  glm::vec4 position;
 };
 
 TEST(MaterialTest, DefaultConstructor) {
@@ -51,60 +51,60 @@ TEST(MaterialTest, MaterialAssign) {
 }
 
 TEST_F(ShadingTest, EyeBetweenLightAndSurface) {
-  auto eye = Eigen::Vector4f{0, 0, -1, 0};
-  auto normal = Eigen::Vector4f{0, 0, -1, 0};
-  light::PointLight light{Eigen::Vector3f{0, 0, -10}};
+  auto eye = glm::vec4{0, 0, -1, 0};
+  auto normal = glm::vec4{0, 0, -1, 0};
+  light::PointLight light{glm::vec3{0, 0, -10}};
 
-  auto result = light::phong_lighting(material, light, position.homogeneous(), eye, normal);
+  auto result = light::phong_lighting(material, light, position, eye, normal);
   ASSERT_EQ(result, (color::Color{1.9f, 1.9f, 1.9f}));
 }
 
 TEST_F(ShadingTest, EyeOffset45Degrees) {
-  auto eye = Eigen::Vector4f{0, std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2, 0};
-  auto normal = Eigen::Vector4f{0, 0, -1, 0};
-  light::PointLight light{Eigen::Vector3f{0, 0, -10}};
+  auto eye = glm::vec4{0, std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2, 0};
+  auto normal = glm::vec4{0, 0, -1, 0};
+  light::PointLight light{glm::vec3{0, 0, -10}};
 
-  auto result = light::phong_lighting(material, light, position.homogeneous(), eye, normal);
+  auto result = light::phong_lighting(material, light, position, eye, normal);
   ASSERT_EQ(result, (color::Color{1.0f, 1.0f, 1.0f}));
 }
 
 TEST_F(ShadingTest, LightOffset45Degrees) {
-  auto eye = Eigen::Vector4f{0, 0, -1, 0};
-  auto normal = Eigen::Vector4f{0, 0, -1, 0};
-  light::PointLight light{Eigen::Vector3f{0, 10, -10}};
+  auto eye = glm::vec4{0, 0, -1, 0};
+  auto normal = glm::vec4{0, 0, -1, 0};
+  light::PointLight light{glm::vec3{0, 10, -10}};
 
-  auto result = light::phong_lighting(material, light, position.homogeneous(), eye, normal);
+  auto result = light::phong_lighting(material, light, position, eye, normal);
   ASSERT_EQ(result, (color::Color{0.7364f, 0.7364f, 0.7364f}));
 }
 
 TEST_F(ShadingTest, LightAndEyeOffset45Degrees) {
-  auto eye = Eigen::Vector4f{0, -std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2, 0};
-  auto normal = Eigen::Vector4f{0, 0, -1, 0};
-  light::PointLight light{Eigen::Vector3f{0, 10, -10}};
+  auto eye = glm::vec4{0, -std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2, 0};
+  auto normal = glm::vec4{0, 0, -1, 0};
+  light::PointLight light{glm::vec3{0, 10, -10}};
 
-  auto result = light::phong_lighting(material, light, position.homogeneous(), eye, normal);
+  auto result = light::phong_lighting(material, light, position, eye, normal);
   ASSERT_EQ(result, (color::Color{1.6364, 1.6364, 1.6364}));
 }
 TEST_F(ShadingTest, LightBehindSurface) {
-  auto eye = Eigen::Vector4f{0, 0, -1, 0};
-  auto normal = Eigen::Vector4f{0, 0, -1, 0};
-  light::PointLight light{Eigen::Vector3f{0, 0, 10}};
+  auto eye = glm::vec4{0, 0, -1, 0};
+  auto normal = glm::vec4{0, 0, -1, 0};
+  light::PointLight light{glm::vec3{0, 0, 10}};
 
-  auto result = light::phong_lighting(material, light, position.homogeneous(), eye, normal);
+  auto result = light::phong_lighting(material, light, position, eye, normal);
   ASSERT_EQ(result, (color::Color{0.1, 0.1, 0.1}));
 }
 TEST_F(ShadingTest, LightShadowedSurface) {
-  auto eye = Eigen::Vector4f{0, 0, -1, 0};
-  auto normal = Eigen::Vector4f{0, 0, -1, 0};
-  light::PointLight light{Eigen::Vector3f{0, 0, 10}};
+  auto eye = glm::vec4{0, 0, -1, 0};
+  auto normal = glm::vec4{0, 0, -1, 0};
+  light::PointLight light{glm::vec3{0, 0, 10}};
 
-  auto result = light::phong_lighting(material, light, position.homogeneous(), eye, normal, true);
+  auto result = light::phong_lighting(material, light, position, eye, normal, true);
   ASSERT_EQ(result, (color::Color{0.1, 0.1, 0.1}));
 }
 
 TEST(ShadowTests, NotShadowed) {
   auto w = World::default_world();
-  Eigen::Vector4f p{0, 10, 0, 1};
+  glm::vec4 p{0, 10, 0, 1};
   for (auto&& light : w->get_light_sources()) {
     ASSERT_FALSE(light::is_shadowed(*w, *light, p));
   }
@@ -112,7 +112,7 @@ TEST(ShadowTests, NotShadowed) {
 
 TEST(ShadowTests, ObjectBetweenLightAndPoint) {
   auto w = World::default_world();
-  Eigen::Vector4f p{10, -10, 10, 1};
+  glm::vec4 p{10, -10, 10, 1};
   for (auto&& light : w->get_light_sources()) {
     ASSERT_TRUE(light::is_shadowed(*w, *light, p));
   }
@@ -120,7 +120,7 @@ TEST(ShadowTests, ObjectBetweenLightAndPoint) {
 
 TEST(ShadowTests, LightBetweenObjectAndPoint) {
   auto w = World::default_world();
-  Eigen::Vector4f p{-20, 20, -20, 1};
+  glm::vec4 p{-20, 20, -20, 1};
   for (auto&& light : w->get_light_sources()) {
     ASSERT_FALSE(light::is_shadowed(*w, *light, p));
   }
@@ -128,7 +128,7 @@ TEST(ShadowTests, LightBetweenObjectAndPoint) {
 
 TEST(ShadowTests, PointBetweenLightAndObject) {
   auto w = World::default_world();
-  Eigen::Vector4f p{-2, 2, -2, 1};
+  glm::vec4 p{-2, 2, -2, 1};
   for (auto&& light : w->get_light_sources()) {
     ASSERT_FALSE(light::is_shadowed(*w, *light, p));
   }

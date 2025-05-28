@@ -55,7 +55,7 @@ set(plane_render_sources
 )
 
 set(headers
-  include/yart/simd.h
+  include/yart/simd.hpp
   include/yart/util/math.h
 
   include/yart/core/ray.h

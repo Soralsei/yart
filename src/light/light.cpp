@@ -1,6 +1,8 @@
 #include "yart/light/light.h"
 
-#include <Eigen/Dense>
+#include <glm/ext/vector_float4.hpp>
+#include <glm/geometric.hpp>
+#include <glm/gtx/norm.hpp>
 
 #include "yart/core/material.h"
 #include "yart/core/ray.h"
@@ -14,14 +16,14 @@ namespace yart {
 
   namespace light {
 
-    Light::Light(Eigen::Vector3f _position, float _light_energy, float _light_specular,
+    Light::Light(glm::vec3 _position, float _light_energy, float _light_specular,
                  color::Color _light_color)
         : Parent(_position),
           light_energy(_light_energy),
           light_specular(_light_specular),
           light_color(_light_color) {}
 
-    Light::Light(Eigen::Vector3f _position) : Parent(_position) {}
+    Light::Light(glm::vec3 _position) : Parent(_position) {}
 
     Light::Light() : Parent() {}
 
@@ -50,24 +52,24 @@ namespace yart {
     }
 
     color::Color phong_lighting(const Material& material, const Light& light,
-                                const Eigen::Vector4f& point, const Eigen::Vector4f& eye,
-                                const Eigen::Vector4f& normal, bool is_shadowed) {
+                                const glm::vec4& point, const glm::vec4& eye,
+                                const glm::vec4& normal, bool is_shadowed) {
       color::Color effective_color
           = material.get_diffuse_color() * (light.get_color() * light.get_energy());
       color::Color ambient = effective_color * material.get_ambient();
       if (is_shadowed) {
         return ambient;
       }
-      Eigen::Vector4f lightv = (light.position().homogeneous() - point).normalized();
-      float light_dot_normal = lightv.dot(normal);
+      glm::vec4 lightv = glm::normalize(glm::vec4{light.position(), 1} - point);
+      float light_dot_normal = glm::dot(lightv, normal);
 
       color::Color specular = color::Black;
       color::Color diffuse = color::Black;
 
       if (light_dot_normal >= 0) {
         diffuse = effective_color * material.get_diffuse() * light_dot_normal;
-        Eigen::Vector4f reflectv = math::reflect(-lightv, normal);
-        float reflect_dot_eye = reflectv.dot(eye);
+        glm::vec4 reflectv = math::reflect(-lightv, normal);
+        float reflect_dot_eye = glm::dot(reflectv, eye);
 
         if (reflect_dot_eye > 0) {
           float factor = std::pow(reflect_dot_eye, material.get_shininess());
@@ -85,10 +87,10 @@ namespace yart {
       if (object == nullptr) return shade;
 
       auto material = object->get_material();
-      Eigen::Vector4f position = hit.get_position();
-      Eigen::Vector4f over_position = hit.get_over_position();
-      Eigen::Vector4f eye = hit.get_eye();
-      Eigen::Vector4f normal = hit.get_normal();
+      glm::vec4 position = hit.get_position();
+      glm::vec4 over_position = hit.get_over_position();
+      glm::vec4 eye = hit.get_eye();
+      glm::vec4 normal = hit.get_normal();
 
       for (auto&& light : world.get_light_sources()) {
         bool in_shadows = is_shadowed(world, *light, over_position);
@@ -98,10 +100,10 @@ namespace yart {
       return shade;
     }
 
-    bool is_shadowed(const World& world, const Light& light, const Eigen::Vector4f& point) {
-      Eigen::Vector4f lightv = light.position().homogeneous() - point;
-      float distance = lightv.norm();
-      Eigen::Vector4f direction = lightv.normalized();
+    bool is_shadowed(const World& world, const Light& light, const glm::vec4& point) {
+      glm::vec4 lightv = glm::vec4{light.position(), 1} - point;
+      float distance = glm::l2Norm(glm::vec3{lightv});
+      glm::vec4 direction = lightv / distance;
 
       Ray r = {point, direction};
       auto intersections = world.intersections(r);

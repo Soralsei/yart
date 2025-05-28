@@ -1,123 +1,128 @@
 #include "yart/geometry/transform.h"
 
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
-#include <Eigen/SVD>
+#include <glm/gtx/io.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <iostream>
 
 namespace yart {
   namespace transform {
 
     Transform::Transform() {}
 
-    Transform::Transform(const Eigen::Matrix4f& transform) {
-      m_position = transform.col(3).head(3);
-      Eigen::JacobiSVD<Eigen::Matrix3f> svd(transform.block(0, 0, 3, 3),
-                                            Eigen::ComputeFullU | Eigen::ComputeFullV);
-
-      float x = (svd.matrixU() * svd.matrixV().adjoint()).determinant() < 0 ? -1 : 1;
-      Eigen::Vector3f sv(svd.singularValues());
-      sv.coeffRef(2) *= x;
-      Eigen::Matrix3f scale = svd.matrixV() * sv.asDiagonal() * svd.matrixV().adjoint();
-      Eigen::Matrix3f m(svd.matrixU());
-      m.col(2) *= x;
-      m_orientation = Eigen::Quaternionf{m * svd.matrixV().adjoint()};
-      m_scale = scale.diagonal();
+    Transform::Transform(const glm::mat4& transform) {
+      glm::vec3 skew;
+      glm::vec4 perspective;
+      glm::decompose(transform, m_scale, m_orientation, m_position, skew, perspective);
+      m_local_matrix = transform;
+      m_is_dirty = true;
     }
 
-    Eigen::Matrix4f Transform::get_local_matrix() {
-      Eigen::Matrix4f T = Eigen::Matrix4f::Identity();
-      T.block(0, 3, 3, 1) = m_position;
-
-      Eigen::Matrix4f R = Eigen::Matrix4f::Identity();
-      R.block(0, 0, 3, 3) = m_orientation.toRotationMatrix();
-
-      Eigen::Matrix4f S = Eigen::Matrix4f::Identity();
-      S.block(0, 0, 3, 3) = m_scale.asDiagonal();
-
-      m_local_matrix = T * R * S;
+    const glm::mat4& Transform::get_local_matrix() {
+      if (m_is_local_dirty) {
+        std::cout << "Local matrix is dirty, recomputing local matrix.\n";
+        glm::mat4 T = glm::translate(glm::mat4{1.0f}, m_position);
+        glm::mat4 R = glm::mat4_cast(m_orientation);
+        glm::mat4 S = glm::scale(glm::mat4{1.0f}, m_scale);
+        m_local_matrix = T * R * S;
+        m_is_local_dirty = false;
+      }
       return m_local_matrix;
     }
 
-    void Transform::compute_model_matrix() {
-      m_model_matrix = get_local_matrix();
+    void Transform::compute_model_matrix() { compute_model_matrix(glm::mat4{1.0f}); }
+
+    void Transform::compute_model_matrix(glm::mat4 parent_matrix) {
+      auto local_matrix = get_local_matrix();
+      m_model_matrix = parent_matrix * local_matrix;
+      // Reset dirty flag after computing the model matrix
+      std::cout << "Computed model matrix: " << m_model_matrix << "\n";
       m_is_dirty = false;
     }
 
-    void Transform::compute_model_matrix(const Eigen::Matrix4f& parent_matrix) {
-      m_model_matrix = parent_matrix * get_local_matrix();
-      m_is_dirty = false;
+    glm::mat4 Transform::matrix() { return matrix(glm::mat4{1.0f}); }
+    glm::mat4 Transform::matrix(glm::mat4 parent_matrix) {
+      if (m_is_dirty || m_is_local_dirty) {
+        std::cout << "Transform is dirty, recomputing model matrix.\n";
+        compute_model_matrix(parent_matrix);
+      }
+      return m_model_matrix;
     }
-
-    const Eigen::Matrix4f& Transform::matrix() const { return m_model_matrix; }
 
     bool Transform::is_dirty() const { return m_is_dirty; }
 
-    const Eigen::Vector3f Transform::get_local_position() const { return m_position; }
+    const glm::vec3& Transform::get_local_position() const { return m_position; }
+    const glm::quat& Transform::get_local_orientation() const { return m_orientation; }
 
-    const Eigen::Quaternionf Transform::get_local_orientation() const { return m_orientation; }
-
-    Transform& Transform::set_local_position(const Eigen::Vector3f& pos) {
+    Transform& Transform::set_local_position(const glm::vec3& pos) {
       m_position = pos;
-      m_is_dirty = true;
+      m_is_local_dirty = true;
       return *this;
     }
-
-    Transform& Transform::set_local_orientation(const Eigen::Quaternionf& orient) {
+    Transform& Transform::set_local_orientation(const glm::quat& orient) {
       m_orientation = orient;
+      m_is_local_dirty = true;
+      return *this;
+    }
+    Transform& Transform::set_local_scale(const glm::vec3& scale) {
+      m_scale = scale;
+      m_is_local_dirty = true;
+      return *this;
+    }
+
+    Transform& Transform::rotate(glm::quat rot) { return rotate(glm::mat4_cast(rot)); }
+    Transform& Transform::rotate(glm::mat3 rot) { return rotate(glm::mat4{rot}); }
+    Transform& Transform::rotate(glm::mat4 rot) {
+      m_orientation *= glm::quat_cast(rot);
+      m_local_matrix = rot * m_local_matrix;
+      m_is_dirty = true;
+      return *this;
+    }
+    Transform& Transform::rotate(float angle, float x, float y, float z) {
+      return rotate(angle, {x, y, z});
+    }
+    Transform& Transform::rotate(float angle, glm::vec3 axis) {
+      m_orientation = glm::rotate(m_orientation, angle, axis);
+      m_local_matrix = glm::rotate(m_local_matrix, angle, axis);
       m_is_dirty = true;
       return *this;
     }
 
-    Transform& Transform::rotate(const Eigen::Quaternionf& rot) {
-      m_orientation *= rot;
-      m_is_dirty = true;
-      return *this;
-    }
-
-    Transform& Transform::rotate(const Eigen::Matrix3f& rot) {
-      Eigen::Quaternionf R{rot};
-      return rotate(R);
-    }
-
-    Transform& Transform::rotate(const Eigen::Matrix4f& rot) {
-      Eigen::Quaternionf R{rot.block<3, 3>(Eigen::fix<0>, Eigen::fix<0>)};
-      return rotate(R);
-    }
-
-    Transform& Transform::rotate(const Eigen::AngleAxisf& rot) {
-      Eigen::Quaternionf R{rot};
-      return rotate(R);
-    }
-
-    Transform& Transform::translate(const Eigen::Vector3f& translation) {
+    Transform& Transform::translate(glm::vec3 translation) {
       m_position += translation;
+      m_local_matrix = glm::translate(m_local_matrix, translation);
       m_is_dirty = true;
       return *this;
     }
-
     Transform& Transform::translate(float x, float y, float z) {
-      Eigen::Vector3f T{x, y, z};
-      return translate(T);
+      return translate(glm::vec3{x, y, z});
     }
 
-    Transform& Transform::rotate_x(float angle) {
-      Eigen::AngleAxisf R(angle, Eigen::Vector3f::UnitX());
-      return rotate(R);
+    Transform& Transform::scale(glm::vec3 _scale) {
+      m_scale *= _scale;
+      m_local_matrix = glm::scale(m_local_matrix, _scale);
+      m_is_dirty = true;
+      return *this;
     }
+    Transform& Transform::scale(float x, float y, float z) { return scale(glm::vec3{x, y, z}); }
 
-    Transform& Transform::rotate_y(float angle) {
-      Eigen::AngleAxisf R(angle, Eigen::Vector3f::UnitY());
-      return rotate(R);
-    }
-
-    Transform& Transform::rotate_z(float angle) {
-      Eigen::AngleAxisf R(angle, Eigen::Vector3f::UnitZ());
-      return rotate(R);
-    }
+    Transform& Transform::rotate_x(float angle) { return rotate(angle, {1, 0, 0}); }
+    Transform& Transform::rotate_y(float angle) { return rotate(angle, {0, 1, 0}); }
+    Transform& Transform::rotate_z(float angle) { return rotate(angle, {0, 0, 1}); }
 
     Transform operator*(const Transform& lhs, const Transform& rhs) {
       return Transform{lhs.m_model_matrix * rhs.m_model_matrix};
     }
+
+    // clang-format off
+    glm::mat4 shear(float xy, float xz, float yx, float yz, float zx, float zy) {
+      return glm::mat4{
+        1, yx, zx, 0,
+        xy, 1, zy, 0,
+        xz, yz, 1, 0,
+        0, 0, 0, 1,
+      };
+    }
+    // clang-format on
 
   }  // namespace transform
 

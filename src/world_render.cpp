@@ -1,8 +1,10 @@
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/vector_float3.hpp>
+#include <glm/gtx/io.hpp>
 #include <iostream>
 #include <memory>
 #include <ostream>
 
-#include "Eigen/Dense"
 #include "yart/core/camera.h"
 #include "yart/core/material.h"
 #include "yart/core/world.h"
@@ -17,59 +19,51 @@ using namespace yart;
 int main(int /*argc*/, char* /*argv*/[]) {
   Camera camera{640, 480, M_PI / 3};
   // Camera camera{480, 360, M_PI / 2};
-  camera.transform = Camera::get_view_transform(Eigen::Vector3f{0, 1.0, -5},
-                                                Eigen::Vector3f::UnitY(), Eigen::Vector3f::UnitY());
+  camera.transform
+      = Camera::get_view_transform(glm::vec3{0, 1.0, -5}, glm::vec3{0, 1, 0}, glm::vec3{0, 1, 0});
 
   std::cout << "Camera view matrix :\n" << camera.transform.matrix() << '\n';
 
   file::PPMWriter writer;
 
-  auto flat_scale = transform::scale<float>(10, 0.01, 10);
+  auto flat_scale = glm::vec3{10, 0.01, 10};
   auto material = std::make_shared<Material>();
   material->set_diffuse_color(color::Color{1, 0.9, 0.9}).set_specular(0);
 
   ObjectPtr floor = std::make_shared<geometry::Sphere>();
   floor->set_material(material);
-  floor->transform.scale(flat_scale.diagonal());
+  floor->transform.scale(flat_scale);
 
   ObjectPtr left_wall = std::make_shared<geometry::Sphere>();
   left_wall->set_material(material);
-  left_wall->transform.translate(transform::translation<float>(0, 0, 5).translation())
-      .rotate(transform::rotationY<float>(-M_PI_4))
-      .rotate(transform::rotationX<float>(M_PI_2))
-      .scale(flat_scale.diagonal());
+  left_wall->transform.translate(0, 0, 5).rotate_y(-M_PI_4).rotate_x(M_PI_2).scale(flat_scale);
 
   ObjectPtr right_wall = std::make_shared<geometry::Sphere>();
   right_wall->set_material(material);
-  right_wall->transform.translate(transform::translation<float>(0, 0, 5).translation())
-      .rotate(transform::rotationY<float>(M_PI_4))
-      .rotate(transform::rotationX<float>(M_PI_2))
-      .scale(flat_scale.diagonal());
+  right_wall->transform.translate(0, 0, 5).rotate_y(M_PI_4).rotate_x(M_PI_2).scale(flat_scale);
 
   ObjectPtr middle = std::make_shared<geometry::Sphere>();
-  middle->transform.translate(transform::translation<float>(-0.5, 1, 0.5).translation());
+  middle->transform.translate(-0.5, 1, 0.5);
   middle->get_material()
       .set_diffuse_color(color::Color{0.1, 1, 0.5})
       .set_diffuse(0.7)
       .set_specular(0.3);
 
   ObjectPtr right = std::make_shared<geometry::Sphere>();
-  right->transform.translate(transform::translation<float>(1.0, 0.5, -0.5).translation())
-      .scale(Eigen::Vector3f{0.5, 0.5, 0.5});
+  right->transform.translate(1.0, 0.5, -0.5).scale(glm::vec3{0.5, 0.5, 0.5});
   right->get_material()
       .set_diffuse_color(color::Color{0.5, 1, 0.1})
       .set_diffuse(0.7)
       .set_specular(0.3);
 
   ObjectPtr left = std::make_shared<geometry::Sphere>();
-  left->transform.translate(transform::translation<float>(-1.0, 0.33, -0.75).translation())
-      .scale(Eigen::Vector3f{0.33, 0.33, 0.33});
+  left->transform.translate(-1.0, 0.33, -0.75).scale(glm::vec3{0.33, 0.33, 0.33});
   left->get_material()
       .set_diffuse_color(color::Color{1, 0.8, 0.1})
       .set_diffuse(0.7)
       .set_specular(0.3);
 
-  LightPtr light = std::make_shared<light::PointLight>(Eigen::Vector3f{-10, 10, -10});
+  LightPtr light = std::make_shared<light::PointLight>(glm::vec3{-10, 10, -10});
   // World world = *World::default_world();
   World world;
   world.add_object(floor)

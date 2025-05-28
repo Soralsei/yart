@@ -13,7 +13,7 @@ namespace yart {
 
     private:
       virtual std::vector<Intersection> local_intersections(const Ray& ray) override;
-      virtual Eigen::Vector4f local_normal_at(const Eigen::Vector4f& point) const override;
+      virtual glm::vec4 local_normal_at(const glm::vec4& point) const override;
       bool m_infinite = true;
       float m_width = 1;
       float m_length = 1;
@@ -23,15 +23,15 @@ namespace yart {
 
     public:
       // Assumes unit plane if is_infinite is false
-      Plane(Transform3D _transform, bool is_infinite);
+      Plane(Transform _transform, bool is_infinite);
       // Assumes unit plane if is_infinite is false
-      Plane(Eigen::Vector3f _origin, bool is_infinite);
+      Plane(glm::vec3 _origin, bool is_infinite);
       // Assumes unit plane if is_infinite is false
       Plane(bool is_infinite);
 
       // Assumes plane is not infinite
-      Plane(Transform3D _transform, float width, float length);
-      Plane(Eigen::Vector3f _origin, float width, float length);
+      Plane(Transform _transform, float width, float length);
+      Plane(glm::vec3 _origin, float width, float length);
       Plane(float width, float length);
       Plane();
 
@@ -40,9 +40,9 @@ namespace yart {
 
       ~Plane();
 
-      std::string as_string() const override;
+      std::string as_string() override;
 
-      friend std::ostream& operator<<(std::ostream& out, const Plane& sphere);
+      friend std::ostream& operator<<(std::ostream& out, Plane& sphere);
     };
 
   }  // namespace geometry

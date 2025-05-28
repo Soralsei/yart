@@ -1,5 +1,6 @@
 #include "yart/geometry/primitives/sphere.h"
 
+#include <glm/gtx/io.hpp>
 #include <iostream>
 
 #include "yart/core/object3d.h"
@@ -13,9 +14,9 @@ namespace yart {
 
   namespace geometry {
 
-    Sphere::Sphere(Transform3D _transform, float _radius) : Parent(_transform), radius(_radius) {}
+    Sphere::Sphere(Transform _transform, float _radius) : Parent(_transform), radius(_radius) {}
 
-    Sphere::Sphere(Eigen::Vector3f _position, float _radius) : Parent(_position), radius(_radius) {}
+    Sphere::Sphere(glm::vec3 _position, float _radius) : Parent(_position), radius(_radius) {}
 
     Sphere::Sphere(float _radius) : Parent(), radius(_radius) {}
     Sphere::Sphere(const Sphere& other) : Parent(other.transform), radius(other.radius) {}
@@ -26,11 +27,11 @@ namespace yart {
     std::vector<Intersection> Sphere::local_intersections(const Ray& ray) {
       // Ray should already be in local frame of the sphere
       // So we can use the ray origin and direction directly
-      Eigen::Vector4f self_to_ray = ray.get_origin() - Eigen::Vector4f::UnitW();
+      glm::vec4 self_to_ray = ray.get_origin() - glm::vec4{0.0f, 0.0f, 0.0f, 1.0f};
       auto direction = ray.get_direction();
-      float a = direction.dot(direction);
-      float b = 2 * direction.dot(self_to_ray);
-      float c = self_to_ray.dot(self_to_ray) - radius * radius;
+      float a = glm::dot(direction, direction);
+      float b = 2 * glm::dot(direction, self_to_ray);
+      float c = glm::dot(self_to_ray, self_to_ray) - radius * radius;
 
       float delta = b * b - 4 * a * c;
 
@@ -45,13 +46,12 @@ namespace yart {
       return make_vec(i1, i2);
     }
 
-    Eigen::Vector4f Sphere::local_normal_at(const Eigen::Vector4f& local_point) const {
-      return (local_point - Eigen::Vector4f::UnitW()).normalized();
+    glm::vec4 Sphere::local_normal_at(const glm::vec4& local_point) const {
+      return glm::normalize(local_point - glm::vec4{0.0f, 0.0f, 0.0f, 1.0f});
     }
 
     std::ostream& operator<<(std::ostream& out, const Sphere& sphere) {
-      return out << "Sphere([" << sphere.position().x() << ", " << sphere.position().y() << ", "
-                 << sphere.position().z() << "], radius: " << sphere.radius << ")";
+      return out << "Sphere([" << sphere.position() << "], radius: " << sphere.radius << ")";
     }
 
     bool Sphere::self_equal(const Sphere& other) const {
@@ -59,7 +59,7 @@ namespace yart {
       return math::approx_equals(radius, other.radius);
     }
 
-    std::string Sphere::as_string() const {
+    std::string Sphere::as_string() {
       std::stringstream repr;
       repr << "Sphere(\ntransform : \n[" << transform.matrix() << " ], radius : " << radius
            << "\n)";

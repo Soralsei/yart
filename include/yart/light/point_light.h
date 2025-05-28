@@ -11,9 +11,9 @@ namespace yart {
       PointLight() = default;
       ~PointLight();
 
-      PointLight(Eigen::Vector3f _position, float _light_energy, float _light_specular,
+      PointLight(glm::vec3 _position, float _light_energy, float _light_specular,
                  color::Color _light_color);
-      PointLight(Eigen::Vector3f _position);
+      PointLight(glm::vec3 _position);
     };
 
   }  // namespace light

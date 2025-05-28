@@ -1,11 +1,9 @@
 #pragma once
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
+#include "yart/geometry/transform.h"
 
 namespace yart {
   namespace geometry {
-    using Transform3D = Eigen::Affine3f;
-    using Quaternion = Eigen::Quaternionf;
+    using Transform = transform::Transform;
 
     constexpr double SHADOW_EPSILON = 1e-3;
     constexpr double EPSILON = 1e-6;

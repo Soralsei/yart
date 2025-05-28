@@ -1,28 +1,29 @@
 #pragma once
-#include "Eigen/Dense"
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/vector_float4.hpp>
+#include <iostream>
+
 #include "yart/geometry/defines.h"
 
 namespace yart {
   class Ray {
   private:
-    // Eigen::Vector3f origin;
-    // Eigen::Vector3f direction;
-    Eigen::Vector4f origin;
-    Eigen::Vector4f direction;
+    glm::vec4 origin;
+    glm::vec4 direction;
 
   public:
-    Ray(Eigen::Vector3f _origin, Eigen::Vector3f _direction);
-    Ray(Eigen::Vector4f _origin, Eigen::Vector4f _direction);
-    Ray(Eigen::Vector3f _direction);
+    Ray(glm::vec3 _origin, glm::vec3 _direction);
+    Ray(glm::vec4 _origin, glm::vec4 _direction);
+    Ray(glm::vec3 _direction);
     ~Ray();
 
-    const Eigen::Vector4f get_origin() const;
-    const Eigen::Vector4f get_direction() const;
+    const glm::vec4 get_origin() const;
+    const glm::vec4 get_direction() const;
 
-    Eigen::Vector4f position(float t) const;
+    glm::vec4 position(float t) const;
 
-    Ray transform(const geometry::Transform3D& transform) const;
-    Ray transform(const Eigen::Matrix4f& transform) const;
+    Ray transform(geometry::Transform& transform) const;
+    Ray transform(glm::mat4& transform) const;
 
     friend std::ostream& operator<<(std::ostream& out, const Ray& ray);
   };

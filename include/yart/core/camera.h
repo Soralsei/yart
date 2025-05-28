@@ -1,4 +1,7 @@
 #pragma once
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/vector_float4.hpp>
+
 #include "yart/core/object3d.h"
 
 namespace yart {
@@ -14,23 +17,23 @@ namespace yart {
     float fov;
     float pixel_size;
 
-    Eigen::Matrix4f view_matrix;
+    // glm::mat4 view_matrix;
+    glm::mat4 view_matrix;
 
   public:
     Camera(int hsize, int vsize, float fov);
     ~Camera() = default;
 
-    Ray ray_to(int x, int y) const;
+    Ray ray_to(int x, int y);
 
-    void look_at(const Eigen::Vector3f& target, const Eigen::Vector3f& up);
+    void look_at(const glm::vec3& target, const glm::vec3& up);
 
     int get_hsize() const;
     int get_vsize() const;
     float get_fov() const;
     float get_pixel_size() const;
 
-    static geometry::Transform3D get_view_transform(const Eigen::Vector3f& from,
-                                                    const Eigen::Vector3f& to,
-                                                    const Eigen::Vector3f& up);
+    static glm::mat4 get_view_transform(const glm::vec3& from, const glm::vec3& to,
+                                        const glm::vec3& up);
   };
 }  // namespace yart

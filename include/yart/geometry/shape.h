@@ -1,8 +1,9 @@
 #pragma once
 
+#include <glm/ext/vector_float4.hpp>
 #include <memory>
+#include <vector>
 
-#include "Eigen/Dense"
 #include "yart/core/object3d.h"
 #include "yart/geometry/defines.h"
 #include "yart/traits/comparable.h"
@@ -27,26 +28,26 @@ namespace yart {
 
     private:
       virtual std::vector<Intersection> local_intersections(const Ray& ray) = 0;
-      virtual Eigen::Vector4f local_normal_at(const Eigen::Vector4f& local_point) const = 0;
-      virtual std::string as_string() const = 0;
+      virtual glm::vec4 local_normal_at(const glm::vec4& local_point) const = 0;
+      virtual std::string as_string() = 0;
 
     public:
-      Shape3D(Eigen::Vector3f _origin);
+      Shape3D(glm::vec3 _origin);
 
-      Shape3D(Eigen::Vector3f _origin, Eigen::Vector4f _rotation);
+      Shape3D(glm::vec3 _origin, glm::vec4 _rotation);
 
-      Shape3D(Transform3D _transform);
+      Shape3D(Transform _transform);
       Shape3D();
       ~Shape3D();
 
       std::vector<geometry::Intersection> intersections(const Ray& ray);
-      Eigen::Vector4f normal_at(const Eigen::Vector4f& point);
+      glm::vec4 normal_at(const glm::vec4& point);
 
       Material& get_material();
       void set_material(const Material& mat);
       void set_material(std::shared_ptr<Material> mat);
 
-      friend std::ostream& operator<<(std::ostream& out, const Shape3D&);
+      friend std::ostream& operator<<(std::ostream& out, Shape3D&);
     };
 
   }  // namespace geometry

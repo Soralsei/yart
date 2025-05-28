@@ -44,7 +44,7 @@ namespace yart {
     Intersections intersections(const Ray& ray) const;
 
     color::Color color_at(const Ray& ray);
-    std::unique_ptr<image::Canvas> render(const Camera& camera);
+    std::unique_ptr<image::Canvas> render(Camera& camera);
 
     static std::unique_ptr<World> default_world();
   };
