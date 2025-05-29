@@ -166,10 +166,14 @@ include(cmake/Doxygen.cmake)
 
 # Identify and link with the specific "packages" the project uses
 #find_package(package_name package_version REQUIRED package_type [other_options])
-# find_package(Eigen3 3.4 REQUIRED NO_MODULE)
-find_package(glm REQUIRED)
+
+pkg_check_modules(GLM REQUIRED glm)
 include_directories(${GLM_INCLUDE_DIRS})
-# include_directories(${EIGEN3_INCLUDE_DIR})
+
+pkg_check_modules(LIBPNG REQUIRED libpng)
+include_directories(${LIBPNG_INCLUDE_DIRS})
+link_libraries(${LIBPNG_LIBRARIES})
+
 #target_link_libraries(
 #  ${PROJECT_NAME}
 #  PUBLIC
@@ -194,12 +198,14 @@ target_link_libraries(
  ${PROJECT_NAME}
  PRIVATE
     # Eigen3::Eigen
-    glm::glm
+    ${GLM_LIBRARIES}
     vendored
 )
+message(STATUS "Linking against LIBPNG ${LIBPNG_LIBRARIES}")
+message(STATUS "Linking against GLM ${GLM_LIBRARIES}")
 
 if(${PROJECT_NAME}_ENABLE_OPENMP)
-  target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
+  target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
 # For Windows, it is necessary to link with the MultiThreaded library.

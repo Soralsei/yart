@@ -103,3 +103,5 @@ if(${PROJECT_NAME}_ENABLE_OPENMP)
 endif()
 
 add_compile_options(-march=native)
+
+find_package(PkgConfig REQUIRED)

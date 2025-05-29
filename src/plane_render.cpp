@@ -6,17 +6,18 @@
 #include "yart/core/camera.h"
 #include "yart/core/material.h"
 #include "yart/core/world.h"
-#include "yart/file/ppm_writer.h"
+#include "yart/file/png_writer.h"
 #include "yart/geometry/defines.h"
 #include "yart/geometry/primitives/plane.h"
 #include "yart/geometry/primitives/sphere.h"
 #include "yart/image/canvas.h"
+#include "yart/image/color_format.h"
 #include "yart/light/point_light.h"
 
 using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
-  Camera camera{640, 480, M_PI / 3};
+  Camera camera{1280, 960, M_PI / 3};
   // Camera camera{480, 360, M_PI / 2};
   auto view_matrix
       = Camera::get_view_transform(glm::vec3{0, 1.0, -5}, glm::vec3{0, 1, 0}, glm::vec3{0, 1, 0});
@@ -25,7 +26,8 @@ int main(int /*argc*/, char* /*argv*/[]) {
   std::cout << "Camera view matrix :" << view_matrix << '\n';
   std::cout << "Camera transform :" << camera.transform.matrix() << '\n';
 
-  file::PPMWriter writer;
+  // file::PPMWriter writer;
+  file::PNGWriter<image::RGB888Format> writer;
 
   auto material = std::make_shared<Material>();
   material->set_diffuse_color(color::Color{1, 0.9, 0.9}).set_specular(0);
@@ -70,7 +72,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
   auto image = world.render(camera);
 
-  writer.write("/home/sora/plane_render_glm.ppm", image->getPixels(), image->getWidth(),
+  writer.write("/home/sora/plane_render_glm.png", image->getPixels(), image->getWidth(),
                image->getHeight());
 
   return 0;
