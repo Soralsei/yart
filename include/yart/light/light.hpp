@@ -3,9 +3,9 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/ext/vector_float4.hpp>
 
-#include "yart/core/object3d.h"
-#include "yart/image/color.h"
-#include "yart/traits/comparable.h"
+#include "yart/core/object3d.hpp"
+#include "yart/image/color.hpp"
+#include "yart/traits/comparable.hpp"
 
 namespace yart {
 

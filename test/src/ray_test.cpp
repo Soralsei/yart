@@ -1,14 +1,14 @@
-#include "yart/core/ray.h"
+#include "yart/core/ray.hpp"
 
 #include <gtest/gtest.h>
 
 #include <glm/gtx/io.hpp>
 #include <memory>
 
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/primitives/plane.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/util/vector.h"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/primitives/plane.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/util/vector.hpp"
 
 using namespace yart;
 

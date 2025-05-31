@@ -1,16 +1,17 @@
-#include "yart/core/world.h"
+#include "yart/core/world.hpp"
 
 #include <algorithm>
 
 #include "omp.h"
-#include "yart/core/camera.h"
-#include "yart/core/material.h"
-#include "yart/core/ray.h"
-#include "yart/geometry/hit.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/image/canvas.h"
-#include "yart/light/light.h"
-#include "yart/light/point_light.h"
+#include "yart/core/camera.hpp"
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/geometry/hit.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/image/canvas.hpp"
+#include "yart/light/light.hpp"
+#include "yart/light/point_light.hpp"
+#include "yart/util/progress_bar.hpp"
 
 namespace yart {
 
@@ -81,6 +82,10 @@ namespace yart {
     int vsize = camera.get_vsize();
 
     std::unique_ptr<image::Canvas> image = std::make_unique<image::Canvas>(hsize, vsize);
+#ifdef USE_PROGRESS_BAR
+    util::ProgressBar progress{static_cast<float>(hsize * vsize)};
+    progress.set_show_percentage(true);
+#endif
 
 #pragma omp parallel for collapse(2) schedule(static, 5)
     for (int y = 0; y < vsize; y++) {
@@ -88,8 +93,14 @@ namespace yart {
         Ray ray = camera.ray_to(x, y);
         color::Color color = color_at(ray);
         image->setPixel(x, y, color);
+#ifdef USE_PROGRESS_BAR
+        progress.increment_progress(1.0f);
+#endif
       }
     }
+#ifdef USE_PROGRESS_BAR
+    progress.end();
+#endif
     return image;
   }
 

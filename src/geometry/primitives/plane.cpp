@@ -1,16 +1,16 @@
-#include "yart/geometry/primitives/plane.h"
+#include "yart/geometry/primitives/plane.hpp"
 
 #include <glm/gtx/io.hpp>
 #include <iostream>
 #include <sstream>
 #include <vector>
 
-#include "yart/core/object3d.h"
-#include "yart/core/ray.h"
-#include "yart/geometry/defines.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/shape.h"
-#include "yart/util/math.h"
+#include "yart/core/object3d.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/geometry/defines.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/shape.hpp"
+#include "yart/util/math.hpp"
 
 namespace yart {
 

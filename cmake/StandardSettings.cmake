@@ -2,7 +2,7 @@
 # Project settings
 #
 
-option(${PROJECT_NAME}_BUILD_EXECUTABLE "Build the project as an executable, rather than a library." OFF)
+option(${PROJECT_NAME}_BUILD_EXECUTABLE "Build the project as an executable, rather than a library." ON)
 option(${PROJECT_NAME}_BUILD_HEADERS_ONLY "Build the project as a header-only library." OFF)
 option(${PROJECT_NAME}_USE_ALT_NAMES "Use alternative names for the project, such as naming the include directory all lowercase." ON)
 
@@ -94,12 +94,17 @@ if(${PROJECT_NAME}_ENABLE_ASAN)
     add_link_options(-fsanitize=address)
 endif()
 
-option(${PROJECT_NAME}_ENABLE_OPENMP "Enable OpenMP for parallel computing" Off)
+option(${PROJECT_NAME}_ENABLE_OPENMP "Enable OpenMP for parallel computing" OFF)
 if(${PROJECT_NAME}_ENABLE_OPENMP)
   FIND_PACKAGE(OpenMP REQUIRED)
   message(STATUS "Found OpenMP, adding flags '${OpenMP_CXX_FLAGS}' to compiler and linker")
   add_compile_options(${OpenMP_CXX_FLAGS})
   add_link_options(${OpenMP_CXX_FLAGS})
+endif()
+option(${PROJECT_NAME}_PROGRESS "Enable a progress bar for rendering" ON)
+if(${PROJECT_NAME}_ENABLE_OPENMP)
+  add_compile_definitions(USE_PROGRESS_BAR)
+  message(STATUS "Adding a progress bar to the rendering routine")
 endif()
 
 add_compile_options(-march=native)

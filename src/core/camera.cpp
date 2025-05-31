@@ -1,11 +1,11 @@
-#include "yart/core/camera.h"
+#include "yart/core/camera.hpp"
 
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/geometric.hpp>
 #include <glm/matrix.hpp>
 
-#include "yart/core/ray.h"
-#include "yart/geometry/transform.h"
+#include "yart/core/ray.hpp"
+#include "yart/geometry/transform.hpp"
 
 namespace yart {
 

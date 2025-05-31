@@ -1,7 +1,7 @@
 #pragma once
-#include "yart/geometry/defines.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/shape.h"
+#include "yart/geometry/defines.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/shape.hpp"
 
 namespace yart {
 

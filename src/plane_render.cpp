@@ -3,16 +3,16 @@
 #include <memory>
 #include <ostream>
 
-#include "yart/core/camera.h"
-#include "yart/core/material.h"
-#include "yart/core/world.h"
-#include "yart/file/png_writer.h"
-#include "yart/geometry/defines.h"
-#include "yart/geometry/primitives/plane.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/image/canvas.h"
-#include "yart/image/color_format.h"
-#include "yart/light/point_light.h"
+#include "yart/core/camera.hpp"
+#include "yart/core/material.hpp"
+#include "yart/core/world.hpp"
+#include "yart/file/png_writer.hpp"
+#include "yart/geometry/defines.hpp"
+#include "yart/geometry/primitives/plane.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/image/canvas.hpp"
+#include "yart/image/color_format.hpp"
+#include "yart/light/point_light.hpp"
 
 using namespace yart;
 

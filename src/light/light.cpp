@@ -1,16 +1,16 @@
-#include "yart/light/light.h"
+#include "yart/light/light.hpp"
 
 #include <glm/ext/vector_float4.hpp>
 #include <glm/geometric.hpp>
 #include <glm/gtx/norm.hpp>
 
-#include "yart/core/material.h"
-#include "yart/core/ray.h"
-#include "yart/core/world.h"
-#include "yart/geometry/hit.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/shape.h"
-#include "yart/util/math.h"
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/core/world.hpp"
+#include "yart/geometry/hit.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/shape.hpp"
+#include "yart/util/math.hpp"
 
 namespace yart {
 

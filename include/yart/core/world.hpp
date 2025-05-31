@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 namespace yart {
 

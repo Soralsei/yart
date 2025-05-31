@@ -2,9 +2,9 @@
 #include <ostream>
 
 #include "SDL3/SDL.h"
-#include "yart/file/ppm_writer.h"
-#include "yart/geometry/transform.h"
-#include "yart/image/canvas.h"
+#include "yart/file/ppm_writer.hpp"
+#include "yart/geometry/transform.hpp"
+#include "yart/image/canvas.hpp"
 
 using namespace yart;
 

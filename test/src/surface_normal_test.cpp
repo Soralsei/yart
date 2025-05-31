@@ -5,9 +5,9 @@
 #include <glm/gtx/io.hpp>
 #include <memory>
 
-#include "yart/geometry/primitives/plane.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/geometry/transform.h"
+#include "yart/geometry/primitives/plane.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/geometry/transform.hpp"
 
 using namespace yart;
 

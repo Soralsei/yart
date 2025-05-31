@@ -1,4 +1,4 @@
-#include "yart/light/point_light.h"
+#include "yart/light/point_light.hpp"
 
 namespace yart {
 

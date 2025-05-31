@@ -1,4 +1,4 @@
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 #include <gtest/gtest.h>
 

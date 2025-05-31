@@ -1,4 +1,4 @@
-#include "yart/geometry/transform.h"
+#include "yart/geometry/transform.hpp"
 
 #include <glm/gtx/io.hpp>
 #include <glm/gtx/matrix_decompose.hpp>

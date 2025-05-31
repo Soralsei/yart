@@ -1,4 +1,4 @@
-#include "yart/image/canvas.h"
+#include "yart/image/canvas.hpp"
 
 #include <algorithm>
 

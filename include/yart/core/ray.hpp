@@ -3,7 +3,7 @@
 #include <glm/ext/vector_float4.hpp>
 #include <iostream>
 
-#include "yart/geometry/defines.h"
+#include "yart/geometry/defines.hpp"
 
 namespace yart {
   class Ray {

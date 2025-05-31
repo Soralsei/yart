@@ -4,8 +4,8 @@
 #include <iostream>
 #include <memory>
 
-#include "yart/geometry/defines.h"
-#include "yart/traits/comparable.h"
+#include "yart/geometry/defines.hpp"
+#include "yart/traits/comparable.hpp"
 
 namespace yart {
 

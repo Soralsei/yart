@@ -1,6 +1,6 @@
 #pragma once
 
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 namespace yart {
 

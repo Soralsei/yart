@@ -2,7 +2,7 @@
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/vector_float4.hpp>
 
-#include "yart/core/object3d.h"
+#include "yart/core/object3d.hpp"
 
 namespace yart {
   class Ray;

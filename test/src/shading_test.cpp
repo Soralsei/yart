@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "yart/core/material.h"
-#include "yart/core/world.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/light/light.h"
-#include "yart/light/point_light.h"
+#include "yart/core/material.hpp"
+#include "yart/core/world.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/light/light.hpp"
+#include "yart/light/point_light.hpp"
 
 using namespace yart;
 

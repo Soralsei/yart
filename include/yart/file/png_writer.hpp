@@ -8,8 +8,8 @@
 #include <iostream>
 
 #include "pngconf.h"
-#include "yart/file/image_writer.h"
-#include "yart/image/color.h"
+#include "yart/file/image_writer.hpp"
+#include "yart/image/color.hpp"
 
 namespace yart {
   namespace file {
@@ -35,7 +35,7 @@ namespace yart {
       bool open_file(const char* filename) {
         m_file = fopen(filename, "wb");
         if (m_file == nullptr) {
-          std::cerr << " Error: fail to open file" << std::endl;
+          std::cerr << " Error: fail to open file" << '\n';
           return false;
         }
         return true;
@@ -77,26 +77,29 @@ namespace yart {
         for (int i = 0; i < height; i++) {
           m_rows[i] = reinterpret_cast<png_bytep>(m_raw_data + i * width);
         }
-        // }
         png_set_rows(m_png_write_struct, m_png_info, m_rows);
         png_write_png(m_png_write_struct, m_png_info, transforms, nullptr);
+
+        // Delete raw pixel data and libpng row buffer
+        delete[] m_raw_data;
+        m_raw_data = nullptr;
+
+        // Delete libpng row buffer
+        delete[] m_rows;
+        m_rows = nullptr;
       }
 
       void cleanup_png_structs() {
-        if (m_png_write_struct == nullptr || m_png_info == nullptr) {
-          throw std::runtime_error("PNG write struct or info is null");
+        if (m_png_write_struct == nullptr) {
+          throw std::runtime_error("PNG write struct pointer is null ?");
+        }
+        if (m_png_info == nullptr) {
+          throw std::runtime_error("PNG info struct pointer is null ?");
         }
         if (m_png_write_struct) {
           png_destroy_write_struct(&m_png_write_struct, &m_png_info);
           m_png_write_struct = nullptr;
           m_png_info = nullptr;
-        }
-        if (m_rows) {
-          // Delete raw pixel data and libpng row buffer
-          delete[] m_raw_data;
-          delete[] m_rows;
-          m_rows = nullptr;
-          m_raw_data = nullptr;
         }
       }
 
@@ -113,7 +116,7 @@ namespace yart {
         }
         m_bit_depth = color_format.bitDepth();
       }
-      ~PNGWriter() override = default;
+      ~PNGWriter() = default;
       bool write(const char* filename, const color::Color* data, int width, int height) override {
         if (!open_file(filename)) {
           return false;
@@ -127,16 +130,16 @@ namespace yart {
           return false;
         }
         bool ret = true;
+
         try {
           init_png_structs(width, height);
           write_data(data, width, height);
+          cleanup_png_structs();  // throws if m_png_write_struct or m_png_info is null
         } catch (const std::exception& e) {
-          std::cerr << " Error: " << e.what() << std::endl;
+          std::cerr << " Error: " << e.what() << '\n';
           ret = false;
         }
 
-        // Cleanup
-        cleanup_png_structs();  // throws if m_png_write_struct or m_png_info is null
         if (m_file) {
           fclose(m_file);
           m_file = nullptr;

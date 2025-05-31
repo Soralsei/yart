@@ -5,8 +5,8 @@
 #include <iostream>
 #include <ostream>
 
-#include "yart/file/ppm_writer.h"
-#include "yart/image/canvas.h"
+#include "yart/file/ppm_writer.hpp"
+#include "yart/image/canvas.hpp"
 
 using namespace yart;
 

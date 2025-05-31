@@ -1,8 +1,8 @@
 #pragma once
 
-#include "yart/file/image_writer.h"
-#include "yart/image/color.h"
-#include "yart/image/color_format.h"
+#include "yart/file/image_writer.hpp"
+#include "yart/image/color.hpp"
+#include "yart/image/color_format.hpp"
 
 #ifdef __unix__ /* __unix__ is usually defined by compilers targeting Unix systems */
 #  define NEWLINE '\n'

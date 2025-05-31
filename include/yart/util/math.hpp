@@ -48,6 +48,9 @@ namespace yart {
     }
 
     glm::vec4 reflect(const glm::vec4& vector, const glm::vec4& normal);
-
+    template bool approx_equals<float>(float left, float right, double atol = ATOL,
+                                       double rtol = RTOL);
+    template bool approx_equals<double>(double left, double right, double atol = ATOL,
+                                        double rtol = RTOL);
   }  // namespace math
 }  // namespace yart

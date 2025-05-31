@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 
-#include "yart/image/color.h"
-#include "yart/traits/sized.h"
+#include "yart/image/color.hpp"
+#include "yart/traits/sized.hpp"
 
 namespace yart {
 

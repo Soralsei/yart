@@ -1,8 +1,8 @@
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 #include <algorithm>
 
-#include "yart/util/math.h"
+#include "yart/util/math.hpp"
 
 namespace yart  // namespace color
 {

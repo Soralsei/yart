@@ -1,6 +1,6 @@
-#include "yart/image/color_format.h"
+#include "yart/image/color_format.hpp"
 
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 namespace yart {
 

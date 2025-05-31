@@ -5,14 +5,14 @@
 #include <memory>
 #include <ostream>
 
-#include "yart/core/camera.h"
-#include "yart/core/material.h"
-#include "yart/core/world.h"
-#include "yart/file/ppm_writer.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/geometry/transform.h"
-#include "yart/image/canvas.h"
-#include "yart/light/point_light.h"
+#include "yart/core/camera.hpp"
+#include "yart/core/material.hpp"
+#include "yart/core/world.hpp"
+#include "yart/file/ppm_writer.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/geometry/transform.hpp"
+#include "yart/image/canvas.hpp"
+#include "yart/light/point_light.hpp"
 
 using namespace yart;
 

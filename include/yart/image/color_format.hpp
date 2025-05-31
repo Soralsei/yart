@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 namespace yart {
 

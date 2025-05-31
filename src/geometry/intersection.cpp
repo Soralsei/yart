@@ -1,8 +1,8 @@
-#include "yart/geometry/intersection.h"
+#include "yart/geometry/intersection.hpp"
 
 #include <limits>
 
-#include "yart/geometry/shape.h"
+#include "yart/geometry/shape.hpp"
 
 namespace yart {
   namespace geometry {

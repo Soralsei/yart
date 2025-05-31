@@ -1,8 +1,8 @@
-#include "yart/image/canvas.h"
+#include "yart/image/canvas.hpp"
 
 #include <gtest/gtest.h>
 
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 using namespace yart;
 

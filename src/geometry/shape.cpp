@@ -1,4 +1,4 @@
-#include "yart/geometry/shape.h"
+#include "yart/geometry/shape.hpp"
 
 #include <glm/ext/vector_float3.hpp>
 #include <glm/geometric.hpp>
@@ -6,9 +6,9 @@
 #include <glm/matrix.hpp>
 #include <iostream>
 
-#include "yart/core/material.h"
-#include "yart/core/ray.h"
-#include "yart/geometry/intersection.h"
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/geometry/intersection.hpp"
 
 namespace yart {
   namespace geometry {

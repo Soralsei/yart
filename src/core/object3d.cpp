@@ -1,4 +1,4 @@
-#include "yart/core/object3d.h"
+#include "yart/core/object3d.hpp"
 
 #include <glm/ext/quaternion_float.hpp>
 #include <glm/gtc/quaternion.hpp>

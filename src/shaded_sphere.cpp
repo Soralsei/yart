@@ -1,13 +1,13 @@
 #include <glm/geometric.hpp>
 #include <memory>
 
-#include "yart/core/material.h"
-#include "yart/core/ray.h"
-#include "yart/file/ppm_writer.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/image/canvas.h"
-#include "yart/light/point_light.h"
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/file/ppm_writer.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/image/canvas.hpp"
+#include "yart/light/point_light.hpp"
 
 using namespace yart;
 

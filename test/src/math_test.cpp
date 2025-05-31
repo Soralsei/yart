@@ -1,4 +1,4 @@
-#include "yart/util/math.h"
+#include "yart/util/math.hpp"
 
 #include <gtest/gtest.h>
 

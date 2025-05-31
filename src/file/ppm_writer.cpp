@@ -1,12 +1,12 @@
-#include "yart/file/ppm_writer.h"
+#include "yart/file/ppm_writer.hpp"
 
 #include <cstdint>
 #include <fstream>
 #include <iostream>
 
-#include "yart/file/image_writer.h"
-#include "yart/image/color.h"
-#include "yart/image/color_format.h"
+#include "yart/file/image_writer.hpp"
+#include "yart/image/color.hpp"
+#include "yart/image/color_format.hpp"
 
 namespace yart {
   namespace file {

@@ -4,10 +4,10 @@
 #include <memory>
 #include <vector>
 
-#include "yart/core/object3d.h"
-#include "yart/geometry/defines.h"
-#include "yart/traits/comparable.h"
-#include "yart/traits/shared_from_this.h"
+#include "yart/core/object3d.hpp"
+#include "yart/geometry/defines.hpp"
+#include "yart/traits/comparable.hpp"
+#include "yart/traits/shared_from_this.hpp"
 
 namespace yart {
 

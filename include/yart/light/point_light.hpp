@@ -1,6 +1,6 @@
 #pragma once
 
-#include "yart/light/light.h"
+#include "yart/light/light.hpp"
 
 namespace yart {
 

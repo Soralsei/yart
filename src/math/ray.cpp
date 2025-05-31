@@ -1,4 +1,4 @@
-#include "yart/core/ray.h"
+#include "yart/core/ray.hpp"
 
 #include <glm/gtx/io.hpp>
 #include <iostream>

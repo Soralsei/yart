@@ -1,4 +1,4 @@
-#include "yart/core/camera.h"
+#include "yart/core/camera.hpp"
 
 #include <gtest/gtest.h>
 
@@ -10,9 +10,9 @@
 #include <glm/matrix.hpp>
 #include <iostream>
 
-#include "yart/core/ray.h"
-#include "yart/core/world.h"
-#include "yart/image/canvas.h"
+#include "yart/core/ray.hpp"
+#include "yart/core/world.hpp"
+#include "yart/image/canvas.hpp"
 
 using namespace yart;
 

@@ -1,15 +1,15 @@
-#include "yart/core/world.h"
+#include "yart/core/world.hpp"
 
 #include <gtest/gtest.h>
 
 #include <glm/gtc/epsilon.hpp>
 #include <glm/gtx/io.hpp>
 
-#include "yart/core/material.h"
-#include "yart/core/ray.h"
-#include "yart/geometry/hit.h"
-#include "yart/geometry/primitives/sphere.h"
-#include "yart/light/light.h"
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/geometry/hit.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/light/light.hpp"
 
 using namespace yart;
 

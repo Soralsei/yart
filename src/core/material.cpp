@@ -1,6 +1,6 @@
-#include "yart/core/material.h"
+#include "yart/core/material.hpp"
 
-#include "yart/util/math.h"
+#include "yart/util/math.hpp"
 
 namespace yart {
   Material::~Material() {}
