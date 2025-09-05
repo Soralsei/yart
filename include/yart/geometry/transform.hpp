@@ -7,7 +7,11 @@ namespace yart {
   namespace transform {
 
     // clang-format off
-    glm::mat4 shear(float xy, float xz, float yx, float yz, float zx, float zy);
+    glm::mat4 shear(
+      float xy, float xz,
+      float yx, float yz,
+      float zx, float zy
+    );
     // clang-format on
 
     class Transform {
