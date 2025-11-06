@@ -40,13 +40,18 @@ jobs:
         if: ${{ steps.cache.output.cache-hit != 'true' }}
         run: |
           cd ..
+
           git clone --depth 1 --branch 1.0.2 https://github.com/g-truc/glm.git
+          cd glm
+
           cmake \
             -DGLM_BUILD_TESTS=OFF \
             -DBUILD_SHARED_LIBS=OFF \
             -B build .
           cmake --build build -- all
           cmake --build build -- install
+
+          cd ../yart
 
       - name: configure
         run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX="$HOME/$env:INSTALL_LOCATION"
