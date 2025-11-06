@@ -8,7 +8,7 @@ namespace yart {
   namespace util {
     class ProgressBar {
     private:
-      std::mutex update_lock;
+      std::recursive_mutex update_lock;
 
       float total_progress;
       std::string progress_char;

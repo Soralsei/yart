@@ -1,5 +1,6 @@
 #include "yart/util/progress_bar.hpp"
 
+#include <cstdint>
 #include <iomanip>  // for setw, setprecision, setfill
 #include <iostream>
 #include <mutex>
@@ -28,10 +29,10 @@ namespace yart {
     }
 
     void ProgressBar::update_bar() {
-      int tmp = static_cast<int>(static_cast<float>(progress_bar_width)
-                                 * (current_progress / total_progress));
-      if (tmp > current_pos) {
-        current_pos = tmp;
+      int updated_pos = static_cast<int>(static_cast<float>(progress_bar_width)
+                                         * (current_progress / total_progress));
+      if (updated_pos > current_pos) {
+        current_pos = updated_pos;
         std::cout << "[";
         for (int i = 0; i < current_pos; ++i) {
           std::cout << progress_char;
@@ -39,17 +40,17 @@ namespace yart {
         for (int i = current_pos; i < progress_bar_width; ++i) {
           std::cout << " ";
         }
+        std::cout << "] " << std::fixed;
         if (show_percentage) {
-          std::cout << "] " << std::fixed << std::setprecision(3)
-                    << current_progress / total_progress * 100.0f << "%\r" << std::flush;
-        } else {
-          std::cout << "] " << std::fixed << std::setprecision(1) << current_progress << '/'
-                    << total_progress << "\r" << std::flush;
+          std::cout << std::setprecision(1) << current_progress / total_progress * 100.0f << "% ";
         }
+        std::cout << "(" << static_cast<uint32_t>(current_progress) << '/'
+                  << static_cast<uint32_t>(total_progress) << ")\r" << std::flush;
       }
     }
 
     ProgressBar& ProgressBar::set_show_percentage(bool show) {
+      std::scoped_lock lock{update_lock};
       show_percentage = show;
       return *this;
     }
