@@ -7,6 +7,7 @@
 #include "yart/core/material.hpp"
 #include "yart/core/world.hpp"
 #include "yart/file/png_writer.hpp"
+#include "yart/file/ppm_writer.hpp"
 #include "yart/geometry/defines.hpp"
 #include "yart/geometry/primitives/plane.hpp"
 #include "yart/geometry/primitives/sphere.hpp"
@@ -27,7 +28,14 @@ int main(int /*argc*/, char* /*argv*/[]) {
   std::cout << "Camera transform :" << camera.transform.matrix() << '\n';
 
   // file::PPMWriter writer;
+
+#ifdef YART_USE_LIBPNG
   file::PNGWriter<image::RGB888Format> writer;
+#  define FILENAME "/home/sora/plane_render_glm.png"
+#else
+  file::PPMWriter writer;
+#  define FILENAME "/home/sora/plane_render_glm.ppm"
+#endif
 
   auto material = std::make_shared<Material>();
   material->set_diffuse_color(color::Color{1, 0.9, 0.9}).set_specular(0);
@@ -72,8 +80,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
   auto image = world.render(camera);
 
-  writer.write("/home/sora/plane_render_glm.png", image->getPixels(), image->getWidth(),
-               image->getHeight());
+  writer.write(FILENAME, image->getPixels(), image->getWidth(), image->getHeight());
 
   return 0;
 }

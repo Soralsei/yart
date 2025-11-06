@@ -1,15 +1,17 @@
 #pragma once
 
-#include <libpng/png.h>
-#include <sys/types.h>
+#ifdef YART_USE_LIBPNG
 
-#include <cstddef>
-#include <cstdio>
-#include <iostream>
+#  include <libpng/png.h>
+#  include <sys/types.h>
 
-#include "pngconf.h"
-#include "yart/file/image_writer.hpp"
-#include "yart/image/color.hpp"
+#  include <cstddef>
+#  include <cstdio>
+#  include <iostream>
+
+#  include "pngconf.h"
+#  include "yart/file/image_writer.hpp"
+#  include "yart/image/color.hpp"
 
 namespace yart {
   namespace file {
@@ -151,3 +153,5 @@ namespace yart {
   }  // namespace file
 
 }  // namespace yart
+
+#endif  // Yart_USE_LIBPNG
