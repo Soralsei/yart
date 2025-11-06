@@ -3,6 +3,7 @@
 #include <glm/ext/vector_float4.hpp>
 #include <glm/geometric.hpp>
 #include <glm/gtx/norm.hpp>
+#include <optional>
 
 #include "yart/core/material.hpp"
 #include "yart/core/ray.hpp"
@@ -107,11 +108,9 @@ namespace yart {
 
       Ray r = {point, direction};
       auto intersections = world.intersections(r);
-      geometry::Intersection* hit = geometry::hit(intersections);
+      std::optional<geometry::Intersection> hit = geometry::hit(intersections);
 
-      // if (hit != nullptr) std::cout << "Hit : " << *hit << "\n";
-
-      return hit != nullptr && hit->get_t() < distance;
+      return hit.has_value() && hit->get_t() < distance;
     }
 
   }  // namespace light

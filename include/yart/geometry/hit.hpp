@@ -38,7 +38,7 @@ namespace yart {
 
       bool is_inside() const;
 
-      static std::shared_ptr<Hit> precompute_hit(const Ray& ray, const Intersection& intersection);
+      static Hit precompute_hit(const Ray& ray, const Intersection& intersection);
     };
 
   }  // namespace geometry

@@ -4,6 +4,7 @@
 
 #include <glm/gtx/io.hpp>
 #include <memory>
+#include <optional>
 
 #include "yart/geometry/intersection.hpp"
 #include "yart/geometry/primitives/plane.hpp"
@@ -90,7 +91,7 @@ TEST(Intersection, HitTestPositive) {
 
   auto hit = geometry::hit(intersections);
 
-  ASSERT_EQ((*hit), i1);
+  ASSERT_EQ(hit.value(), i1);
 }
 
 TEST(Intersection, HitTestNegative) {
@@ -101,7 +102,7 @@ TEST(Intersection, HitTestNegative) {
 
   auto hit = geometry::hit(intersections);
 
-  ASSERT_EQ((*hit), i2);
+  ASSERT_EQ(hit.value(), i2);
 }
 
 TEST(Intersection, HitTestAllNegative) {
@@ -112,7 +113,7 @@ TEST(Intersection, HitTestAllNegative) {
 
   auto hit = geometry::hit(intersections);
 
-  ASSERT_EQ(hit, nullptr);
+  ASSERT_EQ(hit, std::nullopt);
 }
 
 TEST(Intersection, HitTest) {
@@ -125,7 +126,7 @@ TEST(Intersection, HitTest) {
 
   auto hit = geometry::hit(intersections);
 
-  ASSERT_EQ((*hit), i4);
+  ASSERT_EQ(hit.value(), i4);
 }
 
 TEST(TransformRay, Translate) {

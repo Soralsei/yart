@@ -1,6 +1,7 @@
 #include "yart/core/world.hpp"
 
 #include <algorithm>
+#include <optional>
 
 #include "omp.h"
 #include "yart/core/camera.hpp"
@@ -67,14 +68,14 @@ namespace yart {
 
   color::Color World::color_at(const Ray &ray) {
     auto intersects = intersections(ray);
-    geometry::Intersection *h = geometry::hit(intersects);
+    std::optional<geometry::Intersection> h = geometry::hit(intersects);
 
-    if (h == nullptr) {
+    if (h == std::nullopt) {
       return color::Black;
     }
 
-    auto hit = geometry::Hit::precompute_hit(ray, *h);
-    return light::shade_hit(*this, *hit);
+    geometry::Hit hit = geometry::Hit::precompute_hit(ray, h.value());
+    return light::shade_hit(*this, hit);
   }
 
   std::unique_ptr<image::Canvas> World::render(Camera &camera) {

@@ -1,6 +1,7 @@
 #include <glm/gtx/dual_quaternion.hpp>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <ostream>
 
 #include "yart/core/ray.hpp"
@@ -40,7 +41,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
       Ray r{ray_origin, ray_direction};
       auto intersections = sphere->intersections(r);
       auto hit = geometry::hit(intersections);
-      if (hit == nullptr) {
+      if (!hit.has_value()) {
         canvas.setPixel(x, canvas.getHeight() - 1 - y, color::Black);
         continue;
       }

@@ -1,6 +1,7 @@
 #include "yart/geometry/intersection.hpp"
 
 #include <limits>
+#include <optional>
 
 #include "yart/geometry/shape.hpp"
 
@@ -22,13 +23,13 @@ namespace yart {
                  << ", object: " << *(intersection.get_object().lock()) << ")";
     }
 
-    Intersection* hit(std::vector<Intersection>& intersections) {
+    std::optional<Intersection> hit(std::vector<Intersection>& intersections) {
       float min_t = std::numeric_limits<float>::max();
-      Intersection* min_intersection = nullptr;
+      std::optional<Intersection> min_intersection = std::nullopt;
       for (auto&& i : intersections) {
         if (i.get_t() >= 0 && i.get_t() < min_t) {
           min_t = i.get_t();
-          min_intersection = &i;
+          min_intersection = i;
         }
       }
 

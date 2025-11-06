@@ -43,17 +43,17 @@ TEST(IntersectionsTests, PrecomputingIntersectionStates) {
   auto expected_eye = glm::vec4(0, 0, -1, 0);
   auto expected_normal = glm::vec4(0, 0, -1, 0);
 
-  ASSERT_FLOAT_EQ(hit->get_t(), intersection.get_t());
-  ASSERT_TRUE((*(hit->get_object().lock())) == (*(intersection.get_object().lock())))
+  ASSERT_FLOAT_EQ(hit.get_t(), intersection.get_t());
+  ASSERT_TRUE((*(hit.get_object().lock())) == (*(intersection.get_object().lock())))
       << "Hit and intersection objects are not equal\n";
-  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit->get_position(), expected_pos, 1e-6f)))
-      << "Position vector for hit not correct, got : " << hit->get_position()
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit.get_position(), expected_pos, 1e-6f)))
+      << "Position vector for hit not correct, got : " << hit.get_position()
       << ", expected : " << expected_pos << "\n";
-  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit->get_eye(), expected_eye, 1e-6f)))
-      << "Eye vector for hit not correct, got : " << hit->get_eye()
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit.get_eye(), expected_eye, 1e-6f)))
+      << "Eye vector for hit not correct, got : " << hit.get_eye()
       << ", expected : " << expected_eye << "\n";
-  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit->get_normal(), expected_normal, 1e-6f)))
-      << "Normal vector for hit not correct, got : " << hit->get_normal()
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit.get_normal(), expected_normal, 1e-6f)))
+      << "Normal vector for hit not correct, got : " << hit.get_normal()
       << ", expected : " << expected_normal << "\n";
 }
 
@@ -64,7 +64,7 @@ TEST(IntersectionsTests, HitOutside) {
 
   auto hit = geometry::Hit::precompute_hit(ray, intersection);
 
-  ASSERT_TRUE(!hit->is_inside());
+  ASSERT_TRUE(!hit.is_inside());
 }
 
 TEST(IntersectionsTests, HitInside) {
@@ -78,18 +78,18 @@ TEST(IntersectionsTests, HitInside) {
   auto expected_eye = glm::vec4(0, 0, -1, 0);
   auto expected_normal = glm::vec4(0, 0, -1, 0);
 
-  ASSERT_TRUE(hit->is_inside());
+  ASSERT_TRUE(hit.is_inside());
 
-  ASSERT_TRUE((*(hit->get_object().lock())) == (*(intersection.get_object().lock())))
+  ASSERT_TRUE((*(hit.get_object().lock())) == (*(intersection.get_object().lock())))
       << "Hit and intersection objects are not equal\n";
-  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit->get_position(), expected_pos, 1e-6f)))
-      << "Position vector for hit not correct, got : " << hit->get_position()
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit.get_position(), expected_pos, 1e-6f)))
+      << "Position vector for hit not correct, got : " << hit.get_position()
       << ", expected : " << expected_pos << "\n";
-  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit->get_eye(), expected_eye, 1e-6f)))
-      << "Eye vector for hit not correct, got : " << hit->get_eye()
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit.get_eye(), expected_eye, 1e-6f)))
+      << "Eye vector for hit not correct, got : " << hit.get_eye()
       << ", expected : " << expected_eye << "\n";
-  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit->get_normal(), expected_normal, 1e-6f)))
-      << "Normal vector for hit not correct, got : " << hit->get_normal()
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(hit.get_normal(), expected_normal, 1e-6f)))
+      << "Normal vector for hit not correct, got : " << hit.get_normal()
       << ", expected : " << expected_normal << "\n";
 }
 
@@ -101,7 +101,7 @@ TEST(IntersectionsTests, ShadingHit) {
 
   auto hit = geometry::Hit::precompute_hit(ray, intersection);
 
-  color::Color shade = light::shade_hit(*world, *hit);
+  color::Color shade = light::shade_hit(*world, hit);
   color::Color expected{0.38066, 0.47583, 0.2855};
 
   ASSERT_EQ(shade, expected);

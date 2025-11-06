@@ -1,5 +1,6 @@
 #include <glm/geometric.hpp>
 #include <memory>
+#include <optional>
 
 #include "yart/core/material.hpp"
 #include "yart/core/ray.hpp"
@@ -57,7 +58,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
       auto intersections = sphere->intersections(r);
       auto hit = geometry::hit(intersections);
 
-      if (hit == nullptr) {
+      if (!hit.has_value()) {
         canvas.setPixel(x, y, color::Black);
         continue;
       }

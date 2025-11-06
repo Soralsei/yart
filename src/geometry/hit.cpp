@@ -23,22 +23,22 @@ namespace yart {
 
     bool Hit::is_inside() const { return inside; }
 
-    std::shared_ptr<Hit> Hit::precompute_hit(const Ray& ray, const Intersection& intersection) {
-      auto hit = std::make_shared<Hit>();
+    Hit Hit::precompute_hit(const Ray& ray, const Intersection& intersection) {
+      Hit hit;
 
-      hit->object = intersection.get_object();
-      hit->t = intersection.get_t();
-      hit->position = ray.position(intersection.get_t());
-      hit->eye = -ray.get_direction();
+      hit.object = intersection.get_object();
+      hit.t = intersection.get_t();
+      hit.position = ray.position(intersection.get_t());
+      hit.eye = -ray.get_direction();
 
-      glm::vec4 normal = hit->object.lock()->normal_at(hit->position);
+      glm::vec4 normal = hit.object.lock()->normal_at(hit.position);
 
-      bool is_inside = glm::dot(normal, hit->eye) < 0;
-      hit->inside = is_inside;
+      bool is_inside = glm::dot(normal, hit.eye) < 0;
+      hit.inside = is_inside;
 
       float direction = is_inside ? -1 : 1;
-      hit->normal = direction * normal;
-      hit->over_position = hit->position + hit->normal * static_cast<float>(SHADOW_EPSILON);
+      hit.normal = direction * normal;
+      hit.over_position = hit.position + hit.normal * static_cast<float>(SHADOW_EPSILON);
 
       return hit;
     }

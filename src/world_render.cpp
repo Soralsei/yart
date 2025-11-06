@@ -8,10 +8,11 @@
 #include "yart/core/camera.hpp"
 #include "yart/core/material.hpp"
 #include "yart/core/world.hpp"
-#include "yart/file/ppm_writer.hpp"
+#include "yart/file/png_writer.hpp"
 #include "yart/geometry/primitives/sphere.hpp"
 #include "yart/geometry/transform.hpp"
 #include "yart/image/canvas.hpp"
+#include "yart/image/color_format.hpp"
 #include "yart/light/point_light.hpp"
 
 using namespace yart;
@@ -24,7 +25,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
   std::cout << "Camera view matrix :\n" << camera.transform.matrix() << '\n';
 
-  file::PPMWriter writer;
+  file::PNGWriter<yart::image::RGBA8888Format> writer;
 
   auto flat_scale = glm::vec3{10, 0.01, 10};
   auto material = std::make_shared<Material>();
@@ -85,7 +86,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
   auto image = world.render(camera);
 
-  writer.write("/home/sora/world_render.ppm", image->getPixels(), image->getWidth(),
+  writer.write("/home/sora/world_render.png", image->getPixels(), image->getWidth(),
                image->getHeight());
 
   return 0;
