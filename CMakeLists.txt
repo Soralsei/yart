@@ -23,7 +23,7 @@ endif()
 message(STATUS "Started CMake for ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
 
 if (UNIX)
-    add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")    #this will allow to use same _DEBUG macro available in both Linux as well as Windows - MSCV environment. Easy to put Debug specific code.
+  add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")    #this will allow to use same _DEBUG macro available in both Linux as well as Windows - MSCV environment. Easy to put Debug specific code.
 endif (UNIX)
 
 
@@ -166,7 +166,14 @@ include(cmake/Doxygen.cmake)
 
 # Identify and link with the specific "packages" the project uses
 #find_package(package_name package_version REQUIRED package_type [other_options])
-find_package(Eigen3 3.4 REQUIRED NO_MODULE)
+
+pkg_check_modules(GLM REQUIRED glm)
+include_directories(${GLM_INCLUDE_DIRS})
+
+pkg_check_modules(LIBPNG REQUIRED libpng)
+include_directories(${LIBPNG_INCLUDE_DIRS})
+link_libraries(${LIBPNG_LIBRARIES})
+
 #target_link_libraries(
 #  ${PROJECT_NAME}
 #  PUBLIC
@@ -190,9 +197,16 @@ add_subdirectory(vendored)
 target_link_libraries(
  ${PROJECT_NAME}
  PRIVATE
-    Eigen3::Eigen
+    # Eigen3::Eigen
+    ${GLM_LIBRARIES}
     vendored
 )
+message(STATUS "Linking against LIBPNG ${LIBPNG_LIBRARIES}")
+message(STATUS "Linking against GLM ${GLM_LIBRARIES}")
+
+if(${PROJECT_NAME}_ENABLE_OPENMP)
+  target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
+endif()
 
 # For Windows, it is necessary to link with the MultiThreaded library.
 # Depending on how the rest of the project's dependencies are linked, it might be necessary
@@ -259,6 +273,8 @@ add_executable_target(Trajectory "${trajectory_sources}")
 add_executable_target(Clock "${clock_sources}")
 add_executable_target(Projection "${projection_sources}")
 add_executable_target(ShadedSphere "${shading_sources}")
+add_executable_target(WorldRender "${render_sources}")
+add_executable_target(PlaneRender "${plane_render_sources}")
 
 #
 # Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)

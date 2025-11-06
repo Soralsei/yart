@@ -1,79 +1,101 @@
 #include <gtest/gtest.h>
 
+#include <glm/geometric.hpp>
+#include <glm/gtc/epsilon.hpp>
+#include <glm/gtx/io.hpp>
 #include <memory>
 
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/sphere.h"
-#include "yart/geometry/transform.h"
-#include "yart/util/vector.h"
+#include "yart/geometry/primitives/plane.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/geometry/transform.hpp"
 
 using namespace yart;
-using namespace Eigen;
 
 TEST(Normals, SphereNormalXAxis) {
   auto sphere = std::make_shared<geometry::Sphere>();
-  auto normal = sphere->normal_at(Vector3f(1, 0, 0));
+  auto normal = sphere->normal_at(glm::vec4{1, 0, 0, 1.0f});
 
-  auto expected_normal = Vector3f(1, 0, 0);
-  ASSERT_TRUE(normal.isApprox(expected_normal, 1e-6));
+  auto expected_normal = glm::vec4{1, 0, 0, 0};
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(normal, expected_normal, 1e-6f)))
+      << "Expected " << expected_normal << ", got " << normal;
 }
 
 TEST(Normals, SphereNormalYAxis) {
   auto sphere = std::make_shared<geometry::Sphere>();
-  auto normal = sphere->normal_at(Vector3f(0, 1, 0));
+  auto normal = sphere->normal_at(glm::vec4{0, 1, 0, 1.0f});
 
-  auto expected_normal = Vector3f(0, 1, 0);
-  ASSERT_TRUE(normal.isApprox(expected_normal, 1e-6));
+  auto expected_normal = glm::vec4{0, 1, 0, 0};
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(normal, expected_normal, 1e-6f)))
+      << "Expected " << expected_normal << ", got " << normal;
 }
 
 TEST(Normals, SphereNormalZAxis) {
   auto sphere = std::make_shared<geometry::Sphere>();
-  auto normal = sphere->normal_at(Vector3f(0, 0, 1));
+  auto normal = sphere->normal_at(glm::vec4{0, 0, 1, 1.0f});
 
-  auto expected_normal = Vector3f(0, 0, 1);
-  ASSERT_TRUE(normal.isApprox(expected_normal, 1e-6));
+  auto expected_normal = glm::vec4{0, 0, 1, 0};
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(normal, expected_normal, 1e-6f)))
+      << "Expected " << expected_normal << ", got " << normal;
 }
 
 TEST(Normals, SphereNormalNonAxial) {
   auto sphere = std::make_shared<geometry::Sphere>();
-  auto normal = sphere->normal_at(Vector3f(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3));
+  glm::vec4 normal
+      = sphere->normal_at(glm::vec4{std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3, 1.0f});
 
-  auto expected_normal = Vector3f(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3);
-  ASSERT_TRUE(normal.isApprox(expected_normal, 1e-6));
+  glm::vec4 expected_normal
+      = glm::vec4{std::sqrt(3.0f) / 3, std::sqrt(3.0f) / 3, std::sqrt(3.0f) / 3, 0};
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(normal, expected_normal, 1e-6f)))
+      << "Expected " << expected_normal << ", got " << normal;
 }
 
 TEST(Normals, NormalIsNormalized) {
   auto sphere = std::make_shared<geometry::Sphere>();
-  auto normal = sphere->normal_at(Vector3f(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3));
+  auto normal
+      = sphere->normal_at(glm::vec4{std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3, 0.0f});
 
-  auto normalized_normal = normal.normalized();
-  ASSERT_TRUE(normal.isApprox(normalized_normal, 1e-6));
+  auto normalized_normal = glm::normalize(normal);
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(normal, normalized_normal, 1e-6f)));
 }
 
 TEST(Normals, SphereNormalTranslated) {
-  auto transform = geometry::Transform3D::Identity();
-  transform.translate(Vector3f(0, 1, 0));
-  auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
-  auto normal = sphere->normal_at(Vector3f(0, 1.70711f, -0.70711f));
-  
-  auto expected_normal = Vector3f(0, 0.70711, -0.70711);
-  std::cout << "Normal: " << normal.transpose() << "\n";
-  std::cout << "Expected Normal: " << expected_normal.transpose() << "\n";
+  auto transform = geometry::Transform{};
+  transform.translate(0, 1, 0);
+  auto sphere = std::make_shared<geometry::Sphere>(transform, 0.0f);
+  auto normal = sphere->normal_at(glm::vec4{0, 1.70711f, -0.70711f, 1.0f});
 
-  ASSERT_TRUE(normal.isApprox(expected_normal, 1e-4));
+  auto expected_normal = glm::vec4{0, 0.70711, -0.70711, 0};
+
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(normal, expected_normal, 1e-4f)))
+      << "Expected " << expected_normal << ", got " << normal;
 }
 
 TEST(Normals, SphereNormalTransformed) {
-  auto transform = geometry::Transform3D::Identity();
-  transform.scale(Vector3f(1, 0.5, 1)).rotate(transform::rotationZ<float>(M_PI / 5));
-  auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
-  auto normal = sphere->normal_at(Vector3f(0, std::sqrt(2)/2, -std::sqrt(2)/2));
+  auto transform = geometry::Transform{};
+  transform.scale(1, 0.5, 1).rotate_z(M_PI / 5);
+  auto sphere = std::make_shared<geometry::Sphere>(transform, 0.0f);
+  glm::vec4 normal = sphere->normal_at(glm::vec4{0, std::sqrt(2) / 2, -std::sqrt(2) / 2, 1.0f});
 
-  auto expected_normal = Vector3f(0, 0.97014, -0.24254);
-  std::cout << "Normal: " << normal.transpose() << "\n";
-  std::cout << "Expected Normal: " << expected_normal.transpose() << "\n";
+  glm::vec4 expected_normal = glm::vec4{0, 0.97014, -0.24254, 0};
 
-  ASSERT_TRUE(normal.isApprox(expected_normal, 1e-4));
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(normal, expected_normal, 1e-4f)))
+      << "Expected " << expected_normal << ", got " << normal;
+}
+
+TEST(PlaneNormals, ConstantNormal) {
+  geometry::Plane p;
+  auto n1 = p.normal_at(glm::vec4{});
+  auto n2 = p.normal_at({10, 0, -10, 1});
+  auto n3 = p.normal_at({-5, 0, 150, 1});
+
+  glm::vec4 expected_normal = glm::vec4{0, 1, 0, 0};
+
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(n1, expected_normal, 1e-4f)))
+      << "Expected " << expected_normal << ", got " << n1;
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(n2, expected_normal, 1e-4f)))
+      << "Expected " << expected_normal << ", got " << n2;
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(n3, expected_normal, 1e-4f)))
+      << "Expected " << expected_normal << ", got " << n3;
 }
 
 int main(int argc, char **argv) {

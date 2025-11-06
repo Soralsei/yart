@@ -1,11 +1,11 @@
 #pragma once
-#include <iostream>
 
-#include "yart/core/object3d.h"
-#include "yart/geometry/defines.h"
-#include "yart/image/color.h"
-#include "yart/traits/comparable.h"
-#include "yart/util/math.h"
+#include <glm/ext/vector_float3.hpp>
+#include <glm/ext/vector_float4.hpp>
+
+#include "yart/core/object3d.hpp"
+#include "yart/image/color.hpp"
+#include "yart/traits/comparable.hpp"
 
 namespace yart {
 
@@ -14,11 +14,9 @@ namespace yart {
   class Material;
   class World;
 
-  namespace geometry
-  {
+  namespace geometry {
     class Hit;
-  } // namespace geometry
-  
+  }  // namespace geometry
 
   namespace light {
 
@@ -35,28 +33,29 @@ namespace yart {
     public:
       Light();
 
-      Light(Eigen::Vector3f _position, float _light_energy, float _light_specular,
+      Light(glm::vec3 _position, float _light_energy, float _light_specular,
             color::Color _light_color);
 
-      Light(Eigen::Vector3f _position);
+      Light(glm::vec3 _position);
 
       ~Light() = default;
 
       float get_energy() const;
       float get_specular() const;
-      const color::Color& get_light_color() const;
+      const color::Color& get_color() const;
       void set_energy(float _light_energy);
       void set_specular(float _light_specular);
       void set_color(const color::Color& _light_color);
       void set_color(float r, float g, float b);
-      void set_light_color(float r, float g, float b, float a);
+      void set_color(float r, float g, float b, float a);
     };
 
     color::Color phong_lighting(const Material& material, const Light& light,
-                                const Eigen::Vector3f& point, const Eigen::Vector3f& eye,
-                                const Eigen::Vector3f& normal);
+                                const glm::vec4& point, const glm::vec4& eye,
+                                const glm::vec4& normal, bool is_shadowed = false);
 
     color::Color shade_hit(const World& world, const geometry::Hit& hit);
+    bool is_shadowed(const World& world, const Light& light, const glm::vec4& point);
 
   }  // namespace light
 

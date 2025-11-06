@@ -1,19 +1,18 @@
-#include "yart/file/ppm_writer.h"
+#include "yart/file/ppm_writer.hpp"
 
 #include <cstdint>
 #include <fstream>
 #include <iostream>
 
-#include "yart/file/image_writer.h"
-#include "yart/image/color.h"
-#include "yart/image/color_format.h"
+#include "yart/file/image_writer.hpp"
+#include "yart/image/color.hpp"
+#include "yart/image/color_format.hpp"
 
 namespace yart {
   namespace file {
 
     PPMWriter::PPMWriter(PPMFormat _format) : format(_format) {}
-    bool PPMWriter::write(const char* filename, const color::Color* data, int width,
-                          int height) {
+    bool PPMWriter::write(const char* filename, const color::Color* data, int width, int height) {
       std::ofstream file(filename, std::ios::binary);
       if (!file.good()) {
         std::cerr << "Error opening file for writing: " << filename << std::endl;
@@ -43,7 +42,7 @@ namespace yart {
       if (format == PPMFormat::P3) {
         file << "P3";
         separator = NEWLINE;
-      } else if (format == PPMFormat::P6) {
+      } else {
         file << "P6";
         separator = '\n';
       }
@@ -61,7 +60,7 @@ namespace yart {
           uint8_t b = color & 0xFF;
           file << std::to_string(r) << " " << std::to_string(g) << " " << std::to_string(b);
           if (index % 70 == 0 && index != 0) {
-            file << std::endl;
+            file << "\n";
           } else {
             file << " ";
           }

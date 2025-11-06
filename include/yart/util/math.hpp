@@ -1,10 +1,10 @@
 #pragma once
 
 #include <cmath>
+#include <glm/ext/vector_float3.hpp>
+#include <glm/ext/vector_float4.hpp>
 #include <stdexcept>
 #include <type_traits>
-
-#include "Eigen/Dense"
 
 namespace yart {
   namespace math {
@@ -47,7 +47,10 @@ namespace yart {
       return (value - old_min) / static_cast<U>(old_max - old_min) * (new_max - new_min) + new_min;
     }
 
-    Eigen::Vector3f reflect(const Eigen::Vector3f& vector, const Eigen::Vector3f& normal);
-
+    glm::vec4 reflect(const glm::vec4& vector, const glm::vec4& normal);
+    template bool approx_equals<float>(float left, float right, double atol = ATOL,
+                                       double rtol = RTOL);
+    template bool approx_equals<double>(double left, double right, double atol = ATOL,
+                                        double rtol = RTOL);
   }  // namespace math
 }  // namespace yart

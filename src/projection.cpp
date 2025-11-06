@@ -1,14 +1,15 @@
+#include <glm/gtx/dual_quaternion.hpp>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <ostream>
 
-#include "Eigen/Dense"
-#include "yart/core/ray.h"
-#include "yart/file/ppm_writer.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/sphere.h"
-#include "yart/geometry/transform.h"
-#include "yart/image/canvas.h"
+#include "yart/core/ray.hpp"
+#include "yart/file/ppm_writer.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/geometry/transform.hpp"
+#include "yart/image/canvas.hpp"
 
 using namespace yart;
 
@@ -23,8 +24,8 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
   auto sphere = std::make_shared<geometry::Sphere>(1.0f);
 
-  auto transform = geometry::Transform3D{transform::shear<float>(1, 0, 0, 0, 0, 0)};
-  sphere->set_transform(transform);
+  auto transform = geometry::Transform{transform::shear(1, 0, 0, 0, 0, 0)};
+  sphere->transform = transform;
 
   double half_width = canvas_world_width / 2;
   double half_height = canvas_world_height / 2;
@@ -35,12 +36,12 @@ int main(int /*argc*/, char* /*argv*/[]) {
     float world_y = half_height - y * y_pixel_size;
     for (size_t x = 0; x < canvas.getWidth(); x++) {
       float world_x = -half_width + x_pixel_size * x;
-      auto ray_origin = Eigen::Vector3f{0, 0, -5};
-      auto ray_direction = (Eigen::Vector3f{world_x, world_y, 10} - ray_origin).normalized();
+      auto ray_origin = glm::vec3{0, 0, -5};
+      auto ray_direction = glm::normalize(glm::vec3{world_x, world_y, 10} - ray_origin);
       Ray r{ray_origin, ray_direction};
       auto intersections = sphere->intersections(r);
       auto hit = geometry::hit(intersections);
-      if (hit == nullptr) {
+      if (!hit.has_value()) {
         canvas.setPixel(x, canvas.getHeight() - 1 - y, color::Black);
         continue;
       }

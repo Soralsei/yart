@@ -1,11 +1,10 @@
-#include "yart/geometry/hit.h"
+#include "yart/geometry/hit.hpp"
 
-#include <iostream>
-
-#include "yart/core/object3d.h"
-#include "yart/core/ray.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/shape.h"
+#include "yart/core/object3d.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/geometry/defines.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/shape.hpp"
 
 namespace yart {
 
@@ -15,30 +14,31 @@ namespace yart {
 
     std::weak_ptr<Shape3D> Hit::get_object() const { return object; }
 
-    Eigen::Vector3f Hit::get_position() const { return position; }
+    glm::vec4 Hit::get_position() const { return position; }
+    glm::vec4 Hit::get_over_position() const { return over_position; }
 
-    Eigen::Vector3f Hit::get_eye() const { return eye; }
+    glm::vec4 Hit::get_eye() const { return eye; }
 
-    Eigen::Vector3f Hit::get_normal() const { return normal; }
+    glm::vec4 Hit::get_normal() const { return normal; }
 
     bool Hit::is_inside() const { return inside; }
 
-    std::shared_ptr<Hit> Hit::precompute_hit(const Ray& ray,
-                                             const Intersection& intersection) {
-      auto hit = std::make_shared<Hit>();
+    Hit Hit::precompute_hit(const Ray& ray, const Intersection& intersection) {
+      Hit hit;
 
-      hit->object = intersection.get_object();
-      hit->t = intersection.get_t();
-      hit->position = ray.position(intersection.get_t());
-      hit->eye = -ray.get_direction();
+      hit.object = intersection.get_object();
+      hit.t = intersection.get_t();
+      hit.position = ray.position(intersection.get_t());
+      hit.eye = -ray.get_direction();
 
-      auto normal = hit->object.lock()->normal_at(hit->position);
+      glm::vec4 normal = hit.object.lock()->normal_at(hit.position);
 
-      bool is_inside = normal.dot(hit->eye) < 0;
-      hit->inside = is_inside;
+      bool is_inside = glm::dot(normal, hit.eye) < 0;
+      hit.inside = is_inside;
 
-      int direction = is_inside ? -1 : 1;
-      hit->normal = direction * normal;
+      float direction = is_inside ? -1 : 1;
+      hit.normal = direction * normal;
+      hit.over_position = hit.position + hit.normal * static_cast<float>(SHADOW_EPSILON);
 
       return hit;
     }

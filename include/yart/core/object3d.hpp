@@ -1,11 +1,11 @@
 #pragma once
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/vector_float3.hpp>
 #include <iostream>
 #include <memory>
-#include <vector>
 
-#include "Eigen/Dense"
-#include "yart/geometry/defines.h"
-#include "yart/traits/comparable.h"
+#include "yart/geometry/defines.hpp"
+#include "yart/traits/comparable.hpp"
 
 namespace yart {
 
@@ -21,13 +21,12 @@ namespace yart {
     virtual bool is_equal(const Object3D& rhs) const override;
     virtual bool self_equal(const Object3D& other) const override;
 
-    geometry::Transform3D transform;
     uint32_t object_id;
 
   public:
-    Object3D(Eigen::Vector3f _origin);
-    Object3D(Eigen::Vector3f _origin, Eigen::Vector4f _rotation);
-    Object3D(geometry::Transform3D _transform);
+    Object3D(glm::vec3 _origin);
+    Object3D(glm::vec3 _origin, glm::vec4 _rotation);
+    Object3D(geometry::Transform _transform);
     Object3D();
 
     // Copy constructor
@@ -36,16 +35,15 @@ namespace yart {
 
     virtual ~Object3D();
 
-    const geometry::Transform3D& get_transform() const;
-    void set_transform(const geometry::Transform3D& _transform);
+    const glm::vec3& position() const;
+    glm::vec3 orientation() const;
+    const glm::quat& quaternion() const;
 
-    Eigen::Vector3f position() const;
-    Eigen::Vector3f orientation() const;
-    geometry::Quaternion quaternion() const;
-
-    friend std::ostream& operator<<(std::ostream& out, const Object3D& shape);
+    friend std::ostream& operator<<(std::ostream& out, Object3D& shape);
 
     friend bool operator==(const Object3D& lhs, const Object3D& rhs);
+
+    geometry::Transform transform;
   };
 
 }  // namespace yart

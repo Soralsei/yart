@@ -1,14 +1,18 @@
-#include "yart/core/world.h"
+#include "yart/core/world.hpp"
 
-#include "yart/core/camera.h"
-#include "yart/core/material.h"
-#include "yart/core/ray.h"
-#include "yart/geometry/hit.h"
-#include "yart/geometry/sphere.h"
-#include "yart/geometry/transform.h"
-#include "yart/image/canvas.h"
-#include "yart/light/light.h"
-#include "yart/light/point_light.h"
+#include <algorithm>
+#include <optional>
+
+#include "omp.h"
+#include "yart/core/camera.hpp"
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/geometry/hit.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/image/canvas.hpp"
+#include "yart/light/light.hpp"
+#include "yart/light/point_light.hpp"
+#include "yart/util/progress_bar.hpp"
 
 namespace yart {
 
@@ -17,13 +21,19 @@ namespace yart {
   const std::vector<ObjectPtr> World::get_objects() const { return objects; }
   const std::vector<LightPtr> World::get_light_sources() const { return lights; }
 
-  void World::add_object(ObjectPtr obj) { objects.push_back(obj); }
-  void World::add_light(LightPtr light) { lights.push_back(light); }
+  World &World::add_object(ObjectPtr obj) {
+    objects.push_back(obj);
+    return (*this);
+  }
+  World &World::add_light(LightPtr light) {
+    lights.push_back(light);
+    return (*this);
+  }
 
   std::unique_ptr<World> World::default_world() {
     World *world = new World();
 
-    LightPtr default_light = std::make_shared<light::PointLight>(Eigen::Vector3f{-10, 10, -10});
+    LightPtr default_light = std::make_shared<light::PointLight>(glm::vec3{-10, 10, -10});
     world->lights.push_back(default_light);
 
     Material mat = Material{};
@@ -33,15 +43,15 @@ namespace yart {
     sphere1->get_material() = mat;
     world->objects.push_back(sphere1);
 
-    geometry::Transform3D transform
-        = geometry::Transform3D::Identity() * transform::scaling<float>(0.5f, 0.5f, 0.5f);
+    geometry::Transform transform = geometry::Transform{};
+    transform.scale(0.5f, 0.5f, 0.5f);
     auto sphere2 = std::make_shared<geometry::Sphere>(transform, 1.0f);
     world->objects.push_back(sphere2);
 
     return std::unique_ptr<World>(world);
   }
 
-  Intersections World::intersections(const Ray &ray) {
+  Intersections World::intersections(const Ray &ray) const {
     Intersections intersections;
     intersections.reserve(10000);
 
@@ -58,30 +68,40 @@ namespace yart {
 
   color::Color World::color_at(const Ray &ray) {
     auto intersects = intersections(ray);
-    geometry::Intersection *h = geometry::hit(intersects);
+    std::optional<geometry::Intersection> h = geometry::hit(intersects);
 
-    if (h == nullptr) {
+    if (h == std::nullopt) {
       return color::Black;
     }
 
-    auto hit = geometry::Hit::precompute_hit(ray, *h);
-    return light::shade_hit(*this, *hit);
+    geometry::Hit hit = geometry::Hit::precompute_hit(ray, h.value());
+    return light::shade_hit(*this, hit);
   }
 
-  std::unique_ptr<image::Canvas> World::render(const Camera &camera) {
-    uint32_t hsize = camera.get_hsize();
-    uint32_t vsize = camera.get_vsize();
+  std::unique_ptr<image::Canvas> World::render(Camera &camera) {
+    int hsize = camera.get_hsize();
+    int vsize = camera.get_vsize();
 
     std::unique_ptr<image::Canvas> image = std::make_unique<image::Canvas>(hsize, vsize);
+#ifdef USE_PROGRESS_BAR
+    util::ProgressBar progress{static_cast<float>(hsize * vsize)};
+    progress.set_show_percentage(true);
+#endif
 
-    for (uint32_t y = 0; y < vsize; y++) {
-      for (uint32_t x = 0; x < hsize; x++) {
-        auto ray = camera.ray_to(x, y);
-        auto color = color_at(ray);
-
+#pragma omp parallel for collapse(2) schedule(static, 5)
+    for (int y = 0; y < vsize; y++) {
+      for (int x = 0; x < hsize; x++) {
+        Ray ray = camera.ray_to(x, y);
+        color::Color color = color_at(ray);
         image->setPixel(x, y, color);
+#ifdef USE_PROGRESS_BAR
+        progress.increment_progress(1.0f);
+#endif
       }
     }
+#ifdef USE_PROGRESS_BAR
+    progress.end();
+#endif
     return image;
   }
 

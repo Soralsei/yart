@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <limits>
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace yart {
@@ -29,6 +29,6 @@ namespace yart {
 
     std::ostream& operator<<(std::ostream& out, const Intersection& intersection);
 
-    Intersection* hit(std::vector<Intersection>& intersections);
+    std::optional<Intersection> hit(std::vector<Intersection>& intersections);
   }  // namespace geometry
 }  // namespace yart

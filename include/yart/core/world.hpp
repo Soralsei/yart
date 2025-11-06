@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 namespace yart {
 
@@ -38,13 +38,13 @@ namespace yart {
     const std::vector<ObjectPtr> get_objects() const;
     const std::vector<LightPtr> get_light_sources() const;
 
-    void add_object(ObjectPtr object);
-    void add_light(LightPtr light);
+    World& add_object(ObjectPtr object);
+    World& add_light(LightPtr light);
 
-    Intersections intersections(const Ray& ray);
+    Intersections intersections(const Ray& ray) const;
 
     color::Color color_at(const Ray& ray);
-    std::unique_ptr<image::Canvas> render(const Camera& camera);
+    std::unique_ptr<image::Canvas> render(Camera& camera);
 
     static std::unique_ptr<World> default_world();
   };

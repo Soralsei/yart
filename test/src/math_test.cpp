@@ -1,6 +1,10 @@
-#include "yart/util/math.h"
+#include "yart/util/math.hpp"
 
 #include <gtest/gtest.h>
+
+#include <glm/gtc/epsilon.hpp>
+#include <glm/gtx/io.hpp>
+
 using namespace yart;
 
 TEST(RemapTest, FloatToInt) {
@@ -52,21 +56,23 @@ TEST(RemapTest, Byte128ToFloat) {
 }
 
 TEST(VectorOperations, Reflect45) {
-  auto vector = Eigen::Vector3f(1, -1, 0);
-  auto normal = Eigen::Vector3f(0, 1, 0);
+  auto vector = glm::vec4(1, -1, 0, 0);
+  auto normal = glm::vec4(0, 1, 0, 0);
 
-  auto expected = Eigen::Vector3f(1, 1, 0);
+  auto expected = glm::vec4(1, 1, 0, 0);
   auto result = math::reflect(vector, normal);
-  ASSERT_TRUE(result.isApprox(expected, 1e-6));
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(result, expected, 1e-6f)))
+      << "Expected: " << expected << ", got: " << result;
 }
 
 TEST(VectorOperations, ReflectSlanted) {
-  auto vector = Eigen::Vector3f(0, -1, 0);
-  auto normal = Eigen::Vector3f(std::sqrt(2) / 2, std::sqrt(2) / 2, 0);
+  auto vector = glm::vec4(0, -1, 0, 0);
+  auto normal = glm::vec4(std::sqrt(2) / 2, std::sqrt(2) / 2, 0, 0);
 
-  auto expected = Eigen::Vector3f(1, 0, 0);
+  auto expected = glm::vec4(1, 0, 0, 0);
   auto result = math::reflect(vector, normal);
-  ASSERT_TRUE(result.isApprox(expected, 1e-6));
+  ASSERT_TRUE(glm::all(glm::epsilonEqual(result, expected, 1e-6f)))
+      << "Expected: " << expected << ", got: " << result;
 }
 
 int main(int argc, char **argv) {

@@ -1,23 +1,30 @@
-#include "yart/light/light.h"
+#include "yart/light/light.hpp"
 
-#include "yart/core/material.h"
-#include "yart/core/object3d.h"
-#include "yart/core/world.h"
-#include "yart/geometry/hit.h"
-#include "yart/geometry/shape.h"
+#include <glm/ext/vector_float4.hpp>
+#include <glm/geometric.hpp>
+#include <glm/gtx/norm.hpp>
+#include <optional>
+
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/core/world.hpp"
+#include "yart/geometry/hit.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/shape.hpp"
+#include "yart/util/math.hpp"
 
 namespace yart {
 
   namespace light {
 
-    Light::Light(Eigen::Vector3f _position, float _light_energy, float _light_specular,
+    Light::Light(glm::vec3 _position, float _light_energy, float _light_specular,
                  color::Color _light_color)
         : Parent(_position),
           light_energy(_light_energy),
           light_specular(_light_specular),
           light_color(_light_color) {}
 
-    Light::Light(Eigen::Vector3f _position) : Parent(_position) {}
+    Light::Light(glm::vec3 _position) : Parent(_position) {}
 
     Light::Light() : Parent() {}
 
@@ -25,7 +32,7 @@ namespace yart {
 
     float Light::get_specular() const { return light_specular; }
 
-    const color::Color& Light::get_light_color() const { return light_color; }
+    const color::Color& Light::get_color() const { return light_color; }
 
     void Light::set_energy(float _light_energy) { light_energy = _light_energy; }
 
@@ -35,7 +42,7 @@ namespace yart {
 
     void Light::set_color(float r, float g, float b) { light_color = color::Color(r, g, b); }
 
-    void Light::set_light_color(float r, float g, float b, float a) {
+    void Light::set_color(float r, float g, float b, float a) {
       light_color = color::Color(r, g, b, a);
     }
 
@@ -46,26 +53,29 @@ namespace yart {
     }
 
     color::Color phong_lighting(const Material& material, const Light& light,
-                                const Eigen::Vector3f& point, const Eigen::Vector3f& eye,
-                                const Eigen::Vector3f& normal) {
+                                const glm::vec4& point, const glm::vec4& eye,
+                                const glm::vec4& normal, bool is_shadowed) {
       color::Color effective_color
-          = material.get_diffuse_color() * (light.get_light_color() * light.get_energy());
-      Eigen::Vector3f lightv = (light.position() - point).normalized();
+          = material.get_diffuse_color() * (light.get_color() * light.get_energy());
       color::Color ambient = effective_color * material.get_ambient();
-      float light_dot_normal = lightv.dot(normal);
+      if (is_shadowed) {
+        return ambient;
+      }
+      glm::vec4 lightv = glm::normalize(glm::vec4{light.position(), 1} - point);
+      float light_dot_normal = glm::dot(lightv, normal);
 
       color::Color specular = color::Black;
       color::Color diffuse = color::Black;
 
       if (light_dot_normal >= 0) {
         diffuse = effective_color * material.get_diffuse() * light_dot_normal;
-        Eigen::Vector3f reflectv = math::reflect(-lightv, normal);
-        float reflect_dot_eye = reflectv.dot(eye);
+        glm::vec4 reflectv = math::reflect(-lightv, normal);
+        float reflect_dot_eye = glm::dot(reflectv, eye);
 
         if (reflect_dot_eye > 0) {
           float factor = std::pow(reflect_dot_eye, material.get_shininess());
-          specular
-              = (light.get_light_color() * light.get_energy()) * material.get_specular() * factor;
+          specular = light.get_color() * light.get_energy() * material.get_specular() * factor
+                     * light.get_specular();
         }
       }
 
@@ -78,15 +88,29 @@ namespace yart {
       if (object == nullptr) return shade;
 
       auto material = object->get_material();
-      auto position = hit.get_position();
-      auto eye = hit.get_eye();
-      auto normal = hit.get_normal();
+      glm::vec4 position = hit.get_position();
+      glm::vec4 over_position = hit.get_over_position();
+      glm::vec4 eye = hit.get_eye();
+      glm::vec4 normal = hit.get_normal();
 
       for (auto&& light : world.get_light_sources()) {
-        shade += phong_lighting(material, *light, position, eye, normal);
+        bool in_shadows = is_shadowed(world, *light, over_position);
+        shade += phong_lighting(material, *light, position, eye, normal, in_shadows);
       }
 
       return shade;
+    }
+
+    bool is_shadowed(const World& world, const Light& light, const glm::vec4& point) {
+      glm::vec4 lightv = glm::vec4{light.position(), 1} - point;
+      float distance = glm::l2Norm(glm::vec3{lightv});
+      glm::vec4 direction = lightv / distance;
+
+      Ray r = {point, direction};
+      auto intersections = world.intersections(r);
+      std::optional<geometry::Intersection> hit = geometry::hit(intersections);
+
+      return hit.has_value() && hit->get_t() < distance;
     }
 
   }  // namespace light

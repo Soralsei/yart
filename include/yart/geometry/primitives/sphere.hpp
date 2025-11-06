@@ -1,7 +1,7 @@
 #pragma once
-#include "yart/geometry/defines.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/shape.h"
+#include "yart/geometry/defines.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/shape.hpp"
 
 namespace yart {
 
@@ -11,15 +11,16 @@ namespace yart {
       using Parent = comparable<Sphere, Object3D, Shape3D>;
 
     private:
-      virtual std::vector<Intersection> _intersections(const Ray& ray) override;
+      virtual std::vector<Intersection> local_intersections(const Ray& ray) override;
+      virtual glm::vec4 local_normal_at(const glm::vec4& point) const override;
       float radius = 1.0f;
 
     protected:
       virtual bool self_equal(const Sphere& other) const override;
 
     public:
-      Sphere(Transform3D transform, float _radius);
-      Sphere(Eigen::Vector3f _origin, float _radius);
+      Sphere(Transform transform, float _radius);
+      Sphere(glm::vec3 _origin, float _radius);
       Sphere(float _radius);
       Sphere();
 
@@ -28,9 +29,7 @@ namespace yart {
 
       ~Sphere();
 
-      virtual Eigen::Vector3f normal_at(const Eigen::Vector3f& point) const override;
-
-      std::string as_string() const override;
+      std::string as_string() override;
 
       friend std::ostream& operator<<(std::ostream& out, const Sphere& sphere);
     };

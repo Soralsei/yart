@@ -1,8 +1,8 @@
-#include "yart/image/color.h"
+#include "yart/image/color.hpp"
 
 #include <algorithm>
 
-#include "yart/util/math.h"
+#include "yart/util/math.hpp"
 
 namespace yart  // namespace color
 {
@@ -25,7 +25,8 @@ namespace yart  // namespace color
 
     bool operator==(const Color& lhs, const Color& rhs) {
       return (math::approx_equals(lhs.r, rhs.r, 1e-4) && math::approx_equals(lhs.g, rhs.g, 1e-4)
-              && math::approx_equals(lhs.b, rhs.b, 1e-4) && math::approx_equals(lhs.a, rhs.a, 1e-4));
+              && math::approx_equals(lhs.b, rhs.b, 1e-4)
+              && math::approx_equals(lhs.a, rhs.a, 1e-4));
     }
     bool operator!=(const Color& lhs, const Color& rhs) { return !(lhs == rhs); }
 

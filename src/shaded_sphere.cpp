@@ -1,21 +1,19 @@
-#include <iostream>
+#include <glm/geometric.hpp>
 #include <memory>
-#include <ostream>
+#include <optional>
 
-#include "Eigen/Dense"
-#include "yart/core/ray.h"
-#include "yart/core/material.h"
-#include "yart/file/ppm_writer.h"
-#include "yart/geometry/intersection.h"
-#include "yart/geometry/sphere.h"
-#include "yart/geometry/transform.h"
-#include "yart/image/canvas.h"
-#include "yart/light/point_light.h"
+#include "yart/core/material.hpp"
+#include "yart/core/ray.hpp"
+#include "yart/file/ppm_writer.hpp"
+#include "yart/geometry/intersection.hpp"
+#include "yart/geometry/primitives/sphere.hpp"
+#include "yart/image/canvas.hpp"
+#include "yart/light/point_light.hpp"
 
 using namespace yart;
 
 int main(int /*argc*/, char* /*argv*/[]) {
-  image::Canvas canvas{200, 200};
+  image::Canvas canvas{50, 50};
 
   file::PPMWriter writer;
 
@@ -23,20 +21,24 @@ int main(int /*argc*/, char* /*argv*/[]) {
   float canvas_world_height = 7.0f;
 
   Material material;
-  material.set_diffuse_color(0.2, 0.4, 1);
+  material.set_diffuse_color(1, 0.2, 1);
 
-  geometry::Transform3D transform = geometry::Transform3D::Identity();
-  transform = transform * transform::shear<float>(1, 0, 0, 0, 0, 0);
-  transform.rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitY()))
-  .rotate(Eigen::AngleAxisf(M_PI / 6, Eigen::Vector3f::UnitX()));
-  
+  geometry::Transform transform = geometry::Transform{};
+  // transform = transform * transform::shear<float>(1, 0, 0, 0, 0, 0);
+  // transform = transform.translate(
+  //     0, 0, 0) /** transform::rotationY<float>(M_PI_4) * transform::scale<float>(1, 0.5, 0.5)*/;
+
+  // transform.rotate(Eigen::AngleAxisf(M_PI / 6, glm::vec3::UnitY()))
+  // .rotate(Eigen::AngleAxisf(M_PI / 6, glm::vec3::UnitX()))
+  // .;
+
   auto sphere = std::make_shared<geometry::Sphere>(transform, 1.0f);
   sphere->get_material() = material;
 
-  auto light = light::PointLight{Eigen::Vector3f{-10, 10, -10}};
+  auto light = light::PointLight{glm::vec3{-10, 10, -10}};
 
   // auto transform = geometry::Transform3D{transform::shear<float>(1, 0, 0, 0, 0, 0)};
-  // sphere->set_transform(transform);
+  // sphere->transform = transform;
 
   double half_width = canvas_world_width / 2;
   double half_height = canvas_world_height / 2;
@@ -48,22 +50,22 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
     for (size_t x = 0; x < canvas.getWidth(); x++) {
       float world_x = -half_width + x_pixel_size * x;
-      auto ray_origin = Eigen::Vector3f{0, 0, -5};
-      auto ray_direction = (Eigen::Vector3f{world_x, world_y, 10} - ray_origin).normalized();
+      auto ray_origin = glm::vec3{0, 0, -5};
+      auto ray_direction = glm::normalize(glm::vec3{world_x, world_y, 10} - ray_origin);
 
       Ray r{ray_origin, ray_direction};
 
       auto intersections = sphere->intersections(r);
       auto hit = geometry::hit(intersections);
 
-      if (hit == nullptr) {
+      if (!hit.has_value()) {
         canvas.setPixel(x, y, color::Black);
         continue;
       }
 
-      auto point = r.position(hit->get_t());
-      auto normal = sphere->normal_at(point);
-      auto eye = -ray_direction;
+      glm::vec4 point = r.position(hit->get_t());
+      glm::vec4 normal = sphere->normal_at(point);
+      glm::vec4 eye = -r.get_direction();
 
       auto color = light::phong_lighting(sphere->get_material(), light, point, eye, normal);
 

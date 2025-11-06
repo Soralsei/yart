@@ -1,15 +1,14 @@
 #pragma once
-#include <cstdint>
 
-#include "yart/file/image_writer.h"
-#include "yart/image/color.h"
-#include "yart/image/color_format.h"
+#include "yart/file/image_writer.hpp"
+#include "yart/image/color.hpp"
+#include "yart/image/color_format.hpp"
 
 #ifdef __unix__ /* __unix__ is usually defined by compilers targeting Unix systems */
-# define NEWLINE '\n'
+#  define NEWLINE '\n'
 #elif defined(_WIN32) || defined(WIN32) /* _Win32 is usually defined by compilers targeting 32 or \
                                            64 bit Windows systems */
-# define NEWLINE '\r\n'
+#  define NEWLINE '\r\n'
 #endif
 
 namespace yart {
@@ -25,8 +24,7 @@ namespace yart {
     public:
       PPMWriter(PPMFormat format = PPMFormat::P3);
       ~PPMWriter() override = default;
-      bool write(const char* filename, const color::Color* data, int width,
-                 int height) override;
+      bool write(const char* filename, const color::Color* data, int width, int height) override;
 
     private:
       void writeHeader(std::ofstream& file, int width, int height);

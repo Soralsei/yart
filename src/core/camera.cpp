@@ -1,14 +1,18 @@
-#include "yart/core/camera.h"
+#include "yart/core/camera.hpp"
 
-#include "yart/core/ray.h"
-#include "yart/geometry/transform.h"
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/geometric.hpp>
+#include <glm/matrix.hpp>
+
+#include "yart/core/ray.hpp"
+#include "yart/geometry/transform.hpp"
 
 namespace yart {
 
-  Camera::Camera(float _hsize, float _vsize, float _fov)
+  Camera::Camera(int _hsize, int _vsize, float _fov)
       : Object3D::Object3D(), hsize(_hsize), vsize(_vsize), fov(_fov) {
     float half_view = std::tan(fov / 2);
-    float aspect_ratio = hsize / vsize;
+    float aspect_ratio = static_cast<float>(hsize) / static_cast<float>(vsize);
 
     if (aspect_ratio >= 1) {
       half_width = half_view;
@@ -18,51 +22,55 @@ namespace yart {
       half_height = half_view;
     }
 
-    pixel_size = (half_width * 2) / hsize;
+    pixel_size = (half_width * 2) / static_cast<float>(hsize);
   }
 
-  uint32_t Camera::get_hsize() const { return hsize; }
-  uint32_t Camera::get_vsize() const { return vsize; }
+  int Camera::get_hsize() const { return hsize; }
+  int Camera::get_vsize() const { return vsize; }
   float Camera::get_fov() const { return fov; }
   float Camera::get_pixel_size() const { return pixel_size; }
 
-  Ray Camera::ray_to(int x, int y) const {
+  Ray Camera::ray_to(int x, int y) {
     // Offset from edge of pixel (index passed as x and y) and center of pixel
-    float x_offset = (x + 0.5) * pixel_size;
-    float y_offset = (y + 0.5) * pixel_size;
+    float x_offset = (static_cast<float>(x) + 0.5f) * pixel_size;
+    float y_offset = (static_cast<float>(y) + 0.5f) * pixel_size;
 
     float world_x = half_width - x_offset;
     float world_y = half_height - y_offset;
 
-    auto pixel = transform.inverse() * Eigen::Vector3f{world_x, world_y, -1};
-    auto origin = transform.inverse() * Eigen::Vector3f::Zero();
+    glm::mat4 inverse = glm::inverse(transform.matrix());
+    glm::vec4 pixel = inverse * glm::vec4{world_x, world_y, -1.0f, 1.0f};
+    glm::vec4 origin = inverse * glm::vec4{0.0f, 0.0f, 0.0f, 1.0f};
+    // std::cout << "Camera origin: " << origin.transpose() << "\n";
+    // std::cout << "Camera transform:\n" << transform.matrix() << "\n";
 
-    auto direction = (pixel - origin).normalized();
+    glm::vec4 direction = glm::normalize(pixel - origin);
 
     return Ray{origin, direction};
   }
 
-  void Camera::look_at(const Eigen::Vector3f& target, const Eigen::Vector3f& up) {
+  void Camera::look_at(const glm::vec3& target, const glm::vec3& up) {
     transform = Camera::get_view_transform(position(), target, up);
   }
 
-  geometry::Transform3D Camera::get_view_transform(const Eigen::Vector3f& from,
-                                                   const Eigen::Vector3f& to,
-                                                   const Eigen::Vector3f& up) {
-    geometry::Transform3D view_matrix = geometry::Transform3D::Identity();
+  glm::mat4 Camera::get_view_transform(const glm::vec3& from, const glm::vec3& to,
+                                       const glm::vec3& up) {
+    // geometry::Transform view_matrix = geometry::Transform{};
+    // glm::mat4 view_matrix = glm::mat4{1.0f};
 
-    auto forward = (to - from).normalized();
-    auto up_normalized = up.normalized();
-    auto left = forward.cross(up_normalized);
-    auto true_up = left.cross(forward);
+    // auto forward = glm::normalize(to - from);
+    // auto up_normalized = glm::normalize(up);
+    // auto left = glm::normalize(glm::cross(forward, up_normalized));
+    // auto true_up = glm::cross(left, forward);
 
-    view_matrix.matrix().block(0, 0, Eigen::fix<1>, Eigen::fix<3>) = left.transpose();
-    view_matrix.matrix().block(1, 0, Eigen::fix<1>, Eigen::fix<3>) = true_up.transpose();
-    view_matrix.matrix().block(2, 0, Eigen::fix<1>, Eigen::fix<3>) = -forward.transpose();
+    // view_matrix[0] = glm::vec4(left, 0.0f);
+    // view_matrix[1] = glm::vec4(true_up, 0.0f);
+    // view_matrix[2] = glm::vec4(-forward, 0.0f);
+    // view_matrix[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
-    view_matrix *= transform::translation(-from.x(), -from.y(), -from.z());
+    // view_matrix = glm::translate(view_matrix, -from);
 
-    return view_matrix;
+    return glm::lookAt(from, to, up);
   }
 
 }  // namespace yart

@@ -1,16 +1,16 @@
-#include "yart/util/math.h"
+#include "yart/util/math.hpp"
 
 #include <cmath>
-#include <type_traits>
+#include <glm/geometric.hpp>
 
 namespace yart {
 
   namespace math {
 
-    Eigen::Vector3f reflect(const Eigen::Vector3f& vector, const Eigen::Vector3f& normal) {
-      return vector - normal * 2 * vector.dot(normal);
+    glm::vec4 reflect(const glm::vec4& vector, const glm::vec4& normal) {
+      return vector - normal * 2.0f * glm::dot(vector, normal);
     }
 
   }  // namespace math
-  
+
 }  // namespace yart

@@ -3,9 +3,11 @@ set(sources
   src/math/ray.cpp
 
   src/geometry/shape.cpp
-  src/geometry/sphere.cpp
+  src/geometry/primitives/sphere.cpp
+  src/geometry/primitives/plane.cpp
   src/geometry/hit.cpp
   src/geometry/intersection.cpp
+  src/geometry/transform.cpp
 
   src/image/canvas.cpp
   src/image/color.cpp
@@ -20,6 +22,8 @@ set(sources
 
   src/light/light.cpp
   src/light/point_light.cpp
+
+  src/util/progress_bar.cpp
 )
 
 set(main_sources
@@ -43,24 +47,32 @@ set(shading_sources
   src/shaded_sphere.cpp
   ${sources}
 )
+set(render_sources
+  src/world_render.cpp
+  ${sources}
+)
+set(plane_render_sources
+  src/plane_render.cpp
+  ${sources}
+)
 
 set(headers
-  include/yart/simd.h
-  include/yart/util/math.h
+  # include/yart/simd.hpp
+  # include/yart/util/math.hpp
 
-  include/yart/core/ray.h
-  include/yart/core/object3d.h
+  # include/yart/core/ray.hpp
+  # include/yart/core/object3d.hpp
   
-  include/yart/geometry/transform.h
-  include/yart/geometry/sphere.h
+  # include/yart/geometry/transform.hpp
+  # include/yart/geometry/primitives/sphere.hpp
 
-  include/yart/image/canvas.h
-  include/yart/image/color.h
-  include/yart/image/color_format.h
-  include/yart/file/ppm_writer.h
-  include/yart/file/image_writer.h
+  # include/yart/image/canvas.hpp
+  # include/yart/image/color.hpp
+  # include/yart/image/color_format.hpp
+  # include/yart/file/ppm_writer.hpp
+  # include/yart/file/image_writer.hpp
 
-  include/yart/util/vector.h
+  # include/yart/util/vector.hpp
 )
 
 set(test_sources

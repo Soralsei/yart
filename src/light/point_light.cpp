@@ -1,6 +1,4 @@
-#include "yart/light/point_light.h"
-
-#include "yart/core/object3d.h"
+#include "yart/light/point_light.hpp"
 
 namespace yart {
 
@@ -8,11 +6,11 @@ namespace yart {
 
     PointLight::~PointLight() {}
 
-    PointLight::PointLight(Eigen::Vector3f _position, float _light_energy, float _light_specular,
+    PointLight::PointLight(glm::vec3 _position, float _light_energy, float _light_specular,
                            color::Color _light_color)
         : Light(_position, _light_energy, _light_specular, _light_color) {}
 
-    PointLight::PointLight(Eigen::Vector3f _position) : Light(_position) {}
+    PointLight::PointLight(glm::vec3 _position) : Light(_position) {}
 
   }  // namespace light
 
