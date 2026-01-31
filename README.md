@@ -35,12 +35,7 @@ cmake --build . -- -j$(nproc)
 Binaries will be placed in the build tree (check CMake output for exact path).
 
 ## Run
-Run the renderer binary produced by the build. Example (replace with the actual binary name from your build):
-```bash
-# from project root or build dir, adjust path as needed
-./build/bin/raytracer --output out.png --width 800 --height 600
-```
-If the project was not wired to a command-line interface, look for sample programs in `src/` or `examples/` and run the corresponding target from the build directory.
+TODO
 
 ## Tests
 If unit tests are enabled in CMake:
