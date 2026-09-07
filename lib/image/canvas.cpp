@@ -1,12 +1,13 @@
 #include "yart/image/canvas.hpp"
 
 #include <algorithm>
+#include <cstdint>
 
 namespace yart {
 
   namespace image {
 
-    Canvas::Canvas(int _width, int _height)
+    Canvas::Canvas(uint32_t _width, uint32_t _height)
         : width(_width), height(_height), pixels(std::make_unique<Color[]>(_width * _height)) {}
 
     Canvas::Canvas(const Canvas& other) : Canvas(other.width, other.height) {
@@ -59,9 +60,9 @@ namespace yart {
 
     Color Canvas::getPixel(int x, int y) const { return (*this)(x, y); }
 
-    int Canvas::getWidth() const { return width; }
+    uint32_t Canvas::getWidth() const { return width; }
 
-    int Canvas::getHeight() const { return height; }
+    uint32_t Canvas::getHeight() const { return height; }
 
     const Color* Canvas::getPixels() const { return pixels.get(); }
 

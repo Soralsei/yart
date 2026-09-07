@@ -28,15 +28,15 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
 #ifdef YART_USE_LIBPNG
   file::PNGWriter<image::RGB888Format> writer;
-#  define FILENAME "/home/sora/plane_render_glm.png"
+#  define FILENAME "/home/sora/world_render.png"
 #else
   file::PPMWriter writer;
-#  define FILENAME "/home/sora/plane_render_glm.ppm"
+#  define FILENAME "/home/sora/world_render.ppm"
 #endif
 
   auto flat_scale = glm::vec3{10, 0.01, 10};
   auto material = std::make_shared<Material>();
-  material->set_diffuse_color(color::Color{1, 0.9, 0.9}).set_specular(0);
+  material->set_diffuse_color(color::Color{1, 0.9f, 0.9f}).set_specular(0);
 
   ObjectPtr floor = std::make_shared<geometry::Sphere>();
   floor->set_material(material);

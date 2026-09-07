@@ -2,6 +2,7 @@
 
 #include <glm/gtx/io.hpp>
 #include <iostream>
+#include <sstream>
 
 #include "yart/core/object3d.hpp"
 #include "yart/core/ray.hpp"

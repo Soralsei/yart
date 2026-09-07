@@ -1,0 +1,6 @@
+add_executable_target(Clock         "${CMAKE_CURRENT_SOURCE_DIR}/clock.cpp")
+add_executable_target(Trajectory    "${CMAKE_CURRENT_SOURCE_DIR}/trajectory.cpp")
+add_executable_target(Projection    "${CMAKE_CURRENT_SOURCE_DIR}/projection.cpp")
+add_executable_target(ShadedSphere  "${CMAKE_CURRENT_SOURCE_DIR}/shaded_sphere.cpp")
+add_executable_target(WorldRender   "${CMAKE_CURRENT_SOURCE_DIR}/world_render.cpp")
+add_executable_target(PlaneRender   "${CMAKE_CURRENT_SOURCE_DIR}/plane_render.cpp")

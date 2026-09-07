@@ -41,8 +41,6 @@ namespace yart {
     glm::mat4 inverse = glm::inverse(transform.matrix());
     glm::vec4 pixel = inverse * glm::vec4{world_x, world_y, -1.0f, 1.0f};
     glm::vec4 origin = inverse * glm::vec4{0.0f, 0.0f, 0.0f, 1.0f};
-    // std::cout << "Camera origin: " << origin.transpose() << "\n";
-    // std::cout << "Camera transform:\n" << transform.matrix() << "\n";
 
     glm::vec4 direction = glm::normalize(pixel - origin);
 
@@ -55,21 +53,6 @@ namespace yart {
 
   glm::mat4 Camera::get_view_transform(const glm::vec3& from, const glm::vec3& to,
                                        const glm::vec3& up) {
-    // geometry::Transform view_matrix = geometry::Transform{};
-    // glm::mat4 view_matrix = glm::mat4{1.0f};
-
-    // auto forward = glm::normalize(to - from);
-    // auto up_normalized = glm::normalize(up);
-    // auto left = glm::normalize(glm::cross(forward, up_normalized));
-    // auto true_up = glm::cross(left, forward);
-
-    // view_matrix[0] = glm::vec4(left, 0.0f);
-    // view_matrix[1] = glm::vec4(true_up, 0.0f);
-    // view_matrix[2] = glm::vec4(-forward, 0.0f);
-    // view_matrix[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-    // view_matrix = glm::translate(view_matrix, -from);
-
     return glm::lookAt(from, to, up);
   }
 

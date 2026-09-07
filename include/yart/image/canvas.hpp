@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <memory>
 
 #include "yart/image/color.hpp"
@@ -10,12 +11,12 @@ namespace yart {
     using namespace color;
     class Canvas : public traits::Sized {
     private:
-      int width;
-      int height;
+      uint32_t width;
+      uint32_t height;
       std::unique_ptr<Color[]> pixels;
 
     public:
-      Canvas(int width, int height);
+      Canvas(uint32_t width, uint32_t height);
       Canvas(const Canvas& other);
       Canvas(Canvas&& other) noexcept;
       ~Canvas() = default;
@@ -28,8 +29,8 @@ namespace yart {
       Color getPixel(int x, int y) const;
 
       // Implementing the Sized interface
-      int getWidth() const override;
-      int getHeight() const override;
+      uint32_t getWidth() const override;
+      uint32_t getHeight() const override;
 
       const Color* getPixels() const;
       void fill(const Color& color);

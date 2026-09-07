@@ -1,4 +1,3 @@
-#include <glm/gtx/dual_quaternion.hpp>
 #include <iostream>
 #include <memory>
 #include <optional>
